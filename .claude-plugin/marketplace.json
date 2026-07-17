@@ -8,8 +8,8 @@
     {
       "name": "aml",
       "source": "./aml",
-      "description": "초보자용 3단계 워크플로우: /aml:new (인터뷰 → spec.md/task.md) → /aml:go (구현+검증 → progress.md) → /aml:status (진행 확인). 스크립트·훅·에이전트 없이 마크다운만으로 동작.",
-      "version": "0.1.0",
+      "description": "초보자용 3단계 워크플로우: /aml:new (인터뷰 → spec.md/task.md) → /aml:go (구현+검증 → progress.md) → /aml:status (진행 확인). /aml:doctor (점검) 포함. md-first — 관측 스크립트 observe.py 하나로 태스크별 측정을 progress.md에 남기고 선택적으로 Langfuse 전송.",
+      "version": "0.2.0",
       "category": "workflow"
     }
   ]
