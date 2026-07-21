@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 
 프로젝트 루트의 spec.md, task.md, progress.md를 읽고 요약한다. 셋 다 없으면 /aml:new 부터 하도록 안내한다.
 
-보고 내용 (쉬운 말로):
+보고 내용 (산출물에 쓰인 언어로, 쉬운 말로):
 
 - **어디까지 왔나** — 완료/남은 태스크 수, 최근에 한 일 한 줄
 - **막힌 것** — progress.md에 막힘 기록이 있으면 그 내용과 사용자가 답해줘야 할 질문

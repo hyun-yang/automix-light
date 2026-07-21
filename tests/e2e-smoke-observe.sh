@@ -26,23 +26,23 @@ export AML_CLAUDE_PROJECTS_DIR="$TMP/projects"
 
 # A1. 단일 모델 창 (haiku 레코드만 포함)
 OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 단일")"
-echo "$OUT" | grep -q '^측정: claude-haiku-4-5'      || fail "A1 model: $OUT"
-echo "$OUT" | grep -q '입력 100 / 출력 50'            || fail "A1 tokens: $OUT"
-echo "$OUT" | grep -q '예상 비용 \$'                  || fail "A1 cost: $OUT"
+echo "$OUT" | grep -q '^metrics: claude-haiku-4-5'   || fail "A1 model: $OUT"
+echo "$OUT" | grep -q 'tokens 100 in / 50 out'       || fail "A1 tokens: $OUT"
+echo "$OUT" | grep -q 'est. cost \$'                 || fail "A1 cost: $OUT"
 
 # A2. 다중 모델 창 (opus 2건 + haiku 1건, 2020년 레코드는 창 밖)
 OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T00:00:00Z --label "1.1 다중")"
-echo "$OUT" | grep -q '^측정: '                       || fail "A2 prefix: $OUT"
+echo "$OUT" | grep -q '^metrics: '                    || fail "A2 prefix: $OUT"
 echo "$OUT" | grep -q 'claude-opus-4-8'               || fail "A2 opus: $OUT"
 echo "$OUT" | grep -q 'claude-haiku-4-5'              || fail "A2 haiku: $OUT"
-echo "$OUT" | grep -q '입력 1.5k'                     || fail "A2 opus input sum: $OUT"
-echo "$OUT" | grep -q '예상 비용 \$0.03'              || fail "A2 total cost: $OUT"
+echo "$OUT" | grep -q '1.5k in'                       || fail "A2 opus input sum: $OUT"
+echo "$OUT" | grep -q 'est. cost \$0.03'              || fail "A2 total cost: $OUT"
 
 # A3. fail-open — transcript 루트가 없어도 exit 0 + 수집 불가
 if ! OUT="$(AML_CLAUDE_PROJECTS_DIR="$TMP/none" python3 "$OBSERVE" task-done --since 2026-07-01T00:00:00Z --label x)"; then
   fail "A3 must exit 0"
 fi
-echo "$OUT" | grep -q '수집 불가'                     || fail "A3 message: $OUT"
+echo "$OUT" | grep -q 'unavailable'                   || fail "A3 message: $OUT"
 
 echo "OK: part A passed"
 
@@ -83,8 +83,8 @@ if ! OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY \
       python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label x 2>"$ERR")"; then
   fail "B4 must exit 0"
 fi
-echo "$OUT" | grep -q '^측정: '        || fail "B4 stdout: $OUT"
-grep -q '전송 생략' "$ERR"             || fail "B4 stderr: $(cat "$ERR")"
+echo "$OUT" | grep -q '^metrics: '     || fail "B4 stdout: $OUT"
+grep -q 'skipping send' "$ERR"         || fail "B4 stderr: $(cat "$ERR")"
 
 # B5. ping — 자격증명 없으면 WARN, exit 0
 if ! OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY python3 "$OBSERVE" ping)"; then
@@ -101,6 +101,6 @@ grep -q '^- 측정:' "$AMLDIR/templates/progress.template.md"              || fa
 # install.sh 스테이징 사본에서 같은 상대 경로(<플러그인 루트>/scripts/observe.py)로 실행되는지
 AUTOMIX_LIGHT_MARKETPLACE_DIR="$TMP/stage" bash "$HERE/../install.sh" >/dev/null
 OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY python3 "$TMP/stage/aml/scripts/observe.py" task-done --since 2026-07-01T01:00:00Z --label staged 2>/dev/null)"
-echo "$OUT" | grep -q '^측정: '                                          || fail "C2 staged copy: $OUT"
+echo "$OUT" | grep -q '^metrics: '                                       || fail "C2 staged copy: $OUT"
 
 echo "OK: e2e-smoke-observe passed"

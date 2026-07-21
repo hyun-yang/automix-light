@@ -1,6 +1,6 @@
 {
   "name": "aml",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "automix-light — 초보자를 위한 automix의 라이트판. 목표는 한 가지: 빠르고 정확한 구현. 인터뷰(KK/KU/UK/UU)로 몰랐던 결정 지점을 드러내 spec.md를 만들고(/aml:new), task.md를 순서대로 구현·검증하며 progress.md에 쉬운 말로 기록하고(/aml:go), 진행을 확인합니다(/aml:status). md-first — 유일한 스크립트는 관측용 observe.py 하나(태스크별 모델·시간·토큰·비용을 progress.md에 기록, 선택적 Langfuse 전송). /aml:doctor 로 시작 전 점검.",
   "author": {
     "name": "Hayden",

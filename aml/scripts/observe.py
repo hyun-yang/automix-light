@@ -5,7 +5,7 @@
   observe.py task-done --since <ISO8601> --label "<태스크>" \
       [--feature "<기능명>"] [--note "<검증 결과>"] [--dry-run]
 → 세션 transcript(~/.claude/projects/<인코딩된 cwd>/*.jsonl)에서 창(since→now)의
-  모델별 토큰 사용량을 합산해 progress.md 에 붙일 "측정: …" 한 줄을 stdout 으로 낸다.
+  모델별 토큰 사용량을 합산해 progress.md 에 붙일 "metrics: …" 한 줄을 stdout 으로 낸다.
 → .aml/config.yaml 의 langfuse 가 "on" 이면 같은 데이터를 Langfuse 로 추가 전송한다
   (Task 2에서 구현; 자격증명은 env 전용).
 
@@ -70,10 +70,10 @@ def humanize(n: int) -> str:
 
 def humanize_dur(secs: int) -> str:
     if secs >= 3600:
-        return f"{secs // 3600}시간 {secs % 3600 // 60}분"
+        return f"{secs // 3600}h {secs % 3600 // 60}m"
     if secs >= 60:
-        return f"{secs // 60}분 {secs % 60}초"
-    return f"{secs}초"
+        return f"{secs // 60}m {secs % 60}s"
+    return f"{secs}s"
 
 
 # ── transcript 발견 + 집계 (am task-metrics.py 축약 이식) ───────────────────
@@ -127,7 +127,7 @@ def transcript_dir() -> Path | None:
 
 def sum_by_model(start: datetime, end: datetime) -> dict[str, dict] | None:
     """창 [start, end] 안의 assistant usage 를 모델별로 합산.
-    transcript 미발견 → None (측정 줄이 '수집 불가'로 렌더링된다)."""
+    transcript 미발견 → None (측정 줄이 'metrics: unavailable' 로 렌더링된다)."""
     d = transcript_dir()
     if d is None:
         return None
@@ -186,25 +186,25 @@ def fmt_usd(c: float) -> str:
 
 def measure_line(dur_secs: int, per: dict[str, dict] | None) -> str:
     if per is None:
-        return "측정: 수집 불가 (세션 기록을 찾지 못함)"
+        return "metrics: unavailable (no session record found)"
     if not per:
-        return f"측정: {humanize_dur(dur_secs)} · 토큰 기록 없음"
+        return f"metrics: {humanize_dur(dur_secs)} · no token record"
     items = sorted(per.items())
     costs = [cost_usd(m, t) for m, t in items]
     known = [c for c in costs if c is not None]
     total = sum(known) if known else None
     if len(items) == 1:
         m, t = items[0]
-        line = (f"측정: {m} · {humanize_dur(dur_secs)}"
-                f" · 토큰 입력 {humanize(t['input_tokens'])} / 출력 {humanize(t['output_tokens'])}"
-                f" (캐시 읽기 {humanize(t['cache_read_input_tokens'])}"
-                f" / 쓰기 {humanize(t['cache_creation_input_tokens'])})")
+        line = (f"metrics: {m} · {humanize_dur(dur_secs)}"
+                f" · tokens {humanize(t['input_tokens'])} in / {humanize(t['output_tokens'])} out"
+                f" (cache {humanize(t['cache_read_input_tokens'])} r"
+                f" / {humanize(t['cache_creation_input_tokens'])} w)")
     else:
-        parts = [f"{m}(입력 {humanize(t['input_tokens'])}/출력 {humanize(t['output_tokens'])})"
+        parts = [f"{m}({humanize(t['input_tokens'])} in/{humanize(t['output_tokens'])} out)"
                  for m, t in items]
-        line = f"측정: {humanize_dur(dur_secs)} · " + " + ".join(parts)
+        line = f"metrics: {humanize_dur(dur_secs)} · " + " + ".join(parts)
     if total is not None:
-        line += f" · 예상 비용 {fmt_usd(total)}"
+        line += f" · est. cost {fmt_usd(total)}"
     return line
 
 
@@ -295,7 +295,7 @@ def post(host: str, public: str, secret: str, batch: list[dict]) -> int | None:
         with urllib.request.urlopen(req, timeout=10) as resp:
             return resp.status
     except Exception as exc:  # noqa: BLE001 — best-effort
-        print(f"langfuse: 전송 실패 ({exc}) — 계속 진행", file=sys.stderr)
+        print(f"langfuse: send failed ({exc}) — continuing", file=sys.stderr)
         return None
 
 
@@ -304,7 +304,7 @@ def post(host: str, public: str, secret: str, batch: list[dict]) -> int | None:
 def cmd_task_done(args) -> None:
     since = parse_ts(args.since)
     if since is None:
-        print("측정: 수집 불가 (--since 시각을 읽지 못함)")
+        print("metrics: unavailable (could not read --since time)")
         return
     if since.tzinfo is None:
         since = since.replace(tzinfo=timezone.utc)
@@ -320,19 +320,19 @@ def cmd_task_done(args) -> None:
         return
     public, secret, host = resolve_creds()
     if not public or not secret:
-        print("langfuse: on 이지만 LANGFUSE_PUBLIC_KEY/LANGFUSE_SECRET_KEY 가 없어 "
-              "전송 생략", file=sys.stderr)
+        print("langfuse: on but LANGFUSE_PUBLIC_KEY/LANGFUSE_SECRET_KEY missing "
+              "— skipping send", file=sys.stderr)
         return
     status = post(host, public, secret, batch)
     if status is not None:
-        print(f"langfuse: 전송됨 (HTTP {status})", file=sys.stderr)
+        print(f"langfuse: sent (HTTP {status})", file=sys.stderr)
 
 
 def cmd_ping() -> None:
     public, secret, host = resolve_creds()
     if not public or not secret:
-        print("WARN: LANGFUSE_PUBLIC_KEY/LANGFUSE_SECRET_KEY 가 없습니다 — "
-              "셸 환경변수로 설정하세요 (config 파일에는 넣지 않습니다).")
+        print("WARN: LANGFUSE_PUBLIC_KEY/LANGFUSE_SECRET_KEY missing — "
+              "set them as shell env vars (never put them in the config file).")
         return
     ts = iso(now_utc())
     batch = [{"id": "aml-ping-trace-create", "type": "trace-create", "timestamp": ts,
@@ -340,23 +340,23 @@ def cmd_ping() -> None:
                        "timestamp": ts, "tags": ["aml", "ping"]}}]
     status = post(host, public, secret, batch)
     if status is None:
-        print(f"WARN: Langfuse 에 연결하지 못했습니다 ({host}) — 호스트/키를 확인하세요.")
+        print(f"WARN: could not reach Langfuse ({host}) — check host/keys.")
     else:
         # 성공 메시지에는 host 를 넣지 않는다 — 자체 호스팅 endpoint 가
         # 대화 로그에 남는 것을 피한다 (실패 WARN 은 디버깅용으로 host 유지).
-        print(f"OK: Langfuse 연결 확인 (HTTP {status})")
+        print(f"OK: Langfuse connection verified (HTTP {status})")
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(prog="observe.py")
     sub = ap.add_subparsers(dest="cmd", required=True)
-    td = sub.add_parser("task-done", help="태스크 종료 — 측정 줄 출력 (+ langfuse 전송)")
-    td.add_argument("--since", required=True, help="태스크 시작 시각 (ISO8601)")
-    td.add_argument("--label", required=True, help="태스크 번호와 이름")
-    td.add_argument("--feature", default=None, help="기능명 (Langfuse sessionId)")
-    td.add_argument("--note", default=None, help="검증 결과 한 줄")
-    td.add_argument("--dry-run", action="store_true", help="전송 대신 배치 JSON 출력")
-    sub.add_parser("ping", help="Langfuse 연결 확인 (/aml:doctor 용)")
+    td = sub.add_parser("task-done", help="task end — print metrics line (+ langfuse send)")
+    td.add_argument("--since", required=True, help="task start time (ISO8601)")
+    td.add_argument("--label", required=True, help="task number and name")
+    td.add_argument("--feature", default=None, help="feature name (Langfuse sessionId)")
+    td.add_argument("--note", default=None, help="one-line verification result")
+    td.add_argument("--dry-run", action="store_true", help="print batch JSON instead of sending")
+    sub.add_parser("ping", help="check Langfuse connection (for /aml:doctor)")
     args = ap.parse_args()
     if args.cmd == "task-done":
         cmd_task_done(args)
@@ -370,5 +370,5 @@ if __name__ == "__main__":
     except SystemExit:
         raise
     except Exception as exc:  # noqa: BLE001 — 관측은 절대 구현을 막지 않는다
-        print(f"측정: 수집 불가 ({exc})")
+        print(f"metrics: unavailable ({exc})")
         sys.exit(0)
