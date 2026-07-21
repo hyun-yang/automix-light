@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""observe.py — automix-light의 유일한 스크립트 (관측 전용, stdlib만).
+"""observe.py — automix-light's only script (observability only, stdlib only).
 
-태스크가 끝나면 /aml:go 가 호출한다:
-  observe.py task-done --since <ISO8601> --label "<태스크>" \
-      [--feature "<기능명>"] [--note "<검증 결과>"] [--dry-run]
-→ 세션 transcript(~/.claude/projects/<인코딩된 cwd>/*.jsonl)에서 창(since→now)의
-  모델별 토큰 사용량을 합산해 progress.md 에 붙일 "metrics: …" 한 줄을 stdout 으로 낸다.
-→ .aml/config.yaml 의 langfuse 가 "on" 이면 같은 데이터를 Langfuse 로 추가 전송한다
-  (Task 2에서 구현; 자격증명은 env 전용).
+When a task finishes, /aml:go calls:
+  observe.py task-done --since <ISO8601> --label "<task>" \
+      [--feature "<feature name>"] [--note "<verification result>"] [--dry-run]
+→ Sums per-model token usage over the window (since→now) from the session
+  transcript (~/.claude/projects/<encoded cwd>/*.jsonl) and prints one
+  "metrics: …" line to stdout for progress.md.
+→ If langfuse in .aml/config.yaml is "on", also sends the same data to Langfuse
+  (credentials are env-only).
 
-불변 조건: 완전 fail-open — 어떤 런타임 실패도 경고 한 줄 후 exit 0.
-관측 실패가 구현을 막아서는 안 된다. (argparse 사용 오류 exit 2만 예외.)
+Invariant: fully fail-open — any runtime failure prints one warning then exits 0.
+Observability must never block implementation. (Only argparse usage errors exit 2.)
 """
 from __future__ import annotations
 
@@ -29,20 +30,20 @@ USAGE_FIELDS = ("input_tokens", "output_tokens",
 
 DEFAULT_HOST = "https://cloud.langfuse.com"
 
-# 모델 계열별 단가 (USD/MTok, 입력/출력) — am pricing.py 와 동일한 표.
+# Per-model-family pricing (USD/MTok, input/output) — same table as am pricing.py.
 PRICING = {"opus": (5.0, 25.0), "fable": (10.0, 50.0),
            "sonnet": (3.0, 15.0), "haiku": (1.0, 5.0)}
-CACHE_WRITE_MULT = 1.25   # 캐시 쓰기 ≈ 입력 단가의 1.25배
-CACHE_READ_MULT = 0.10    # 캐시 읽기 ≈ 입력 단가의 0.1배
+CACHE_WRITE_MULT = 1.25   # cache write ≈ 1.25× input price
+CACHE_READ_MULT = 0.10    # cache read ≈ 0.1× input price
 
 
-# ── 시간/표기 유틸 ──────────────────────────────────────────────────────────
+# ── time / formatting utils ──────────────────────────────────────────────────────────
 
 def parse_ts(ts) -> datetime | None:
     if not ts:
         return None
     s = str(ts).strip().replace("Z", "+00:00")
-    s = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", s)   # BSD date 의 +1000 → +10:00
+    s = re.sub(r"([+-]\d{2})(\d{2})$", r"\1:\2", s)   # BSD date's +1000 → +10:00
     try:
         return datetime.fromisoformat(s)
     except ValueError:
@@ -76,7 +77,7 @@ def humanize_dur(secs: int) -> str:
     return f"{secs}s"
 
 
-# ── transcript 발견 + 집계 (am task-metrics.py 축약 이식) ───────────────────
+# ── transcript discovery + aggregation (trimmed port of am task-metrics.py) ───────────────────
 
 def projects_root() -> Path:
     return Path(os.environ.get("AML_CLAUDE_PROJECTS_DIR")
@@ -84,7 +85,7 @@ def projects_root() -> Path:
 
 
 def _dir_cwd(d: Path) -> str | None:
-    """이 transcript 디렉터리에 기록된 realpath cwd (없으면 None)."""
+    """The realpath cwd recorded in this transcript dir (None if absent)."""
     for f in sorted(d.glob("*.jsonl")):
         try:
             with f.open(encoding="utf-8") as fh:
@@ -105,8 +106,8 @@ def _dir_cwd(d: Path) -> str | None:
 
 
 def transcript_dir() -> Path | None:
-    """현재 cwd 의 transcript 디렉터리. 인코딩(`[^A-Za-z0-9] → -`)이 손실형이라
-    기록된 cwd 로 검증하고, 불일치·미발견이면 전체 스캔한다."""
+    """Transcript dir for the current cwd. The encoding (`[^A-Za-z0-9] → -`) is
+    lossy, so verify against the recorded cwd; on mismatch/miss, scan all dirs."""
     root = projects_root()
     if not root.is_dir():
         return None
@@ -126,8 +127,8 @@ def transcript_dir() -> Path | None:
 
 
 def sum_by_model(start: datetime, end: datetime) -> dict[str, dict] | None:
-    """창 [start, end] 안의 assistant usage 를 모델별로 합산.
-    transcript 미발견 → None (측정 줄이 'metrics: unavailable' 로 렌더링된다)."""
+    """Sum assistant usage within the window [start, end] per model.
+    Transcript not found → None (measure line renders as 'metrics: unavailable')."""
     d = transcript_dir()
     if d is None:
         return None
@@ -135,7 +136,7 @@ def sum_by_model(start: datetime, end: datetime) -> dict[str, dict] | None:
     start_epoch = start.timestamp()
     for f in d.rglob("*.jsonl"):
         try:
-            if f.stat().st_mtime < start_epoch - 2:   # 창 이전에 끝난 파일 프루닝
+            if f.stat().st_mtime < start_epoch - 2:   # prune files that ended before the window
                 continue
             fh = f.open(encoding="utf-8")
         except OSError:
@@ -157,14 +158,14 @@ def sum_by_model(start: datetime, end: datetime) -> dict[str, dict] | None:
                     continue
                 msg = rec.get("message") or {}
                 usage = msg.get("usage") or {}
-                model = msg.get("model") or "?"   # 모델 미기록 레코드는 "?" 버킷 (비용 생략)
+                model = msg.get("model") or "?"   # records with no model go to the "?" bucket (cost skipped)
                 tot = per.setdefault(model, {k: 0 for k in USAGE_FIELDS})
                 for k in USAGE_FIELDS:
                     tot[k] += usage.get(k, 0) or 0
     return per
 
 
-# ── 비용 ────────────────────────────────────────────────────────────────────
+# ── cost ────────────────────────────────────────────────────────────────────
 
 def cost_usd(model: str, tok: dict) -> float | None:
     m = model.strip().lower()
@@ -182,7 +183,7 @@ def fmt_usd(c: float) -> str:
     return f"${c:.4f}" if c < 0.01 else f"${c:.2f}"
 
 
-# ── 측정 줄 렌더링 ──────────────────────────────────────────────────────────
+# ── measure line rendering ──────────────────────────────────────────────────────────
 
 def measure_line(dur_secs: int, per: dict[str, dict] | None) -> str:
     if per is None:
@@ -208,12 +209,12 @@ def measure_line(dur_secs: int, per: dict[str, dict] | None) -> str:
     return line
 
 
-# ── Langfuse (opt-in, 기본 off — .aml/config.yaml 부재 = off) ───────────────
+# ── Langfuse (opt-in, default off — .aml/config.yaml absent = off) ───────────────
 
 def config_get(key: str) -> str | None:
-    """.aml/config.yaml 의 키를 first-match 로 읽는다 (am get_config 규약).
-    파일은 평평한 2키(langfuse/langfuse_host)로 문서화되며,
-    중첩·중복이 있어도 파일 내 첫 텍스트 일치가 이긴다."""
+    """Read a key from .aml/config.yaml by first match (am get_config convention).
+    The file is documented as two flat keys (langfuse/langfuse_host); even with
+    nesting/duplicates, the first textual match in the file wins."""
     p = Path(".aml/config.yaml")
     if not p.is_file():
         return None
@@ -247,7 +248,7 @@ def slug(s: str) -> str:
 def build_batch(label: str, feature: str | None, note: str | None,
                 since: datetime, end: datetime, dur_secs: int,
                 per: dict[str, dict] | None) -> list[dict]:
-    """태스크 하나 → Langfuse ingestion 배치. id 는 label+since 기반으로 결정적."""
+    """One task → Langfuse ingestion batch. ids are deterministic from label+since."""
     tid = f"aml-{slug(label)}-{re.sub(r'[^0-9]', '', iso(since))[:14]}"
     items = sorted((per or {}).items())
     summary: dict = {"duration_sec": dur_secs, "models": dict(items)}
@@ -299,7 +300,7 @@ def post(host: str, public: str, secret: str, batch: list[dict]) -> int | None:
         return None
 
 
-# ── 커맨드 ──────────────────────────────────────────────────────────────────
+# ── commands ──────────────────────────────────────────────────────────────────
 
 def cmd_task_done(args) -> None:
     since = parse_ts(args.since)
@@ -342,8 +343,8 @@ def cmd_ping() -> None:
     if status is None:
         print(f"WARN: could not reach Langfuse ({host}) — check host/keys.")
     else:
-        # 성공 메시지에는 host 를 넣지 않는다 — 자체 호스팅 endpoint 가
-        # 대화 로그에 남는 것을 피한다 (실패 WARN 은 디버깅용으로 host 유지).
+        # Don't put host in the success message — avoids a self-hosted endpoint
+        # leaking into chat logs (the failure WARN keeps host for debugging).
         print(f"OK: Langfuse connection verified (HTTP {status})")
 
 
@@ -369,6 +370,6 @@ if __name__ == "__main__":
         main()
     except SystemExit:
         raise
-    except Exception as exc:  # noqa: BLE001 — 관측은 절대 구현을 막지 않는다
+    except Exception as exc:  # noqa: BLE001 — observability must never block impl
         print(f"metrics: unavailable ({exc})")
         sys.exit(0)

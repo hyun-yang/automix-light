@@ -1,29 +1,29 @@
 ---
-description: task.md를 순서대로 구현·검증하고 progress.md에 기록한다. 다 되면 spec.md의 완성 기준으로 최종 확인.
+description: Implement task.md in order, verify, and log to progress.md. When done, do a final check against spec.md's "Done when".
 ---
 
-# /aml:go — 구현
+# /aml:go — implement
 
-프로젝트 루트의 spec.md, task.md, progress.md(최근 항목)를 읽는다. 없으면 /aml:new 부터 하도록 안내하고 멈춘다. 상태가 이상해 보이면 /aml:doctor 로 점검할 수 있다고 알려준다.
+Read spec.md, task.md, and progress.md (latest entry) at the project root. If they're missing, tell the user to start with /aml:new and stop. If the state looks off, mention they can check with /aml:doctor.
 
-당신의 상대는 초보자다. 보고와 기록은 spec.md·progress.md에 쓰인 언어를 따라, 프로그래밍 모르는 사람이 이해할 수 있는 말로 쓴다.
+You're working with a beginner. Write reports and logs in the language used in spec.md·progress.md, in words a non-programmer can understand.
 
-## 태스크 루프
+## Task loop
 
-task.md의 미체크 태스크를 순서대로:
+For each unchecked task in task.md, in order:
 
-1. **구현** — 시작할 때 `date -Is` (또는 ISO8601 로 시각을 낼 수 있는 다른 방법)로 시작 시각을 기억해 둔다. spec.md의 결정("오늘 정한 것들")과 참조(시안·스크린샷)를 지도 삼아 구현한다.
-2. **검증** — 테스트가 있으면 실행하고, 없으면 실제로 실행해 동작을 확인한다. spec.md 완성 기준 중 이 태스크에 해당하는 항목과 대조한다.
-3. **기록** — task.md에 체크하고, progress.md 맨 위에 항목을 추가한다: 한 일 / 검증 결과 / **구현 노트**(계획과 다르게 한 것과 그 이유 — 이 일지가 초보자가 코드 대신 읽는 것이다) / **측정** / 다음. 측정 줄은 한 번의 호출로 얻는다:
+1. **Implement** — at the start, record the start time with `date -Is` (or any other way to produce an ISO8601 timestamp). Implement using spec.md's decisions ("Decisions") and references (mockups/screenshots) as your map.
+2. **Verify** — run the tests if there are any; otherwise actually run it and check the behavior. Compare against the spec.md "Done when" items relevant to this task.
+3. **Log** — check the task off in task.md and add an entry to the top of progress.md: what you did / verification result / **implementation notes** (what you did differently from the plan and why — this log is what the beginner reads instead of the code) / **the measure line** / next. Get the measure line in one call:
 
-   `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" task-done --since <시작 시각> --label "<태스크 번호와 이름>" --feature "<spec.md 제목>" --note "<검증 결과 한 줄>"`
+   `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" task-done --since <start time> --label "<task number and name>" --feature "<spec.md title>" --note "<one-line verification>"`
 
-   출력된 "metrics: …" 줄을 그대로 붙인다 — 이 줄은 언어 중립(영어 레이블)이며 사용자 언어로 번역하지 않는다 (Langfuse 설정이 켜져 있으면 같은 호출이 전송까지 한다 — 전송 실패는 무시하고 진행). 호출 자체가 실패하면(python3 없음 등) `metrics: unavailable`로 적고 계속 진행한다.
+   Paste the printed "metrics: …" line as-is — this line is language-neutral (English labels) and is not translated into the user's language (if Langfuse is configured on, the same call also sends it — ignore send failures and continue). If the call itself fails (no python3, etc.), write `metrics: unavailable` and continue.
 
-같은 문제를 3번 시도해도 안 풀리면 멈춘다: progress.md에 막힌 지점을 기록하고, 상황을 쉬운 말로 설명한 뒤 사용자에게 묻는다.
+If the same problem doesn't resolve after 3 tries, stop: record the sticking point in progress.md, explain the situation in plain words, and ask the user.
 
-## 전부 완료하면
+## When everything is done
 
-1. spec.md의 완성 기준을 하나씩 실제로 확인하고 체크한다. 안 되는 항목이 있으면 고친 뒤 다시 확인한다.
-2. git 저장소면 커밋한다. 아니면 조용히 넘어간다.
-3. 마무리 보고 — 무엇이 완성됐는지, 직접 확인하는 방법(실행법), 그리고 제안: "만든 것을 제대로 이해했는지 퀴즈로 확인해볼까요? /aml:status 에서도 할 수 있어요."
+1. Check each spec.md "Done when" item for real and tick it off. If something fails, fix it and check again.
+2. If it's a git repo, commit. Otherwise skip quietly.
+3. Wrap-up report — what got built, how to check it yourself (how to run it), and an offer: "Want a quick quiz to confirm you really understand what we built? You can also do it from /aml:status."

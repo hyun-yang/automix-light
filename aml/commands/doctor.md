@@ -1,27 +1,27 @@
 ---
-description: 시작 전 점검 — 파일 3개와 완성 기준, git/python3, Langfuse 설정을 확인한다. 읽기 전용.
+description: Pre-start check — the 3 files and their checkboxes, git/python3, Langfuse config. Read-only.
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
-# /aml:doctor — 시작 전 점검
+# /aml:doctor — pre-start check
 
-프로젝트 루트에서 아래를 순서대로 점검하고, spec.md 가 있으면 그 언어로(없으면 사용자 대화 언어로) 쉽게 보고한다. 아무것도 고치지 않는다.
+Check the following in order at the project root and report plainly — in spec.md's language if it exists, otherwise the user's conversation language. Fix nothing.
 
-## 막는 것 — 걸리면 ❌ 와 고치는 법을 보고
+## Blocking — on failure, report ❌ and how to fix
 
-1. spec.md / task.md / progress.md 가 셋 다 있는가 → 없으면: "/aml:new 로 시작하세요"
-2. spec.md 의 "완성 기준"에 체크박스(`- [ ]` 또는 `- [x]`)가 1개 이상 있는가
-3. task.md 에 태스크 체크박스가 1개 이상 있는가
+1. Do spec.md / task.md / progress.md all exist? → if not: "Start with /aml:new"
+2. Does spec.md's "Done when" have at least one checkbox (`- [ ]` or `- [x]`)?
+3. Does task.md have at least one task checkbox?
 
-## 안내만 — 진행을 막지 않고 ⚠️ 로 보고
+## Advisory only — don't block, report ⚠️
 
-4. git 저장소인가 (`git rev-parse --is-inside-work-tree`) — 아니면: "git 이 없어도 되지만, 있으면 실수를 되돌리기 쉬워요"
-5. python3 이 있는가 (`command -v python3`) — 없으면: "측정 줄(모델·시간·토큰·비용)이 progress.md 에 기록되지 않아요"
-6. Langfuse 상태 — 셋 중 하나로 보고. **Langfuse 는 어떤 경우에도 진행을 막지 않는다.**
-   - `.aml/config.yaml` 이 없거나 `langfuse:` 값이 "on" 이 아니면 → "Langfuse 전송: 꺼짐(기본값)". 켜는 법은 README 의 "Langfuse 켜기" 절.
-   - "on" 인데 LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY 환경변수가 없으면 → ⚠️ "켜져 있지만 키가 없어 전송이 생략됩니다" + 키 설정법(키 값은 절대 출력하지 않는다 — 있/없음만).
-   - "on" 이고 키가 있으면 → `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" ping` 으로 연결 확인, OK/WARN 을 그대로 보고.
+4. Is this a git repo (`git rev-parse --is-inside-work-tree`)? — if not: "git isn't required, but it makes mistakes easy to undo"
+5. Is python3 available (`command -v python3`)? — if not: "the measure line (model·time·tokens·cost) won't be recorded in progress.md"
+6. Langfuse status — report one of three. **Langfuse never blocks, under any circumstances.**
+   - If `.aml/config.yaml` is absent or `langfuse:` isn't "on" → "Langfuse export: off (default)". How to turn it on: the README's "Turn on Langfuse" section.
+   - If "on" but LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY env vars are missing → ⚠️ "on but keys missing, so sending is skipped" + how to set the keys (never print key values — only present/absent).
+   - If "on" and keys are present → verify the connection with `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" ping`, and report OK/WARN as-is.
 
-## 보고 형식
+## Report format
 
-항목마다 ✅/❌/⚠️ 한 줄. 마지막에 다음 행동 한 줄 — 파일이 없으면 /aml:new, 미완료 태스크가 있으면 /aml:go, 문제가 없으면 "바로 시작해도 됩니다".
+One ✅/❌/⚠️ line per item. End with one line on the next action — /aml:new if files are missing, /aml:go if tasks remain, "you're clear to start" if there are no problems.

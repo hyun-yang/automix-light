@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# install.sh — automix-light 마켓플레이스를 안정된 경로에 스테이징하고
-# Claude Code 안에서 실행할 /plugin 명령을 안내한다.
+# install.sh — stage the automix-light marketplace at a stable path and
+# print the /plugin commands to run inside Claude Code.
 #
-# 사용법 (마켓플레이스 루트에서):
+# Usage (from the marketplace root):
 #   $ cd automix-light
 #   $ ./install.sh
 
@@ -17,43 +17,43 @@ echo "Source: $SCRIPT_DIR"
 echo "Target: $TARGET"
 echo
 
-# 1. 마켓플레이스 루트인지 확인
+# 1. Confirm this is the marketplace root
 if [[ ! -f "$SCRIPT_DIR/.claude-plugin/marketplace.json" ]]; then
-  echo "ERROR: $SCRIPT_DIR/.claude-plugin/marketplace.json 이 없습니다." >&2
-  echo "       marketplace.json 이 있는 automix-light 루트에서 실행하세요." >&2
+  echo "ERROR: $SCRIPT_DIR/.claude-plugin/marketplace.json not found." >&2
+  echo "       Run this from the automix-light root that has marketplace.json." >&2
   exit 1
 fi
 
-# 2. JSON 매니페스트 검증 (python3 가 있을 때만)
+# 2. Validate the JSON manifests (only when python3 is available)
 if command -v python3 >/dev/null 2>&1; then
   python3 -c "import json; json.load(open('$SCRIPT_DIR/.claude-plugin/marketplace.json'))" \
-    || { echo "ERROR: marketplace.json 이 올바른 JSON이 아닙니다" >&2; exit 1; }
+    || { echo "ERROR: marketplace.json is not valid JSON" >&2; exit 1; }
   python3 -c "import json; json.load(open('$SCRIPT_DIR/aml/.claude-plugin/plugin.json'))" \
-    || { echo "ERROR: plugin.json 이 올바른 JSON이 아닙니다" >&2; exit 1; }
+    || { echo "ERROR: plugin.json is not valid JSON" >&2; exit 1; }
 fi
 
-# 3. 안정된 경로로 복사 (기존 설치는 백업)
+# 3. Copy to the stable path (back up any existing install)
 mkdir -p "$(dirname "$TARGET")"
 if [[ -d "$TARGET" ]]; then
-  echo "기존 설치를 ${TARGET}.bak 으로 백업합니다"
+  echo "Backing up the existing install to ${TARGET}.bak"
   rm -rf "${TARGET}.bak"
   mv "$TARGET" "${TARGET}.bak"
 fi
 cp -r "$SCRIPT_DIR" "$TARGET"
 
-# 4. 다음 단계 안내
+# 4. Next steps
 cat <<EOF
-✓ 스테이징 완료: $TARGET
+✓ Staged: $TARGET
 
-다음 단계 — Claude Code 안에서 실행하세요:
+Next — run these inside Claude Code:
 
-  1. 마켓플레이스 추가:
+  1. Add the marketplace:
      /plugin marketplace add $TARGET
 
-  2. 플러그인 설치:
+  2. Install the plugin:
      /plugin install aml@automix-light
 
-  3. 확인:
-     /help                  # /aml:new, /aml:go, /aml:status 가 보여야 함
+  3. Verify:
+     /help                  # /aml:new, /aml:go, /aml:status should appear
 
 EOF
