@@ -1,16 +1,16 @@
 ---
-description: Summarize progress from spec.md / task.md / progress.md in plain language. Read-only.
+description: spec.md / task.md / progress.md 를 바탕으로 진행 상황을 쉬운 말로 요약한다. 읽기 전용.
 allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 ---
 
-# /aml:status — check progress
+# /aml:status — 진행 상황 확인
 
-Read spec.md, task.md, and progress.md at the project root and summarize. If all three are missing, tell the user to start with /aml:new.
+프로젝트 루트의 spec.md, task.md, progress.md 를 읽고 요약한다. 셋 다 없으면 /aml:new 부터 하라고 알린다.
 
-Report (in the language used in the outputs, in plain words):
+보고(한국어로, 쉬운 말로):
 
-- **How far along** — done/remaining task counts, one line on the most recent work
-- **What's blocked** — if progress.md has a blocker recorded, its content and the question the user needs to answer
-- **Next action** — /aml:go if tasks remain, /aml:new for the next feature once everything's done
+- **어디까지 왔나** — 끝난/남은 할 일 개수, 가장 최근 작업 한 줄
+- **막힌 것** — progress.md 에 막힌 것이 적혀 있으면 그 내용과 사용자가 답해 줘야 할 질문
+- **다음에 할 일** — 할 일이 남았으면 /aml:go, 다 끝났으면 다음 기능을 위해 /aml:new
 
-End with an offer — if they want, a **quiz**: about 3 easy questions on what's been built so far, to check whether the user can explain it to someone else. Staying in the loop isn't about reading code — it's about confirming understanding.
+마지막에 제안을 덧붙인다 — 원하면 **퀴즈**: 지금까지 만든 것에 대한 쉬운 질문 3개쯤으로, 사용자가 다른 사람에게 설명할 수 있는지 확인한다. 흐름을 놓치지 않는다는 건 코드를 읽는 게 아니라 이해했는지 확인하는 것이다.

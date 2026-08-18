@@ -1,12 +1,12 @@
-<!-- Headings/hints are examples — follow the structure, write content in the user's language. -->
-# Progress log
+<!-- 제목과 안내문은 예시입니다 — 구조는 그대로 두고, 내용은 한국어로 씁니다. -->
+# 진행 기록
 
-<!-- Newest entry on top. Write so a non-programmer can follow it. -->
+<!-- 최신 기록이 맨 위. 프로그래밍을 모르는 사람도 따라올 수 있게 씁니다. -->
 
-## YYYY-MM-DD — <one line: what you did>
+## YYYY-MM-DD — <한 줄: 무엇을 했는지>
 
-- Did:
-- Verified: <how you checked and how it went>
-- Notes: <anything done differently from the plan, and why. "none" if nothing>
-- <observe.py output as-is — a `metrics: …` line: model · duration · tokens · est. cost. On failure: `metrics: unavailable`>
-- Next: <what's left, or what's blocked>
+- 한 일:
+- 확인: <어떻게 확인했고 결과는 어땠는지>
+- 메모: <계획과 다르게 한 것과 그 이유. 없으면 "없음">
+- <observe.py 출력을 그대로 — `측정: …` 한 줄: 모델 · 걸린 시간 · 토큰 · 예상 비용. 실패하면 `측정: 기록 없음`>
+- 다음: <남은 것, 또는 막힌 것>

@@ -3,13 +3,13 @@
   "owner": {
     "name": "Hayden"
   },
-  "description": "automix's light edition — an md-only plugin for beginners. Build a spec through an interview, then implement fast and accurately.",
+  "description": "automix 의 가벼운 버전 — 초보자를 위한 md 전용 플러그인, 한국어판. 인터뷰로 기획을 세우고, 빠르고 정확하게 구현합니다.",
   "plugins": [
     {
       "name": "aml",
       "source": "./aml",
-      "description": "Beginner 3-step workflow: /aml:new (interview → spec.md/task.md) → /aml:go (implement + verify → progress.md) → /aml:status (check progress). Includes /aml:doctor (checks). md-first — one observability script (observe.py) logs per-task metrics to progress.md and optionally exports to Langfuse.",
-      "version": "0.4.0",
+      "description": "초보자용 3단계 흐름: /aml:new (인터뷰 → spec.md/task.md) → /aml:go (구현 + 검증 → progress.md) → /aml:status (진행 확인). /aml:doctor (점검) 포함. md 우선 — 관측 스크립트(observe.py) 하나만이 할 일별 측정값을 progress.md 에 남기고, 원하면 Langfuse 로도 보냅니다. 모든 대화와 산출물은 한국어입니다.",
+      "version": "0.4.1",
       "category": "workflow"
     }
   ]

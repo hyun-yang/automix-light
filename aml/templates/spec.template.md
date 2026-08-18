@@ -1,30 +1,30 @@
-<!-- Headings/hints are examples — follow the structure, write content in the user's language. -->
-# <name> — <one-line summary>
+<!-- 제목과 안내문은 예시입니다 — 구조는 그대로 두고, 내용은 한국어로 씁니다. -->
+# <이름> — <한 줄 요약>
 
-## Why
+## 왜 만드나
 
-<A sentence or two. Who uses it, when, and why.>
+<한두 문장. 누가, 언제, 왜 쓰는지.>
 
-## What (core features)
+## 무엇을 만드나 (핵심 기능)
 
-- <feature 1>
-- <feature 2>
+- <기능 1>
+- <기능 2>
 
-## Done when
+## 완성 기준
 
-<!-- Statements you can check yourself by trying it. These become /aml:go's verification criteria. -->
+<!-- 직접 써 보고 확인할 수 있는 문장으로 씁니다. 이 목록이 /aml:go 의 검증 기준이 됩니다. -->
 
-- [ ] <a checkable statement>
-- [ ] <a checkable statement>
+- [ ] <확인할 수 있는 문장>
+- [ ] <확인할 수 있는 문장>
 
-## Decisions
+## 정한 것들
 
-| Decision | Choice | Why |
+| 정할 거리 | 고른 것 | 이유 |
 |---|---|---|
-| <decision point> | <what was chosen> | <one-line reason> |
+| <정해야 했던 것> | <고른 것> | <한 줄 이유> |
 
-## Reference (the map)
+## 참고 자료 (지도)
 
-<!-- Chosen mockup files, screenshots, "like app X" — anything you can point at. -->
+<!-- 고른 목업 파일, 화면 캡처, "○○ 앱처럼" — 가리킬 수 있는 건 무엇이든. -->
 
-- <reference>
+- <참고 자료>

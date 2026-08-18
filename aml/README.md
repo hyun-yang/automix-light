@@ -1,114 +1,114 @@
-# automix-light (aml)
+# automix-light (aml) — 한국어판
 
-> automix's light edition. Beginners want one thing — **fast, accurate implementation**.
+> automix 의 가벼운 버전. 초보자가 원하는 건 하나다 — **빠르고 정확한 구현**.
 
-automix (am) is a full harness with spec verification, code review, team mode, a pattern library, and external observability. Someone building their first app doesn't need most of that yet. automix-light keeps only what a beginner actually needs:
+automix(am)는 기획 검증, 코드 리뷰, 팀 모드, 패턴 라이브러리, 외부 관측까지 갖춘 완전한 작업 틀이다. 첫 앱을 만드는 사람에게는 대부분 아직 필요 없다. automix-light 는 초보자에게 실제로 필요한 것만 남겼다.
 
-- **3 files** — `spec.md` (what to build), `task.md` (the to-dos), `progress.md` (the log). All at the project root, all in plain words — **they follow the language you use in the conversation** (only the machine-appended measure line stays language-neutral English).
-- **4 commands** — `/aml:new` → `/aml:go` → `/aml:status`, plus `/aml:doctor` for checks.
-- **md-first** — commands, templates, and outputs are all markdown. The one exception is a single observability script, `scripts/observe.py` (Python standard library only) — it measures the model, duration, tokens, and estimated cost for each task, logs them to progress.md, and optionally sends them to Langfuse. Even if this script fails, implementation never stops.
+- **파일 3개** — `spec.md`(무엇을 만드나), `task.md`(할 일), `progress.md`(기록). 모두 프로젝트 루트에, 모두 쉬운 말로 — 이 버전은 **모든 대화와 산출물이 한국어**다.
+- **명령 4개** — `/aml:new` → `/aml:go` → `/aml:status`, 그리고 점검용 `/aml:doctor`.
+- **md 우선** — 명령·템플릿·산출물이 모두 마크다운이다. 예외는 관측 스크립트 하나, `scripts/observe.py`(파이썬 표준 라이브러리만 사용) — 할 일마다 모델·걸린 시간·토큰·예상 비용을 재서 progress.md 에 남기고, 원하면 Langfuse 로도 보낸다. 이 스크립트가 실패해도 구현은 멈추지 않는다.
 
-The design roots itself in "A Field Guide to Fable": small prompts, context first, and **mine the unknowns before you start**. Beginners start out not even knowing what they don't know (Unknown Unknowns) — so the first command isn't implementation, it's an interview.
+설계의 뿌리는 "A Field Guide to Fable" 이다: 작은 프롬프트, 제약보다 맥락, 그리고 **시작하기 전에 모르는 것부터 캐낸다**. 초보자는 자기가 무엇을 모르는지조차 모르는 상태(Unknown Unknowns)에서 출발한다 — 그래서 첫 명령이 구현이 아니라 인터뷰다.
 
-## Install
+## 설치
 
 ```bash
 cd automix-light
-./install.sh          # stages to ~/.claude-marketplaces/automix-light
+./install.sh          # ~/.claude-marketplaces/automix-light 로 복사됩니다
 ```
 
-Then, inside Claude Code:
+그다음 Claude Code 안에서:
 
 ```
 /plugin marketplace add ~/.claude-marketplaces/automix-light
 /plugin install aml@automix-light
 ```
 
-If `/aml:new`, `/aml:go`, `/aml:status`, `/aml:doctor` show up in `/help`, you're set.
+`/help` 에 `/aml:new`, `/aml:go`, `/aml:status`, `/aml:doctor` 가 보이면 설치가 끝난 것이다.
 
-## The flow
+## 흐름
 
-### 1. `/aml:new "one line: what you want to build"`
+### 1. `/aml:new "한 줄: 무엇을 만들고 싶은지"`
 
-Claude builds your map through an interview, mining four regions in turn:
+Claude 가 인터뷰로 지도를 그린다. 네 구역을 차례로 캐낸다.
 
-| Region | Meaning | How it's drawn out |
+| 구역 | 뜻 | 끌어내는 방법 |
 |---|---|---|
-| KK (known knowns) | what you already said | just captured |
-| UU (unknown unknowns) | decisions you haven't considered | shown first as a "people usually decide this" list |
-| KU (known unknowns) | decisions still open | questions with options, "recommend one" available |
-| UK (unknown knowns) | can't describe, but recognize on sight | pick from 3–4 mockups in different styles |
+| KK (아는 것을 아는) | 이미 말한 것 | 그대로 적는다 |
+| UU (모르는 줄도 모르는) | 생각해 보지 못한 정할 거리 | "보통 이런 걸 정합니다" 목록을 먼저 보여 준다 |
+| KU (모르는 걸 아는) | 아직 안 정한 것 | 선택지가 있는 질문, "추천해 주세요" 가능 |
+| UK (말로는 못 하지만 아는) | 설명은 못 해도 보면 안다 | 느낌이 다른 목업 3~4개 중에서 고른다 |
 
-At the end you get `spec.md` (with a "Done when" checklist) and `task.md`, and you review them.
+마지막에 `spec.md`("완성 기준" 목록 포함)와 `task.md` 가 만들어지고, 사용자가 검토한다.
 
 ### 2. `/aml:go`
 
-Implements `task.md` in order. For each task:
+`task.md` 를 순서대로 구현한다. 할 일마다:
 
-1. **Implement** — using spec.md's decisions and references as the map.
-2. **Verify** — confirm behavior with tests or an actual run.
-3. **Log** — add an entry to the top of `progress.md`: what you did / verification / **implementation notes** (what changed from the plan and why) / **the measure line** / next.
+1. **구현** — spec.md 의 정한 것들과 참고 자료를 지도 삼아.
+2. **검증** — 테스트나 실제 실행으로 동작을 확인.
+3. **기록** — `progress.md` 맨 위에 기록 추가: 한 일 / 확인 / **메모**(계획과 달라진 것과 이유) / **측정 줄** / 다음.
 
-The **measure line** is this edition's new feature — each task leaves one:
+**측정 줄**은 이 버전의 새 기능이다 — 할 일마다 한 줄씩 남는다:
 
 ```
-- metrics: claude-opus-4-8 · 4m 32s · tokens 12.3k in / 4.1k out (cache 88k r / 2.1k w) · est. cost $0.42
+- 측정: claude-opus-4-8 · 4분 32초 · 토큰 입력 12.3k / 출력 4.1k (캐시 읽기 88k / 쓰기 2.1k) · 예상 비용 $0.42
 ```
 
-How to read it: which model · how long · how many tokens (conversation volume) it took to finish the task, and roughly what it cost. Cost is an estimate from public pricing and may differ from your bill. Where python3 is unavailable, this line reads `metrics: unavailable` but implementation continues.
+읽는 법: 어떤 모델이 · 얼마나 걸려서 · 토큰(대화량)을 얼마나 써서 그 할 일을 끝냈고, 비용은 대략 얼마였는지. 비용은 공개 가격표로 계산한 추정치라 실제 청구액과 다를 수 있다. python3 이 없는 환경에서는 이 줄이 `측정: 기록 없음` 으로 남지만 구현은 그대로 진행된다.
 
-If you get stuck on the same problem 3 times, it stops and asks you. When everything's done, it checks each spec.md "Done when" item for real, then reports.
+같은 문제로 3번 막히면 멈추고 사용자에게 묻는다. 다 끝나면 spec.md 의 "완성 기준"을 하나씩 실제로 확인한 뒤 보고한다.
 
 ### 3. `/aml:status`
 
-Summarizes how far along you are, whether anything's blocked, and what to do next. If you want, a **quiz** — to check whether you can explain what you built to someone else.
+어디까지 왔는지, 막힌 건 없는지, 다음에 뭘 하면 되는지 요약한다. 원하면 **퀴즈** — 만든 걸 다른 사람에게 설명할 수 있는지 확인한다.
 
 ### 4. `/aml:doctor`
 
-A status check before you start (or when something seems off). Read-only — it fixes nothing.
+시작하기 전에(또는 뭔가 이상할 때) 상태를 점검한다. 읽기 전용이라 아무것도 고치지 않는다.
 
-- ❌ **Blocking**: spec.md/task.md/progress.md missing, no "Done when" or task checkboxes → points to `/aml:new`
-- ⚠️ **Advisory only**: no git, no python3 (measure line is skipped), Langfuse config issues
+- ❌ **막는 항목**: spec.md/task.md/progress.md 없음, "완성 기준"이나 할 일 체크박스 없음 → `/aml:new` 안내
+- ⚠️ **참고만**: git 없음, python3 없음(측정 줄이 안 남음), Langfuse 설정 문제
 
-Langfuse never blocks, under any circumstances.
+Langfuse 는 어떤 경우에도 막지 않는다.
 
-## Turn on Langfuse (optional, off by default)
+## Langfuse 켜기 (선택, 기본 꺼짐)
 
-[Langfuse](https://langfuse.com) is an observability tool that shows LLM work on a dashboard. Turn it on and each task's measure data (model·tokens·time·verification result) is sent, so you can see a timeline grouped by feature on the web. **It makes no difference if you leave it off** — the progress.md log is always there.
+[Langfuse](https://langfuse.com) 는 LLM 작업을 대시보드로 보여 주는 관측 도구다. 켜 두면 할 일마다 측정 데이터(모델·토큰·시간·검증 결과)가 전송되어, 기능별로 묶인 흐름을 웹에서 볼 수 있다. **꺼 두어도 아무 차이 없다** — progress.md 기록은 언제나 남는다.
 
-1. Get a public/secret key from a Langfuse project (cloud or self-hosted).
-2. Set the keys **as environment variables only** (don't put them in the config file):
+1. Langfuse 프로젝트(클라우드 또는 자체 호스팅)에서 public/secret 키를 받는다.
+2. 키는 **환경변수로만** 설정한다 (설정 파일에는 넣지 않는다):
    ```bash
    export LANGFUSE_PUBLIC_KEY=pk-...
    export LANGFUSE_SECRET_KEY=sk-...
-   export LANGFUSE_HOST=https://cloud.langfuse.com   # your address if self-hosted
+   export LANGFUSE_HOST=https://cloud.langfuse.com   # 자체 호스팅이면 그 주소
    ```
-3. Create `.aml/config.yaml` at the project root:
+3. 프로젝트 루트에 `.aml/config.yaml` 을 만든다:
    ```yaml
-   langfuse: "on"        # "off" or no file = no sending (default)
-   langfuse_host: ""     # empty → LANGFUSE_HOST, or cloud.langfuse.com if that's unset too
+   langfuse: "on"        # "off" 이거나 파일이 없으면 전송 안 함 (기본값)
+   langfuse_host: ""     # 비우면 LANGFUSE_HOST, 그것도 없으면 cloud.langfuse.com
    ```
-4. Verify the connection with `/aml:doctor` — if you see "OK: Langfuse connection verified", you're done.
+4. `/aml:doctor` 로 연결을 확인한다 — "정상: Langfuse 연결을 확인했습니다" 가 보이면 끝.
 
-Sending is best-effort: if the network drops or a key is wrong, it leaves one warning and implementation continues. To turn it off, delete `.aml/config.yaml` or set `langfuse: "off"`.
+전송은 최선 노력이다: 네트워크가 끊기거나 키가 틀리면 경고 한 줄만 남기고 구현은 계속된다. 끄려면 `.aml/config.yaml` 을 지우거나 `langfuse: "off"` 로 바꾼다.
 
-## Example session
+## 예시 한 판
 
 ```
-/aml:new "a kanban-style to-do app, as a single HTML file"
-  → "People usually decide: how many columns, due dates, where completed cards go, drag to move…"
-  → 5 questions (with options) → 4 mockups → pick #3
-  → spec.md + task.md created, review requested
+/aml:new "칸반처럼 쓰는 할 일 앱, HTML 파일 하나로"
+  → "보통 이런 걸 정합니다: 칸 개수, 마감일, 끝낸 카드는 어디로, 끌어서 옮기기…"
+  → 질문 5개(선택지 포함) → 목업 4개 → 3번 선택
+  → spec.md + task.md 생성, 검토 요청
 
 /aml:go
-  → 1.1 board screen → verify → log to progress.md (metrics: claude-opus-4-8 · 3m 11s · …)
-  → 1.2 add-card modal → …
-  → all 7 "Done when" items checked → "Open todo.html in your browser"
+  → 1.1 보드 화면 → 검증 → progress.md 기록 (측정: claude-opus-4-8 · 3분 11초 · …)
+  → 1.2 카드 추가 창 → …
+  → "완성 기준" 7개 모두 확인 → "브라우저에서 todo.html 을 열어 보세요"
 
 /aml:status
-  → "7 of 7 done. Want a quiz to check?"
+  → "7개 중 7개 완료. 퀴즈로 확인해 볼까요?"
 ```
 
-## When to graduate to automix (am)
+## 언제 automix(am)로 넘어가나
 
-When you're going to build apps **regularly** — once you need an independent verification gate (goal), code review, team execution, or a pattern library that spans projects, am has all of it. The spec → task → verify skeleton is the same, so the flow you learned in aml carries straight over. am's Langfuse integration (`/am:observe`) uses the same environment variables.
+앱을 **꾸준히** 만들게 될 때다 — 독립 검증 관문(goal), 코드 리뷰, 팀 실행, 프로젝트를 넘나드는 패턴 라이브러리가 필요해지면 am 에 전부 있다. 기획 → 할 일 → 검증이라는 뼈대는 같아서, aml 에서 익힌 흐름이 그대로 이어진다. am 의 Langfuse 연동(`/am:observe`)도 같은 환경변수를 쓴다.

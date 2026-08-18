@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# e2e-smoke-observe.sh — aml observe.py: metric aggregation / measure line / fail-open
-# (Part B adds Langfuse dry-run coverage.)
+# e2e-smoke-observe.sh — aml observe.py: 측정값 합산 / 측정 줄 / fail-open
+# (파트 B 는 Langfuse dry-run 을 함께 확인한다.)
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OBSERVE="$HERE/../aml/scripts/observe.py"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-fail() { echo "FAIL: $*" >&2; exit 1; }
+fail() { echo "실패: $*" >&2; exit 1; }
 
-[ -f "$OBSERVE" ] || fail "observe.py not found: $OBSERVE"
+[ -f "$OBSERVE" ] || fail "observe.py 를 찾을 수 없음: $OBSERVE"
 
 PROJ="$TMP/proj"; mkdir -p "$PROJ"; cd "$PROJ"
 
-# ── fake transcript: one session JSONL under the encoded-cwd directory ───────
+# ── 가짜 세션 기록: 인코딩된 cwd 폴더 아래 세션 JSONL 하나 ───────────────────
 ENC="$(python3 -c 'import os,re; print(re.sub(r"[^A-Za-z0-9]","-",os.path.realpath(os.getcwd())))')"
 TR="$TMP/projects/$ENC"; mkdir -p "$TR"
 cat > "$TR/session.jsonl" <<EOF
@@ -24,92 +24,99 @@ cat > "$TR/session.jsonl" <<EOF
 EOF
 export AML_CLAUDE_PROJECTS_DIR="$TMP/projects"
 
-# A1. single-model window (only the haiku record falls in)
-OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 single")"
-echo "$OUT" | grep -q '^metrics: claude-haiku-4-5'   || fail "A1 model: $OUT"
-echo "$OUT" | grep -q 'tokens 100 in / 50 out'       || fail "A1 tokens: $OUT"
-echo "$OUT" | grep -q 'est. cost \$'                 || fail "A1 cost: $OUT"
+# A1. 모델 하나짜리 구간 (haiku 기록만 들어온다)
+OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 하나")"
+echo "$OUT" | grep -q '^측정: claude-haiku-4-5'      || fail "A1 모델: $OUT"
+echo "$OUT" | grep -q '토큰 입력 100 / 출력 50'      || fail "A1 토큰: $OUT"
+echo "$OUT" | grep -q '예상 비용 \$'                 || fail "A1 비용: $OUT"
 
-# A2. multi-model window (2 opus + 1 haiku; the 2020 record is out of window)
-OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T00:00:00Z --label "1.1 multi")"
-echo "$OUT" | grep -q '^metrics: '                    || fail "A2 prefix: $OUT"
+# A2. 모델 여럿인 구간 (opus 2개 + haiku 1개; 2020년 기록은 구간 밖)
+OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T00:00:00Z --label "1.1 여럿")"
+echo "$OUT" | grep -q '^측정: '                       || fail "A2 머리말: $OUT"
 echo "$OUT" | grep -q 'claude-opus-4-8'               || fail "A2 opus: $OUT"
 echo "$OUT" | grep -q 'claude-haiku-4-5'              || fail "A2 haiku: $OUT"
-echo "$OUT" | grep -q '1.5k in'                       || fail "A2 opus input sum: $OUT"
-echo "$OUT" | grep -q 'est. cost \$0.03'              || fail "A2 total cost: $OUT"
+echo "$OUT" | grep -q '입력 1.5k'                     || fail "A2 opus 입력 합계: $OUT"
+echo "$OUT" | grep -q '예상 비용 \$0.03'              || fail "A2 총비용: $OUT"
 
-# A3. fail-open — exit 0 + unavailable even when the transcript root is missing
+# A3. fail-open — 기록 폴더 자체가 없어도 종료 코드 0 + "기록 없음"
 if ! OUT="$(AML_CLAUDE_PROJECTS_DIR="$TMP/none" python3 "$OBSERVE" task-done --since 2026-07-01T00:00:00Z --label x)"; then
-  fail "A3 must exit 0"
+  fail "A3 는 종료 코드 0 이어야 함"
 fi
-echo "$OUT" | grep -q 'unavailable'                   || fail "A3 message: $OUT"
+echo "$OUT" | grep -q '기록 없음'                     || fail "A3 메시지: $OUT"
 
-echo "OK: part A passed"
+echo "정상: 파트 A 통과"
 
-# ── Part B: Langfuse opt-in ──────────────────────────────────────────────────
-# B1. config absent → off → measure line only (no batch output even with --dry-run)
-OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 single" --dry-run)"
-[ "$(printf '%s\n' "$OUT" | wc -l)" -eq 1 ] || fail "B1 off must print 1 line: $OUT"
+# ── 파트 B: Langfuse 켜기 ────────────────────────────────────────────────────
+# B1. 설정 파일 없음 → 꺼짐 → 측정 줄만 (--dry-run 이어도 배치 출력 없음)
+OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 하나" --dry-run)"
+[ "$(printf '%s\n' "$OUT" | wc -l)" -eq 1 ] || fail "B1 꺼짐이면 1줄만 나와야 함: $OUT"
 
-# B2. config on + --dry-run → 2nd line is the batch JSON; verify structure
+# B2. 설정 on + --dry-run → 둘째 줄이 배치 JSON; 구조를 확인한다
 mkdir -p .aml
 printf 'langfuse: "on"\nlangfuse_host: ""\n' > .aml/config.yaml
-OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 single" \
-       --feature "test feature" --note "3 tests passed" --dry-run)"
+OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 하나" \
+       --feature "테스트 기능" --note "테스트 3개 통과" --dry-run)"
 printf '%s\n' "$OUT" | sed -n '2p' | python3 -c '
 import json, sys
 b = json.load(sys.stdin)["batch"]
 types = sorted(e["type"] for e in b)
 assert types == ["event-create", "generation-create", "trace-create"], types
 tr = next(e for e in b if e["type"] == "trace-create")
-assert tr["body"]["sessionId"] == "test feature", tr["body"]
+assert tr["body"]["sessionId"] == "테스트 기능", tr["body"]
 assert tr["body"]["id"].startswith("aml-"), tr["body"]["id"]
 gen = next(e for e in b if e["type"] == "generation-create")
 assert gen["body"]["model"] == "claude-haiku-4-5", gen["body"]["model"]
 assert gen["body"]["usageDetails"]["input"] == 100, gen["body"]["usageDetails"]
 ev = next(e for e in b if e["type"] == "event-create")
-assert ev["body"]["metadata"]["note"] == "3 tests passed", ev["body"]
-' || fail "B2 batch structure"
+assert ev["body"]["metadata"]["note"] == "테스트 3개 통과", ev["body"]
+' || fail "B2 배치 구조"
 
-# B3. deterministic ids — same since/label twice → identical id set
+# B3. id 는 결정적 — 같은 since/label 을 두 번 실행하면 id 집합이 같아야 한다
 ids() { printf '%s\n' "$1" | sed -n '2p' | python3 -c 'import json,sys; print(sorted(e["id"] for e in json.load(sys.stdin)["batch"]))'; }
-OUT2="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 single" \
-        --feature "test feature" --note "3 tests passed" --dry-run)"
-[ "$(ids "$OUT")" = "$(ids "$OUT2")" ] || fail "B3 ids must be deterministic"
+OUT2="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label "1.2 하나" \
+        --feature "테스트 기능" --note "테스트 3개 통과" --dry-run)"
+[ "$(ids "$OUT")" = "$(ids "$OUT2")" ] || fail "B3 id 는 결정적이어야 함"
 
-# B3b. non-ASCII feature/note survive the round-trip (unicode is not mangled)
+# B3b. 한글 라벨이 trace id 에 그대로 남는다 (라벨 구분이 사라지지 않는다)
+printf '%s\n' "$OUT" | sed -n '2p' | python3 -c '
+import json, sys
+tr = next(e for e in json.load(sys.stdin)["batch"] if e["type"] == "trace-create")
+assert "하나" in tr["body"]["id"], tr["body"]["id"]
+' || fail "B3b 한글 라벨 slug"
+
+# B3c. ASCII 가 아닌 기능명/메모가 그대로 왕복한다 (유니코드가 깨지지 않는다)
 OUT="$(python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label x \
-       --feature "café-日本語-🎯" --note "non-ASCII note" --dry-run)"
+       --feature "café-日本語-🎯" --note "ASCII 아닌 메모" --dry-run)"
 printf '%s\n' "$OUT" | sed -n '2p' | python3 -c '
 import json, sys
 tr = next(e for e in json.load(sys.stdin)["batch"] if e["type"] == "trace-create")
 assert tr["body"]["sessionId"] == "café-日本語-🎯", tr["body"]["sessionId"]
-' || fail "B3b non-ASCII round-trip"
+' || fail "B3c ASCII 아닌 값 왕복"
 
-# B4. on + no creds + not dry-run → skip-send warning (stderr), exit 0, measure line on stdout
+# B4. on + 키 없음 + dry-run 아님 → 전송 건너뜀 경고(stderr), 종료 코드 0, stdout 에는 측정 줄
 ERR="$TMP/err"
 if ! OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY \
       python3 "$OBSERVE" task-done --since 2026-07-01T01:00:00Z --label x 2>"$ERR")"; then
-  fail "B4 must exit 0"
+  fail "B4 는 종료 코드 0 이어야 함"
 fi
-echo "$OUT" | grep -q '^metrics: '     || fail "B4 stdout: $OUT"
-grep -q 'skipping send' "$ERR"         || fail "B4 stderr: $(cat "$ERR")"
+echo "$OUT" | grep -q '^측정: '          || fail "B4 stdout: $OUT"
+grep -q '전송을 건너뜁니다' "$ERR"       || fail "B4 stderr: $(cat "$ERR")"
 
-# B5. ping — WARN when no creds, exit 0
+# B5. ping — 키가 없으면 경고, 종료 코드 0
 if ! OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY python3 "$OBSERVE" ping)"; then
-  fail "B5 must exit 0"
+  fail "B5 는 종료 코드 0 이어야 함"
 fi
-echo "$OUT" | grep -q '^WARN:'         || fail "B5: $OUT"
+echo "$OUT" | grep -q '^경고:'           || fail "B5: $OUT"
 
-# ── Part C: command md wiring + staged path ──────────────────────────────────
+# ── 파트 C: 명령 md 연결 + 복사본 경로 ──────────────────────────────────────
 AMLDIR="$HERE/../aml"
-grep -q 'scripts/observe.py" task-done --since' "$AMLDIR/commands/go.md" || fail "C1 go.md wiring"
-grep -q 'scripts/observe.py" ping' "$AMLDIR/commands/doctor.md"          || fail "C1 doctor.md wiring"
-grep -q 'metrics:' "$AMLDIR/templates/progress.template.md"              || fail "C1 template line"
+grep -q 'scripts/observe.py" task-done --since' "$AMLDIR/commands/go.md" || fail "C1 go.md 연결"
+grep -q 'scripts/observe.py" ping' "$AMLDIR/commands/doctor.md"          || fail "C1 doctor.md 연결"
+grep -q '측정:' "$AMLDIR/templates/progress.template.md"                 || fail "C1 템플릿 측정 줄"
 
-# The staged copy runs from the same relative path (<plugin root>/scripts/observe.py)
+# 복사본도 같은 상대 경로(<플러그인 루트>/scripts/observe.py)에서 실행된다
 AUTOMIX_LIGHT_MARKETPLACE_DIR="$TMP/stage" bash "$HERE/../install.sh" >/dev/null
 OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY python3 "$TMP/stage/aml/scripts/observe.py" task-done --since 2026-07-01T01:00:00Z --label staged 2>/dev/null)"
-echo "$OUT" | grep -q '^metrics: '                                       || fail "C2 staged copy: $OUT"
+echo "$OUT" | grep -q '^측정: '                                          || fail "C2 복사본: $OUT"
 
-echo "OK: e2e-smoke-observe passed"
+echo "정상: e2e-smoke-observe 통과"

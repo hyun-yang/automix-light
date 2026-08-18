@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# install.sh — stage the automix-light marketplace at a stable path and
-# print the /plugin commands to run inside Claude Code.
+# install.sh — automix-light 마켓플레이스를 고정된 경로에 복사하고,
+# Claude Code 안에서 실행할 /plugin 명령을 출력한다.
 #
-# Usage (from the marketplace root):
+# 사용법 (마켓플레이스 루트에서):
 #   $ cd automix-light
 #   $ ./install.sh
 
@@ -11,49 +11,49 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET="${AUTOMIX_LIGHT_MARKETPLACE_DIR:-$HOME/.claude-marketplaces/automix-light}"
 
-echo "automix-light installer"
+echo "automix-light 설치 도구"
 echo "─────────────────────────────────────────────────"
-echo "Source: $SCRIPT_DIR"
-echo "Target: $TARGET"
+echo "원본: $SCRIPT_DIR"
+echo "대상: $TARGET"
 echo
 
-# 1. Confirm this is the marketplace root
+# 1. 여기가 마켓플레이스 루트인지 확인
 if [[ ! -f "$SCRIPT_DIR/.claude-plugin/marketplace.json" ]]; then
-  echo "ERROR: $SCRIPT_DIR/.claude-plugin/marketplace.json not found." >&2
-  echo "       Run this from the automix-light root that has marketplace.json." >&2
+  echo "오류: $SCRIPT_DIR/.claude-plugin/marketplace.json 이 없습니다." >&2
+  echo "      marketplace.json 이 있는 automix-light 루트에서 실행하세요." >&2
   exit 1
 fi
 
-# 2. Validate the JSON manifests (only when python3 is available)
+# 2. JSON 파일 검사 (python3 이 있을 때만)
 if command -v python3 >/dev/null 2>&1; then
   python3 -c "import json; json.load(open('$SCRIPT_DIR/.claude-plugin/marketplace.json'))" \
-    || { echo "ERROR: marketplace.json is not valid JSON" >&2; exit 1; }
+    || { echo "오류: marketplace.json 이 올바른 JSON 이 아닙니다" >&2; exit 1; }
   python3 -c "import json; json.load(open('$SCRIPT_DIR/aml/.claude-plugin/plugin.json'))" \
-    || { echo "ERROR: plugin.json is not valid JSON" >&2; exit 1; }
+    || { echo "오류: plugin.json 이 올바른 JSON 이 아닙니다" >&2; exit 1; }
 fi
 
-# 3. Copy to the stable path (back up any existing install)
+# 3. 고정 경로로 복사 (기존 설치본은 백업)
 mkdir -p "$(dirname "$TARGET")"
 if [[ -d "$TARGET" ]]; then
-  echo "Backing up the existing install to ${TARGET}.bak"
+  echo "기존 설치본을 ${TARGET}.bak 으로 백업합니다"
   rm -rf "${TARGET}.bak"
   mv "$TARGET" "${TARGET}.bak"
 fi
 cp -r "$SCRIPT_DIR" "$TARGET"
 
-# 4. Next steps
-cat <<EOF
-✓ Staged: $TARGET
+# 4. 다음 단계
+cat <<MSG
+✓ 복사 완료: $TARGET
 
-Next — run these inside Claude Code:
+다음 — Claude Code 안에서 실행하세요:
 
-  1. Add the marketplace:
+  1. 마켓플레이스 추가:
      /plugin marketplace add $TARGET
 
-  2. Install the plugin:
+  2. 플러그인 설치:
      /plugin install aml@automix-light
 
-  3. Verify:
-     /help                  # /aml:new, /aml:go, /aml:status should appear
+  3. 확인:
+     /help                  # /aml:new, /aml:go, /aml:status 가 보이면 됩니다
 
-EOF
+MSG

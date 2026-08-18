@@ -1,13 +1,13 @@
-<!-- Headings/hints are examples — follow the structure, write content in the user's language. -->
-# Tasks — <feature name>
+<!-- 제목과 안내문은 예시입니다 — 구조는 그대로 두고, 내용은 한국어로 씁니다. -->
+# 할 일 — <기능 이름>
 
-<!-- One task = one chunk finished in a single go. Don't over-split. Work in order. -->
+<!-- 할 일 하나 = 한 번에 끝내는 한 덩어리. 너무 잘게 쪼개지 않습니다. 순서대로 진행합니다. -->
 
-## 1. <section name>
+## 1. <구간 이름>
 
-- [ ] 1.1 <task>
-- [ ] 1.2 <task>
+- [ ] 1.1 <할 일>
+- [ ] 1.2 <할 일>
 
-## 2. <section name>
+## 2. <구간 이름>
 
-- [ ] 2.1 <task>
+- [ ] 2.1 <할 일>

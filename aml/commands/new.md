@@ -1,42 +1,42 @@
 ---
-description: Turn a one-line idea into spec.md / task.md / progress.md through an interview. Does not implement.
-argument-hint: "<one line: what you want to build>"
+description: 한 줄 아이디어를 인터뷰로 구체화해 spec.md / task.md / progress.md 를 만든다. 구현은 하지 않는다.
+argument-hint: "<한 줄: 무엇을 만들고 싶은지>"
 allowed-tools: Read, Write, Glob, Grep, Bash, AskUserQuestion
 ---
 
-# /aml:new — draw the map through conversation
+# /aml:new — 대화로 지도를 그린다
 
-The user's idea: $ARGUMENTS
+사용자의 아이디어: $ARGUMENTS
 
-You're working with a beginner. They can't read code, but they can answer questions and react to what they see. The goal of this command is to move the beginner's mental picture onto a map called spec.md — implementation is /aml:go's job. Match the language the user writes in — conversation and outputs (spec.md·task.md·progress.md, including the template headings) in the user's language, in plain words a beginner understands. This language becomes the baseline that /aml:go·/aml:status·/aml:doctor follow. (Only the machine-appended measure line stays language-neutral — see the outputs below.)
+지금 함께 일하는 사람은 초보자다. 코드는 못 읽지만, 질문에는 답할 수 있고 눈으로 본 것에는 반응할 수 있다. 이 명령의 목표는 초보자 머릿속의 그림을 spec.md 라는 지도로 옮기는 것이다 — 구현은 /aml:go 의 몫이다. 대화와 산출물(spec.md·task.md·progress.md, 템플릿의 제목까지)은 모두 **한국어**로, 초보자가 알아듣는 쉬운 말로 쓴다. (기계가 붙이는 측정 줄만 observe.py 가 만든 형식 그대로 둔다 — 아래 산출물 항목 참고.)
 
-## 1. Check for existing work
+## 1. 이미 하던 일이 있는지 확인
 
-If spec.md and task.md exist at the project root with unfinished tasks, ask the user whether to continue (point to /aml:go) or start fresh. If starting fresh, leave a summary of the earlier work in progress.md, then rewrite spec.md and task.md.
+프로젝트 루트에 spec.md 와 task.md 가 있고 끝나지 않은 할 일이 남아 있으면, 이어서 할지(/aml:go 안내) 새로 시작할지 사용자에게 묻는다. 새로 시작한다면 이전 작업 요약을 progress.md 에 남긴 뒤 spec.md 와 task.md 를 새로 쓴다.
 
-## 2. Survey the territory
+## 2. 지형 살피기
 
-If there's existing code, skim it to learn the language, framework, and structure. Skip this for an empty project.
+기존 코드가 있으면 훑어보고 언어·프레임워크·구조를 파악한다. 빈 프로젝트면 건너뛴다.
 
-## 3. Mine the unknowns — the interview
+## 3. 모르는 것 캐내기 — 인터뷰
 
-A beginner's map has four regions, each drawn out a different way:
+초보자의 지도에는 네 구역이 있고, 구역마다 끌어내는 방법이 다르다.
 
-- **KK (known knowns)** — what the user already said. Don't re-ask; just capture it.
-- **UU (unknown unknowns)** — decision points they haven't even considered. **Blind Spot Pass**: first show a list of "things people usually decide when building this." Just seeing them turns a UU into a KU.
-- **KU (known unknowns)** — things that need deciding but aren't decided yet. Ask one at a time, without jargon, with options. Give every question a "Not sure — recommend one" choice, and if they pick it, decide the choice and the reason for them.
-- **UK (unknown knowns)** — things they can't put into words but recognize on sight. When the screen/design matters and the user can't describe their taste, build 3–4 wildly different screen mockups in a single HTML file and let them pick. The chosen mockup becomes a reference (part of the map).
+- **KK (아는 것을 아는)** — 사용자가 이미 말한 것. 다시 묻지 말고 그대로 적는다.
+- **UU (모르는 줄도 모르는)** — 생각조차 해 보지 못한 정할 거리. **사각지대 훑기**: 먼저 "이런 걸 만들 때 보통 이런 걸 정합니다" 목록을 보여 준다. 목록을 보는 것만으로 UU 가 KU 로 바뀐다.
+- **KU (모르는 걸 아는)** — 정해야 하는데 아직 안 정한 것. 전문 용어 없이, 선택지와 함께, 한 번에 하나씩 묻는다. 모든 질문에 "잘 모르겠어요 — 추천해 주세요" 선택지를 넣고, 그걸 고르면 선택과 이유를 대신 정해 준다.
+- **UK (말로는 못 하지만 아는)** — 설명은 못 해도 보면 안다. 화면이나 디자인이 중요한데 사용자가 취향을 말로 못 하면, 완전히 다른 느낌의 화면 목업 3~4개를 HTML 파일 하나에 만들어 고르게 한다. 고른 목업이 참고 자료(지도의 일부)가 된다.
 
-Scale the number of questions to the size — about 3 for a small feature, about 7 for a new app or a framework choice. Prioritize questions that could change the architecture.
+질문 수는 규모에 맞춘다 — 작은 기능이면 3개쯤, 새 앱이나 프레임워크 선택이 걸리면 7개쯤. 구조가 바뀔 수 있는 질문을 먼저 한다.
 
-## 4. Write the outputs
+## 4. 산출물 쓰기
 
-Following the three templates in ${CLAUDE_PLUGIN_ROOT}/templates/, create these at the project root:
+${CLAUDE_PLUGIN_ROOT}/templates/ 의 템플릿 3개를 따라 프로젝트 루트에 만든다.
 
-- **spec.md** — holds the interview results. Write "Done when" as statements the beginner can check themselves by trying it — this checklist is /aml:go's verification criteria. Record interview decisions in the "Decisions" table, and chosen mockups/screenshots/"like app X" under "Reference (the map)".
-- **task.md** — coarse tasks to run in order. One task = one chunk finished in a single go.
-- **progress.md** — create it from the template if absent, and log a "planning" entry with today's date.
+- **spec.md** — 인터뷰 결과를 담는다. "완성 기준"은 초보자가 직접 써 보고 확인할 수 있는 문장으로 쓴다 — 이 목록이 /aml:go 의 검증 기준이 된다. 인터뷰에서 정한 것은 "정한 것들" 표에, 고른 목업·화면 캡처·"○○ 앱처럼"은 "참고 자료 (지도)"에 적는다.
+- **task.md** — 순서대로 진행할 굵은 할 일. 할 일 하나 = 한 번에 끝내는 한 덩어리.
+- **progress.md** — 없으면 템플릿으로 만들고, 오늘 날짜로 "계획 세움" 기록을 하나 남긴다.
 
-## 5. Confirm
+## 5. 확인받기
 
-Show a plain-language summary of spec.md and get it reviewed. Once confirmed, tell them: "Run /aml:go to start implementation."
+spec.md 를 쉬운 말로 요약해 보여 주고 검토받는다. 확인이 끝나면 이렇게 안내한다: "/aml:go 를 실행하면 구현을 시작합니다."
