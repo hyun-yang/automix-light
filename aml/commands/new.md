@@ -12,11 +12,24 @@ allowed-tools: Read, Write, Glob, Grep, Bash, AskUserQuestion
 
 ## 1. 이미 하던 일이 있는지 확인
 
-프로젝트 루트에 spec.md 와 task.md 가 있고 끝나지 않은 할 일이 남아 있으면, 이어서 할지(/aml:go 안내) 새로 시작할지 사용자에게 묻는다. 새로 시작한다면 이전 작업 요약을 progress.md 에 남긴 뒤 spec.md 와 task.md 를 새로 쓴다.
+프로젝트 루트에 spec.md 와 task.md 가 있고 끝나지 않은 할 일이 남아 있으면, 이어서 할지(/aml:go 안내) 새로 시작할지 사용자에게 묻는다. 새로 시작한다면 이전 작업 요약을 progress.md 에 남긴 뒤 spec.md 와 task.md 를 새로 쓴다. 이어서 하기로 했더라도 2단계의 준비물(CLAUDE.md·git)은 확인하고 넘긴다.
 
-## 2. 지형 살피기
+## 2. 지형 살피기와 준비물 갖추기
 
 기존 코드가 있으면 훑어보고 언어·프레임워크·구조를 파악한다. 빈 프로젝트면 건너뛴다.
+
+이어서 준비물 두 가지를 확인한다 — 인터뷰를 하기 전에, 파일을 쓰기 전에.
+
+- **CLAUDE.md** — 프로젝트 루트에 있는지 확인만 하고 기억해 둔다. **있으면 절대 덮어쓰지 않는다.** 없으면 4단계에서 인터뷰 결과로 만든다.
+- **git** — 저장소가 아니면 알리고 바로 초기화한다. 이미 저장소면 아무것도 하지 않는다(남의 브랜치 이름도 바꾸지 않는다).
+
+  ```bash
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 \
+    || git init -b main 2>/dev/null \
+    || { git init && git symbolic-ref HEAD refs/heads/main; }
+  ```
+
+  둘째 갈래는 `-b` 를 모르는 옛 git 대비다 — 첫 커밋 전이라 `master` 대신 `main` 을 가리키게 하면 된다. 사용자에게는 한 줄로 알린다: "되돌리기가 쉽도록 git 을 준비하고 기본 브랜치를 main 으로 맞췄습니다."
 
 ## 3. 모르는 것 캐내기 — 인터뷰
 
@@ -31,11 +44,12 @@ allowed-tools: Read, Write, Glob, Grep, Bash, AskUserQuestion
 
 ## 4. 산출물 쓰기
 
-${CLAUDE_PLUGIN_ROOT}/templates/ 의 템플릿 3개를 따라 프로젝트 루트에 만든다.
+${CLAUDE_PLUGIN_ROOT}/templates/ 의 템플릿을 따라 프로젝트 루트에 만든다.
 
 - **spec.md** — 인터뷰 결과를 담는다. "완성 기준"은 초보자가 직접 써 보고 확인할 수 있는 문장으로 쓴다 — 이 목록이 /aml:go 의 검증 기준이 된다. 인터뷰에서 정한 것은 "정한 것들" 표에, 고른 목업·화면 캡처·"○○ 앱처럼"은 "참고 자료 (지도)"에 적는다.
 - **task.md** — 순서대로 진행할 굵은 할 일. 할 일 하나 = 한 번에 끝내는 한 덩어리.
 - **progress.md** — 없으면 템플릿으로 만들고, 오늘 날짜로 "계획 세움" 기록을 하나 남긴다.
+- **CLAUDE.md** — 2단계에서 없다고 확인된 경우에만, claude.template.md 를 따라 인터뷰 답으로 채워 쓴다. Claude Code 가 다음 세션부터 자동으로 읽는 파일이니 짧고 정확하게. 인터뷰에서 안 나온 칸(테스트하는 법 등)은 억지로 되묻지 말고 `<아직 안 정함>` 으로 둔다.
 
 ## 5. 확인받기
 

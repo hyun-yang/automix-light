@@ -114,9 +114,16 @@ grep -q 'scripts/observe.py" task-done --since' "$AMLDIR/commands/go.md" || fail
 grep -q 'scripts/observe.py" ping' "$AMLDIR/commands/doctor.md"          || fail "C1 doctor.md 연결"
 grep -q '측정:' "$AMLDIR/templates/progress.template.md"                 || fail "C1 템플릿 측정 줄"
 
+# C3. 준비물 점검(CLAUDE.md + git) 연결
+[ -f "$AMLDIR/templates/claude.template.md" ]                            || fail "C3 CLAUDE 템플릿"
+grep -q 'claude.template.md' "$AMLDIR/commands/new.md"                   || fail "C3 new.md 템플릿 연결"
+grep -q 'git init' "$AMLDIR/commands/new.md"                             || fail "C3 new.md git 준비"
+grep -q 'CLAUDE.md' "$AMLDIR/commands/doctor.md"                         || fail "C3 doctor.md 점검"
+
 # 복사본도 같은 상대 경로(<플러그인 루트>/scripts/observe.py)에서 실행된다
 AUTOMIX_LIGHT_MARKETPLACE_DIR="$TMP/stage" bash "$HERE/../install.sh" >/dev/null
 OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY python3 "$TMP/stage/aml/scripts/observe.py" task-done --since 2026-07-01T01:00:00Z --label staged 2>/dev/null)"
 echo "$OUT" | grep -q '^측정: '                                          || fail "C2 복사본: $OUT"
+[ -f "$TMP/stage/aml/templates/claude.template.md" ]                     || fail "C2 복사본 템플릿"
 
 echo "정상: e2e-smoke-observe 통과"
