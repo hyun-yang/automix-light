@@ -1,11 +1,11 @@
 ---
-description: 시작 전 점검 — 파일 3개와 완성 기준, git/python3, Langfuse 설정을 확인한다. 읽기 전용.
+description: 시작 전 점검 — 파일과 완성 기준, 안전망, git/python3, Langfuse 설정을 확인한다. 읽기 전용.
 allowed-tools: Read, Bash, Glob, Grep
 ---
 
 # /aml:doctor — 시작 전 점검
 
-프로젝트 루트에서 아래를 순서대로 확인하고 한국어로 쉽게 보고한다. 아무것도 고치지 않는다.
+프로젝트 루트에서 아래를 순서대로 확인하고 한국어로 쉽게 보고한다. **아무것도 고치지 않는다.**
 
 ## 막는 항목 — 실패하면 ❌ 와 해결 방법을 알린다
 
@@ -15,14 +15,23 @@ allowed-tools: Read, Bash, Glob, Grep
 
 ## 참고만 하는 항목 — 막지 않고 ⚠️ 로 알린다
 
-4. CLAUDE.md 가 있는가? — 없으면: "이 프로젝트가 뭔지 Claude 가 매번 다시 파악해야 합니다. /aml:new 를 실행하면 만들어 드립니다"
-5. git 저장소인가(`git rev-parse --is-inside-work-tree`)? — 아니면: "/aml:new 가 git 을 준비하고 기본 브랜치를 main 으로 맞춰 줍니다 — 있으면 실수를 되돌리기 쉽습니다"
-6. python3 를 쓸 수 있는가(`command -v python3`)? — 아니면: "progress.md 에 측정 줄(모델·시간·토큰·비용)이 남지 않습니다"
-7. Langfuse 상태 — 셋 중 하나로 보고한다. **Langfuse 는 어떤 경우에도 막지 않는다.**
-   - `.aml/config.yaml` 이 없거나 `langfuse:` 가 "on" 이 아니면 → "Langfuse 전송: 꺼짐(기본값)". 켜는 방법은 README 의 "Langfuse 켜기" 항목.
-   - "on" 인데 LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY 환경변수가 없으면 → ⚠️ "켜져 있지만 키가 없어 전송을 건너뜁니다" + 키 설정 방법 (키 값은 절대 출력하지 않는다 — 있음/없음만).
-   - "on" 이고 키도 있으면 → `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" ping` 으로 연결을 확인하고, 나온 정상/경고 결과를 그대로 전한다.
+4. **CLAUDE.md** 가 있는가? — 없으면: "이 프로젝트가 뭔지 Claude 가 매번 다시 파악해야 합니다. /aml:new 를 실행하면 만들어 드립니다". 있으면 길이도 본다 — 120줄이 넘으면 "한 페이지를 넘었습니다. 이제 안 맞는 줄이 있는지 /aml:rule 로 정리해 보세요".
+5. **intent.md** 가 있는가? — 없으면: "왜 만들기로 했는지 기록이 없습니다. 다음에 /aml:new 나 /aml:next 를 실행하면 만들어집니다" (지금 당장은 문제없다).
+6. **REVIEW.md** 가 있는가? — 없으면: "리뷰 기준표가 없습니다. /aml:review 를 처음 실행하면 만들어 드립니다".
+7. **`.aml/FIXING`** 이 남아 있는가? — 있으면 ⚠️: "버그를 고치는 중이라는 표시가 남아 있습니다. 이 표시가 있는 동안에는 테스트 파일을 고칠 수 없습니다. 다 끝난 상태라면 `rm .aml/FIXING` 으로 지우세요."
+8. **안전망(훅)** 상태 — 셋 중 하나로 보고한다.
+   - python3 이 없으면 → ⚠️ "안전망이 동작하지 않습니다(python3 없음). 비밀키·되돌릴 수 없는 명령을 막아 주지 못합니다."
+   - `.aml/config.yaml` 에 `guard: "off"` 가 있으면 → ⚠️ "안전망을 꺼 두셨습니다."
+   - 그 밖에는 → ✅ "안전망 켜짐 — 비밀키 · 고치는 중 테스트 파일 · 되돌릴 수 없는 명령을 막습니다."
+9. **git** 저장소인가(`git rev-parse --is-inside-work-tree`)? — 아니면: "/aml:new 가 git 을 준비하고 기본 브랜치를 main 으로 맞춰 줍니다 — 있으면 실수를 되돌리기 쉽습니다"
+10. **python3** 를 쓸 수 있는가(`command -v python3`)? — 아니면: "progress.md 에 측정 줄(모델·시간·토큰·비용)이 남지 않습니다"
+11. **규칙 카드** — `.claude/skills/*/SKILL.md` 개수를 세어 알린다(0개도 정상). 있으면 이름만 한 줄로.
+12. **설정을 바꾼 뒤 확인했는가** — CLAUDE.md · REVIEW.md · 규칙 카드 중 가장 최근에 고쳐진 시각이 progress.md 의 마지막 기록보다 나중이면 ⚠️: "Claude 를 이끄는 설정이 바뀐 뒤 아직 전체 확인을 안 했습니다. `/aml:go` 나 `/aml:review` 로 완성 기준을 한 번 다시 훑어보세요." (설정이 바뀌면 결과도 달라질 수 있다.)
+13. **Langfuse** 상태 — 셋 중 하나로 보고한다. **Langfuse 는 어떤 경우에도 막지 않는다.**
+    - `.aml/config.yaml` 이 없거나 `langfuse:` 가 "on" 이 아니면 → "Langfuse 전송: 꺼짐(기본값)". 켜는 방법은 README 의 "Langfuse 켜기" 항목.
+    - "on" 인데 LANGFUSE_PUBLIC_KEY / LANGFUSE_SECRET_KEY 환경변수가 없으면 → ⚠️ "켜져 있지만 키가 없어 전송을 건너뜁니다" + 키 설정 방법 (키 값은 절대 출력하지 않는다 — 있음/없음만).
+    - "on" 이고 키도 있으면 → `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" ping` 으로 연결을 확인하고, 나온 정상/경고 결과를 그대로 전한다.
 
 ## 보고 형식
 
-항목마다 ✅/❌/⚠️ 한 줄씩. 마지막에 다음에 할 일을 한 줄로 — 파일이 없으면 /aml:new, 할 일이 남았으면 /aml:go, 문제가 없으면 "바로 시작하셔도 됩니다".
+항목마다 ✅/❌/⚠️ 한 줄씩. 마지막에 다음에 할 일을 한 줄로 — 파일이 없으면 /aml:new, 할 일이 남았으면 /aml:go, 다 끝났으면 /aml:next, 문제가 없으면 "바로 시작하셔도 됩니다".

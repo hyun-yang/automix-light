@@ -54,6 +54,6 @@ cat <<MSG
      /plugin install aml@automix-light
 
   3. 확인:
-     /help                  # /aml:new, /aml:go, /aml:status 가 보이면 됩니다
+     /help                  # /aml:new, /aml:go, /aml:review, /aml:next 가 보이면 됩니다
 
 MSG

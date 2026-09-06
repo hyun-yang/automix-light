@@ -300,6 +300,80 @@ def post(host: str, public: str, secret: str, batch: list[dict]) -> int | None:
         return None
 
 
+# ── 진행 기록 요약 (progress.md 의 측정 줄 합산) ─────────────────────────────
+
+_DUR_H = re.compile(r"(\d+)시간")
+_DUR_M = re.compile(r"(\d+)분")
+_DUR_S = re.compile(r"(\d+)초")
+_COST = re.compile(r"예상 비용\s*\$([0-9]+(?:\.[0-9]+)?)")
+_TOK_IN = re.compile(r"입력\s*([0-9]+(?:\.[0-9]+)?)([kM]?)")
+_TOK_OUT = re.compile(r"출력\s*([0-9]+(?:\.[0-9]+)?)([kM]?)")
+_MODEL_MULTI = re.compile(r"([A-Za-z][A-Za-z0-9._-]*)\(입력")
+_MODEL_ONE = re.compile(r"^([A-Za-z][A-Za-z0-9._-]*)\s+·")
+
+
+def unhumanize(num: str, unit: str) -> int:
+    """humanize() 가 만든 표기(12.3k, 1.4M)를 되돌린다 — 표기 자체가 반올림이라 근삿값이다."""
+    v = float(num)
+    if unit == "k":
+        v *= 1_000
+    elif unit == "M":
+        v *= 1_000_000
+    return int(round(v))
+
+
+def summarize_progress(text: str) -> str:
+    """progress.md 전체에서 '측정:' 줄만 골라 합산한다 (템플릿 안내문은 건너뛴다)."""
+    tasks = untracked = secs = tok_in = tok_out = 0
+    cost = 0.0
+    have_cost = False
+    models: dict[str, int] = {}
+    for raw in text.splitlines():
+        at = raw.find("측정:")
+        if at < 0:
+            continue
+        line = raw[at + len("측정:"):].strip()
+        if line.startswith("기록 없음"):
+            tasks += 1
+            untracked += 1
+            continue
+        hits = [rx.search(line) for rx in (_DUR_H, _DUR_M, _DUR_S)]
+        if not any(hits):
+            continue  # 걸린 시간이 없으면 진짜 측정 줄이 아니다 (템플릿 안내문 등)
+        tasks += 1
+        for m, mult in zip(hits, (3600, 60, 1)):
+            if m:
+                secs += int(m.group(1)) * mult
+        m = _COST.search(line)
+        if m:
+            cost += float(m.group(1))
+            have_cost = True
+        for num, unit in _TOK_IN.findall(line):
+            tok_in += unhumanize(num, unit)
+        for num, unit in _TOK_OUT.findall(line):
+            tok_out += unhumanize(num, unit)
+        found = _MODEL_MULTI.findall(line)
+        if not found:
+            one = _MODEL_ONE.match(line)
+            found = [one.group(1)] if one else []
+        for name in found:
+            models[name] = models.get(name, 0) + 1
+    if tasks == 0:
+        return "요약: 측정 줄이 아직 없습니다"
+    parts = [f"요약: 작업 {tasks}개", f"총 {humanize_dur(secs)}"]
+    if tok_in or tok_out:
+        parts.append(f"토큰 대략 입력 {humanize(tok_in)} / 출력 {humanize(tok_out)}")
+    if have_cost:
+        parts.append(f"예상 비용 합계 {fmt_usd(cost)}")
+    out = " · ".join(parts)
+    if models:
+        ranked = sorted(models.items(), key=lambda kv: (-kv[1], kv[0]))
+        out += "\n모델: " + " · ".join(f"{m} {n}회" for m, n in ranked)
+    if untracked:
+        out += f"\n측정 없는 작업: {untracked}개"
+    return out
+
+
 # ── 명령 ──────────────────────────────────────────────────────────────────
 
 def cmd_task_done(args) -> None:
@@ -327,6 +401,16 @@ def cmd_task_done(args) -> None:
     status = post(host, public, secret, batch)
     if status is not None:
         print(f"langfuse: 전송 완료 (HTTP {status})", file=sys.stderr)
+
+
+def cmd_summary(args) -> None:
+    path = Path(args.path)
+    try:
+        text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        print(f"요약: {path} 를 읽지 못했습니다")
+        return
+    print(summarize_progress(text))
 
 
 def cmd_ping() -> None:
@@ -357,10 +441,14 @@ def main() -> None:
     td.add_argument("--feature", default=None, help="기능 이름 (Langfuse sessionId)")
     td.add_argument("--note", default=None, help="한 줄 검증 결과")
     td.add_argument("--dry-run", action="store_true", help="전송 대신 배치 JSON 출력")
+    sm = sub.add_parser("summary", help="progress.md 의 측정 줄 합산 (/aml:status 용)")
+    sm.add_argument("path", nargs="?", default="progress.md", help="progress.md 경로")
     sub.add_parser("ping", help="Langfuse 연결 확인 (/aml:doctor 용)")
     args = ap.parse_args()
     if args.cmd == "task-done":
         cmd_task_done(args)
+    elif args.cmd == "summary":
+        cmd_summary(args)
     else:
         cmd_ping()
 

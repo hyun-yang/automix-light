@@ -3,13 +3,13 @@
   "owner": {
     "name": "Hayden"
   },
-  "description": "automix 의 가벼운 버전 — 초보자를 위한 md 전용 플러그인, 한국어판. 인터뷰로 기획을 세우고, 빠르고 정확하게 구현합니다.",
+  "description": "automix 의 가벼운 버전 — 초보자를 위한 md 우선 플러그인, 한국어판. AI-native SDLC 플레이북을 혼자 만드는 사람 크기로 옮겼다: 인터뷰로 기획하고, 계획대로 만들고, 스스로 점검하고, 써 본 결과로 한 바퀴 더.",
   "plugins": [
     {
       "name": "aml",
       "source": "./aml",
-      "description": "초보자용 3단계 흐름: /aml:new (인터뷰 → spec.md/task.md) → /aml:go (구현 + 검증 → progress.md) → /aml:status (진행 확인). /aml:doctor (점검) 포함. md 우선 — 관측 스크립트(observe.py) 하나만이 할 일별 측정값을 progress.md 에 남기고, 원하면 Langfuse 로도 보냅니다. 모든 대화와 산출물은 한국어입니다.",
-      "version": "0.5.0",
+      "description": "초보자용 한 바퀴: /aml:new (왜 → 인터뷰 → spec.md/task.md) → /aml:go (구현 + 검증 + 독립 확인 → progress.md) → /aml:review (버그·안전·약속 지킴) → /aml:next (써 본 결과 → 다음 바퀴). /aml:rule (반복 실수를 규칙으로) · /aml:status (진행과 지표) · /aml:doctor (점검) 포함. md 우선 — 관측 스크립트(observe.py)가 할 일별 측정값을 progress.md 에 남기고(원하면 Langfuse 로도), 안전망 훅이 되돌리기 어려운 일 세 가지를 막는다. 모든 대화와 산출물은 한국어입니다.",
+      "version": "0.6.0",
       "category": "workflow"
     }
   ]

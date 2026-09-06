@@ -120,10 +120,80 @@ grep -q 'claude.template.md' "$AMLDIR/commands/new.md"                   || fail
 grep -q 'git init' "$AMLDIR/commands/new.md"                             || fail "C3 new.md git 준비"
 grep -q 'CLAUDE.md' "$AMLDIR/commands/doctor.md"                         || fail "C3 doctor.md 점검"
 
+# C4. v0.6.0 아티팩트 사슬 — 템플릿 7개와 명령 7개가 모두 있고 서로를 가리킨다
+for t in intent spec task progress claude review skill; do
+  [ -f "$AMLDIR/templates/$t.template.md" ]                              || fail "C4 템플릿 없음: $t"
+done
+for c in new go review next rule status doctor; do
+  [ -f "$AMLDIR/commands/$c.md" ]                                        || fail "C4 명령 없음: $c"
+done
+grep -q 'intent.template.md' "$AMLDIR/commands/new.md"                   || fail "C4 new.md → intent 템플릿"
+grep -q 'REVIEW.md' "$AMLDIR/commands/new.md"                            || fail "C4 new.md → REVIEW.md"
+grep -q '.claude/skills' "$AMLDIR/commands/new.md"                       || fail "C4 new.md → 규칙 카드"
+grep -q '걱정되는 것' "$AMLDIR/templates/spec.template.md"               || fail "C4 spec 템플릿 걱정되는 것"
+grep -q '바뀌는 파일' "$AMLDIR/templates/task.template.md"               || fail "C4 task 템플릿 계획 항목"
+grep -q '확인하는 법' "$AMLDIR/templates/claude.template.md"             || fail "C4 claude 템플릿 확인하는 법"
+
+# C5. 구현 루프 — 고치는 중 표시 · 독립 확인 · 리뷰 · 다음 바퀴로 이어진다
+grep -q '.aml/FIXING' "$AMLDIR/commands/go.md"                           || fail "C5 go.md FIXING"
+grep -q 'aml:verifier' "$AMLDIR/commands/go.md"                          || fail "C5 go.md verifier"
+grep -q '/aml:review' "$AMLDIR/commands/go.md"                           || fail "C5 go.md → review"
+grep -q '/aml:next' "$AMLDIR/commands/go.md"                             || fail "C5 go.md → next"
+grep -q 'review.template.md' "$AMLDIR/commands/review.md"                || fail "C5 review.md → 템플릿"
+grep -q '/aml:rule' "$AMLDIR/commands/review.md"                         || fail "C5 review.md → rule"
+grep -q 'skill.template.md' "$AMLDIR/commands/rule.md"                   || fail "C5 rule.md → 규칙 카드 템플릿"
+grep -q 'intent.md' "$AMLDIR/commands/next.md"                           || fail "C5 next.md → intent"
+grep -q 'observe.py" summary' "$AMLDIR/commands/status.md"               || fail "C5 status.md → summary"
+grep -q 'FIXING' "$AMLDIR/commands/doctor.md"                            || fail "C5 doctor.md FIXING 점검"
+grep -q '안전망' "$AMLDIR/commands/doctor.md"                            || fail "C5 doctor.md 안전망 점검"
+
+# C6. 도우미 · 안전망 · 참고 문서
+[ -f "$AMLDIR/agents/verifier.md" ]                                      || fail "C6 verifier 없음"
+grep -q '^tools: Read, Bash, Grep, Glob$' "$AMLDIR/agents/verifier.md"   || fail "C6 verifier 는 읽기 전용이어야 함"
+[ -x "$AMLDIR/hooks/aml-guard.sh" ]                                      || fail "C6 안전망 실행 권한"
+for r in artifact-chain autonomy-and-guardrails next-steps; do
+  [ -f "$AMLDIR/references/$r.md" ]                                      || fail "C6 참고 문서 없음: $r"
+done
+grep -q 'autonomy-and-guardrails.md' "$AMLDIR/commands/rule.md"          || fail "C6 rule.md → 안전망 문서"
+grep -q 'next-steps.md' "$AMLDIR/commands/next.md"                       || fail "C6 next.md → 다음 단계 문서"
+
 # 복사본도 같은 상대 경로(<플러그인 루트>/scripts/observe.py)에서 실행된다
 AUTOMIX_LIGHT_MARKETPLACE_DIR="$TMP/stage" bash "$HERE/../install.sh" >/dev/null
 OUT="$(env -u LANGFUSE_PUBLIC_KEY -u LANGFUSE_SECRET_KEY python3 "$TMP/stage/aml/scripts/observe.py" task-done --since 2026-07-01T01:00:00Z --label staged 2>/dev/null)"
 echo "$OUT" | grep -q '^측정: '                                          || fail "C2 복사본: $OUT"
 [ -f "$TMP/stage/aml/templates/claude.template.md" ]                     || fail "C2 복사본 템플릿"
+[ -x "$TMP/stage/aml/hooks/aml-guard.sh" ]                               || fail "C2 복사본 안전망"
+[ -f "$TMP/stage/aml/agents/verifier.md" ]                               || fail "C2 복사본 verifier"
+[ -f "$TMP/stage/aml/references/next-steps.md" ]                         || fail "C2 복사본 참고 문서"
+
+echo "정상: 파트 C 통과"
+
+# ── 파트 D: 진행 기록 요약 (observe.py summary) ──────────────────────────────
+cat > "$TMP/progress.md" <<'PROG'
+# 진행 기록
+
+## 2026-09-06 — 둘째
+- 측정: claude-opus-4-8 · 4분 32초 · 토큰 입력 12.3k / 출력 4.1k (캐시 읽기 88k / 쓰기 2.1k) · 예상 비용 $0.42
+- 리뷰: 중요 0 · 사소 2
+
+## 2026-09-05 — 첫째
+- 측정: 1시간 3분 · claude-opus-4-8(입력 5.0k/출력 1.2k) + claude-haiku-4-5(입력 900/출력 300) · 예상 비용 $1.10
+- 측정: 기록 없음 (세션 기록을 찾지 못했습니다)
+- <observe.py 출력을 그대로 — `측정: …` 한 줄: 모델 · 걸린 시간 · 토큰 · 예상 비용>
+PROG
+OUT="$(python3 "$OBSERVE" summary "$TMP/progress.md")" || fail "D1 종료 코드"
+echo "$OUT" | grep -q '작업 3개'                                         || fail "D1 작업 수: $OUT"
+echo "$OUT" | grep -q '총 1시간 7분'                                     || fail "D1 걸린 시간: $OUT"
+echo "$OUT" | grep -q '예상 비용 합계 \$1.52'                            || fail "D1 비용 합계: $OUT"
+echo "$OUT" | grep -q 'claude-opus-4-8 2회'                              || fail "D1 모델 집계: $OUT"
+echo "$OUT" | grep -q '측정 없는 작업: 1개'                              || fail "D1 측정 없는 작업: $OUT"
+
+# D2. 측정 줄이 없는 파일 / 아예 없는 파일 — 둘 다 종료 코드 0
+printf '# 진행 기록\n\n아직 아무것도 없습니다.\n' > "$TMP/empty.md"
+OUT="$(python3 "$OBSERVE" summary "$TMP/empty.md")" || fail "D2 종료 코드"
+echo "$OUT" | grep -q '측정 줄이 아직 없습니다'                          || fail "D2: $OUT"
+OUT="$(python3 "$OBSERVE" summary "$TMP/없는파일.md")" || fail "D3 종료 코드(없는 파일도 0)"
+echo "$OUT" | grep -q '읽지 못했습니다'                                  || fail "D3: $OUT"
+echo "정상: 파트 D 통과"
 
 echo "정상: e2e-smoke-observe 통과"
