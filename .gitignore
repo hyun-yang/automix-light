@@ -1,0 +1,12 @@
+# 파이썬
+__pycache__/
+*.py[cod]
+.venv/
+
+# 에디터
+.idea/
+
+# 비밀키 — 저장소에 절대 들어가면 안 된다
+.env
+.env.*
+!.env.example

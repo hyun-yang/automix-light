@@ -33,13 +33,15 @@ if command -v python3 >/dev/null 2>&1; then
 fi
 
 # 3. 고정 경로로 복사 (기존 설치본은 백업)
+#    마켓플레이스에 필요한 것만 옮긴다 — .git/.venv/.idea 는 복사하지 않는다.
 mkdir -p "$(dirname "$TARGET")"
 if [[ -d "$TARGET" ]]; then
   echo "기존 설치본을 ${TARGET}.bak 으로 백업합니다"
   rm -rf "${TARGET}.bak"
   mv "$TARGET" "${TARGET}.bak"
 fi
-cp -r "$SCRIPT_DIR" "$TARGET"
+mkdir -p "$TARGET"
+cp -r "$SCRIPT_DIR/.claude-plugin" "$SCRIPT_DIR/aml" "$TARGET/"
 
 # 4. 다음 단계
 cat <<MSG
