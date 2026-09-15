@@ -1,7 +1,7 @@
 {
   "name": "aml",
   "version": "0.6.0",
-  "description": "automix-light — 초보자를 위한 automix 의 가벼운 버전, 한국어 전용판. Anthropic 의 AI-native SDLC 플레이북을 혼자 만드는 사람 크기로 옮겼다: intent.md(왜 만드는지) → 인터뷰 → spec.md(무엇 + 완성 기준 + 걱정되는 것) → task.md(바뀌는 파일·위험·증명) → 구현·검증·기록(progress.md, 할 일별 측정 줄) → 독립 확인(verifier) → 리뷰(REVIEW.md 3패스) → 다음 바퀴(intent.md). 명령 7개: /aml:new /aml:go /aml:review /aml:next /aml:rule /aml:status /aml:doctor. 되돌리기 어려운 일 세 가지(비밀키·고치는 중 테스트 파일·되돌릴 수 없는 명령)를 막는 안전망 훅과, 반복되는 실수를 규칙 카드로 굳히는 /aml:rule 포함. 스크립트는 observe.py 하나(표준 라이브러리만, Langfuse 전송은 선택).",
+  "description": "첫 앱을 만드는 사람을 위한 Claude Code 플러그인. automix의 가벼운 한국어 버전으로, 질문과 답변을 통한 기획부터 구현, 검증, 코드 리뷰, 사용 후 개선까지 안내합니다. 각 단계의 계획과 결과를 마크다운 문서로 남기고, 작업별 모델·소요 시간·토큰 사용량·예상 비용을 기록합니다. 별도의 검증 담당 에이전트(verifier), 위험한 작업을 차단하는 훅, 반복된 실수를 개발 규칙으로 정리하는 기능을 제공합니다. 명령어는 /aml:new, /aml:go, /aml:review, /aml:next, /aml:rule, /aml:status, /aml:doctor의 7개입니다. 작업 지표 기록 스크립트는 파이썬 표준 라이브러리만 사용하며, Langfuse 전송은 선택 사항입니다.",
   "author": {
     "name": "Hayden",
     "email": "iamyhs@gmail.com"
