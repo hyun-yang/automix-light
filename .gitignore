@@ -10,3 +10,14 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# 도구 색인
+.codegraph/
+
+# 개발용 계획·기록 문서 — 로컬에만 둔다 (루트만)
+/CLAUDE.md
+/intent.md
+/spec.md
+/task.md
+/progress.md
+/REVIEW.md
