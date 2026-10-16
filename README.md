@@ -22,8 +22,10 @@ Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native
 ```bash
 git clone https://github.com/hyun-yang/automix-light.git
 cd automix-light
-./install.sh          # ~/.claude-marketplaces/automix-light에 복사합니다
+bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사합니다
 ```
+
+> 설치 명령이 바뀌었습니다. 예전의 `./install.sh` 대신 저장소 루트에서 `bash claude-code/install.sh` 를 실행합니다.
 
 설치 스크립트를 실행한 뒤, Claude Code에서 다음 명령을 입력합니다.
 
@@ -48,7 +50,7 @@ cd automix-light
 
 ## 특징
 
-- **마크다운 중심 구성** — 명령어 정의, 템플릿, 작업 결과를 마크다운 파일로 관리합니다. 실행 코드는 작업 지표를 기록하는 스크립트(`aml/scripts/observe.py`, 파이썬 표준 라이브러리만 사용)와 위험한 작업을 차단하는 훅(`aml/hooks/aml-guard.sh`)으로 구성됩니다.
+- **마크다운 중심 구성** — 명령어 정의, 템플릿, 작업 결과를 마크다운 파일로 관리합니다. 실행 코드는 작업 지표를 기록하는 스크립트(`claude-code/aml/scripts/observe.py`, 파이썬 표준 라이브러리만 사용)와 위험한 작업을 차단하는 훅(`claude-code/aml/hooks/aml-guard.sh`)으로 구성됩니다.
 - **위험한 작업 차단** — `.env` 파일 커밋, 버그 수정 중 테스트 파일 변경, 강제 푸시와 하드 리셋을 막습니다. `spec.md`와 `task.md`가 있는 폴더에서만 동작합니다.
 - **별도의 검증 담당 에이전트** — 구현이 끝나면 `verifier` 에이전트가 직접 실행해 완성 기준을 충족하는지 확인합니다.
 - **작업 지표 기록** — 작업별 모델, 소요 시간, 토큰 사용량, 예상 비용을 `progress.md`에 기록합니다. [Langfuse](https://langfuse.com)로 지표를 전송하는 기능은 선택 사항이며, **기본적으로 비활성화되어 있습니다.**
@@ -56,30 +58,31 @@ cd automix-light
 ## 저장소 구조
 
 ```text
-.claude-plugin/marketplace.json   마켓플레이스 설정
-aml/                              플러그인 파일
-  commands/                       /aml:* 명령어 7개
-  agents/verifier.md              검증 담당 에이전트
-  hooks/aml-guard.sh              위험한 작업 차단 (PreToolUse 훅)
-  scripts/observe.py              작업 지표 기록 (표준 라이브러리만 사용)
-  templates/                      intent · spec · task · progress · review 템플릿
-  references/                     추가 설명과 활용 안내
-install.sh                        마켓플레이스 설치 스크립트
-tests/                            기본 동작 확인 테스트
+claude-code/                        Claude Code 판
+  .claude-plugin/marketplace.json   마켓플레이스 설정
+  aml/                              플러그인 파일
+    commands/                       /aml:* 명령어 7개
+    agents/verifier.md              검증 담당 에이전트
+    hooks/aml-guard.sh              위험한 작업 차단 (PreToolUse 훅)
+    scripts/observe.py              작업 지표 기록 (표준 라이브러리만 사용)
+    templates/                      intent · spec · task · progress · review 템플릿
+    references/                     추가 설명과 활용 안내
+  install.sh                        마켓플레이스 설치 스크립트
+  tests/                            기본 동작 확인 테스트
 ```
 
 ## 테스트
 
 ```bash
-bash tests/e2e-smoke-guard.sh     # 위험한 작업 차단: 6가지 사례 확인
-bash tests/e2e-smoke-observe.sh   # 작업 지표 기록 및 설치 결과 확인
+bash claude-code/tests/e2e-smoke-guard.sh     # 위험한 작업 차단: 6가지 사례 확인
+bash claude-code/tests/e2e-smoke-observe.sh   # 작업 지표 기록 및 설치 결과 확인
 ```
 
 ## 더 보기
 
-- [`aml/README.md`](aml/README.md) — 명령어별 동작, 기획 질문 방식, Langfuse 설정
-- [`aml/Example.md`](aml/Example.md) — 기획부터 구현, 검증, 개선까지의 전체 예시
-- [`aml/references/`](aml/references/) — 단계별 문서의 연결 방식, 작업 차단 규칙 추가, 확장 방법
+- [`claude-code/aml/README.md`](claude-code/aml/README.md) — 명령어별 동작, 기획 질문 방식, Langfuse 설정
+- [`claude-code/aml/Example.md`](claude-code/aml/Example.md) — 기획부터 구현, 검증, 개선까지의 전체 예시
+- [`claude-code/aml/references/`](claude-code/aml/references/) — 단계별 문서의 연결 방식, 작업 차단 규칙 추가, 확장 방법
 
 ## 라이선스
 

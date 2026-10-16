@@ -2,9 +2,9 @@
 # install.sh — automix-light 마켓플레이스를 고정된 경로에 복사하고,
 # Claude Code 안에서 실행할 /plugin 명령을 출력한다.
 #
-# 사용법 (마켓플레이스 루트에서):
+# 사용법 (저장소 루트에서):
 #   $ cd automix-light
-#   $ ./install.sh
+#   $ bash claude-code/install.sh
 
 set -euo pipefail
 
@@ -20,7 +20,7 @@ echo
 # 1. 여기가 마켓플레이스 루트인지 확인
 if [[ ! -f "$SCRIPT_DIR/.claude-plugin/marketplace.json" ]]; then
   echo "오류: $SCRIPT_DIR/.claude-plugin/marketplace.json 이 없습니다." >&2
-  echo "      marketplace.json 이 있는 automix-light 루트에서 실행하세요." >&2
+  echo "      저장소의 claude-code/install.sh 를 그대로 실행하세요 (예: bash claude-code/install.sh)." >&2
   exit 1
 fi
 

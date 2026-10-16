@@ -28,7 +28,7 @@ v0.6.0은 Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the
 
 ```bash
 cd automix-light
-./install.sh          # ~/.claude-marketplaces/automix-light에 복사합니다
+bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사합니다
 ```
 
 그런 다음 Claude Code에서 다음 명령을 입력합니다.
