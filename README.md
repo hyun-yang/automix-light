@@ -19,14 +19,14 @@ Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native
 
 ## 어느 도구에서 쓰나요?
 
-같은 흐름을 두 도구에서 쓸 수 있습니다. 쓰는 도구의 폴더로 가서 설치 안내를 따르세요.
+두 도구에서 같은 작업 흐름을 사용할 수 있습니다. 사용하는 도구에 맞는 설치 안내를 따르세요.
 
 | 쓰는 도구 | 설치와 안내 | 설치 명령 (저장소 루트에서) |
 |---|---|---|
 | Claude Code | [`claude-code/README.md`](claude-code/README.md) | `bash claude-code/install.sh` |
 | Codex | [`codex/README.md`](codex/README.md) | `codex plugin marketplace add "$PWD/codex"` → `codex plugin add aml@automix-light` |
 
-> 설치 명령이 바뀌었습니다. 예전의 `./install.sh` 대신 저장소 루트에서 `bash claude-code/install.sh` 를 실행합니다.
+> 설치 명령이 바뀌었습니다. 예전의 `./install.sh` 대신 저장소 루트에서 `bash claude-code/install.sh`를 실행합니다.
 
 ```bash
 git clone https://github.com/hyun-yang/automix-light.git
@@ -45,15 +45,15 @@ cd automix-light
 | 진행 상황, 완성 기준 통과율, 누적 시간과 비용 확인 | `/aml:status` | `$aml:status` |
 | 작업을 시작할 준비가 되었는지 점검 (파일은 수정하지 않음) | `/aml:doctor` | `$aml:doctor` |
 
-계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`)은 두 도구에서 같은 모양이라, 하던 프로젝트를 다른 도구로 옮겨 이어서 진행할 수 있습니다. 다른 것은 프로젝트 안내 파일(`CLAUDE.md` ↔ `AGENTS.md`)과 규칙 카드 위치(`.claude/skills/` ↔ `.agents/skills/`)뿐입니다. 옮기는 절차는 각 폴더의 README 에 있습니다. 한 번에 한 도구만 쓰세요.
+계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`)은 두 도구에서 형식이 같아, 진행 중인 프로젝트를 다른 도구로 옮겨 이어서 작업할 수 있습니다. 프로젝트 안내 파일(`CLAUDE.md` ↔ `AGENTS.md`)과 규칙 카드 위치(`.claude/skills/` ↔ `.agents/skills/`)만 다릅니다. 전환 절차는 각 폴더의 README에 있습니다. 한 번에 한 도구만 사용하세요.
 
 ## 두 판의 차이
 
 | | Claude Code 판 | Codex 판 |
 |---|---|---|
-| 위험한 작업 차단 | AML 훅이 `.env` 커밋, 버그 수정 중 테스트 파일 변경, 강제 푸시·하드 리셋을 막음 | 이 버전에는 AML 전용 차단 훅이 없습니다. Codex 의 권한·샌드박스·승인 설정은 환경에 따라 적용되며, Claude 판 AML 훅과 같은 차단을 보장하지 않습니다 |
-| 마지막 확인 | 별도 검증 에이전트(`verifier`)가 직접 실행해 확인 | 기본은 자체 확인. 실제로 따로 맡겼을 때만 "독립 확인"으로 기록 |
-| 작업 지표 | 모델, 소요 시간, 토큰, 예상 비용. [Langfuse](https://langfuse.com) 전송은 선택 사항이며 **기본 꺼짐** | 모델, 소요 시간, 토큰. 확실히 읽지 못하면 `측정: 기록 없음`. 단가를 확인하지 않은 모델은 "비용 미산정". Langfuse 전송 없음 |
+| 위험한 작업 차단 | AML 훅이 `.env` 커밋, 버그 수정 중 테스트 파일 변경, 강제 푸시·하드 리셋을 막음 | 이 버전에는 AML 전용 차단 훅이 없습니다. Codex의 권한·샌드박스·승인 설정은 환경에 따라 적용되며, Claude Code 판의 AML 훅과 동일한 차단을 보장하지 않습니다 |
+| 최종 검증 | 별도 검증 에이전트(`verifier`)가 직접 실행해 확인 | 기본은 자체 검증. 별도 에이전트에게 실제로 검증을 맡겼을 때만 "독립 확인"으로 기록 |
+| 작업 지표 | 모델, 소요 시간, 토큰, 예상 비용. [Langfuse](https://langfuse.com) 전송은 선택 사항이며 **기본적으로 비활성화** | 모델, 소요 시간, 토큰. 측정값을 확인할 수 없으면 `측정: 기록 없음`으로 표시. 단가를 확인하지 않은 모델은 "비용 미산정"으로 표시. Langfuse 전송 없음 |
 
 ## 저장소 구조
 
@@ -72,14 +72,14 @@ codex/                              Codex 판
   docs/                             설계 분석과 검토 문서
 ```
 
-두 `aml/` 폴더는 서로를 참조하지 않습니다. 공통 템플릿 5개(spec · task · progress · intent · review)는 두 판에 같은 내용으로 들어 있고, `codex/tests/test-templates.sh` 가 같은지 확인합니다.
+두 `aml/` 폴더는 서로를 참조하지 않습니다. 공통 템플릿 5개(spec · task · progress · intent · review)는 두 판에 동일한 내용으로 포함되어 있으며, `codex/tests/test-templates.sh`로 내용이 일치하는지 확인합니다.
 
 ## 테스트
 
 ```bash
 bash claude-code/tests/e2e-smoke-guard.sh     # 위험한 작업 차단: 6가지 사례 확인
 bash claude-code/tests/e2e-smoke-observe.sh   # 작업 지표 기록 및 설치 결과 확인
-bash codex/tests/test-templates.sh            # 공통 템플릿이 두 판에서 같은지
+bash codex/tests/test-templates.sh            # 두 판의 공통 템플릿 일치 여부 확인
 python3 codex/tests/test_observe.py           # Codex 측정·요약 숫자 검사
 bash codex/tests/test-package.sh              # Codex 패키지 구조 (codex 명령이 있으면 격리 설치까지)
 ```
