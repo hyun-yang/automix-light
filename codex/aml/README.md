@@ -6,13 +6,13 @@
 
 | 스킬 | 하는 일 |
 |---|---|
-| `aml-new` | 인터뷰로 `intent.md`·`spec.md`·`task.md`·`progress.md` 만들기 (구현은 안 함) |
-| `aml-go` | `task.md` 를 순서대로 구현·검증하고 `progress.md` 에 기록 |
-| `aml-review` | 커밋 전 버그·안전·약속 지킴 점검 (코드는 안 고침) |
-| `aml-next` | 써 본 결과를 다음 할 일이나 새 기획으로 |
-| `aml-rule` | 두 번 반복된 실수를 `AGENTS.md` 나 규칙 카드(`.agents/skills/`)로 |
-| `aml-status` | 진행 상황과 시간·토큰·비용 요약 |
-| `aml-doctor` | 시작 전 점검 (파일은 안 바꿈) |
+| `$aml:new` | 인터뷰로 `intent.md`·`spec.md`·`task.md`·`progress.md` 만들기 (구현은 안 함) |
+| `$aml:go` | `task.md` 를 순서대로 구현·검증하고 `progress.md` 에 기록 |
+| `$aml:review` | 커밋 전 버그·안전·약속 지킴 점검 (코드는 안 고침) |
+| `$aml:next` | 써 본 결과를 다음 할 일이나 새 기획으로 |
+| `$aml:rule` | 두 번 반복된 실수를 `AGENTS.md` 나 규칙 카드(`.agents/skills/`)로 |
+| `$aml:status` | 진행 상황과 시간·토큰·비용 요약 |
+| `$aml:doctor` | 시작 전 점검 (파일은 안 바꿈) |
 
 ## 폴더
 

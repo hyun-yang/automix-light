@@ -17,7 +17,7 @@
   "interface": {
     "displayName": "Automix Light",
     "shortDescription": "한 줄 아이디어를 기획하고, 만들고, 확인하고, 기록합니다.",
-    "longDescription": "인터뷰로 intent.md·spec.md·task.md 를 만들고(aml-new), 할 일을 순서대로 구현·검증해 progress.md 에 기록합니다(aml-go). 리뷰(aml-review), 다음 바퀴(aml-next), 규칙 카드(aml-rule), 진행 요약(aml-status), 준비 점검(aml-doctor) 포함. 모든 대화와 산출물은 한국어입니다.",
+    "longDescription": "인터뷰로 intent.md·spec.md·task.md 를 만들고($aml:new), 할 일을 순서대로 구현·검증해 progress.md 에 기록합니다($aml:go). 리뷰($aml:review), 다음 바퀴($aml:next), 규칙 카드($aml:rule), 진행 요약($aml:status), 준비 점검($aml:doctor) 포함. 모든 대화와 산출물은 한국어입니다.",
     "developerName": "Hayden",
     "category": "Productivity",
     "capabilities": [
@@ -26,9 +26,9 @@
       "Write"
     ],
     "defaultPrompt": [
-      "$aml:aml-new 로 새 아이디어를 기획해 주세요.",
-      "$aml:aml-go 로 남은 할 일을 진행해 주세요.",
-      "$aml:aml-status 로 진행 상황을 알려 주세요."
+      "$aml:new 로 새 아이디어를 기획해 주세요.",
+      "$aml:go 로 남은 할 일을 진행해 주세요.",
+      "$aml:status 로 진행 상황을 알려 주세요."
     ]
   }
 }

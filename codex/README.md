@@ -14,7 +14,7 @@ codex plugin add aml@automix-light
 codex plugin list            # aml@automix-light  installed, enabled 가 보이면 됩니다
 ```
 
-Codex 를 새로 열고 `$aml` 을 입력했을 때 `aml:aml-new` 처럼 플러그인 이름이 앞에 붙은 스킬 7개가 보이면 설치가 끝난 것입니다. 스킬은 `$aml:aml-go` 처럼 부르거나, "남은 할 일 진행해 줘"처럼 말로 부탁해도 됩니다. 마켓플레이스는 내려받은 폴더를 가리키니, 폴더를 지우거나 옮기지 마세요.
+Codex 를 새로 열고 `$aml` 을 입력했을 때 `aml:new` 처럼 플러그인 이름이 앞에 붙은 스킬 7개가 보이면 설치가 끝난 것입니다. 스킬은 `$aml:go` 처럼 부르거나, "남은 할 일 진행해 줘"처럼 말로 부탁해도 됩니다. Codex 에는 `/new`·`/status`·`/review` 같은 기본 명령이 따로 있으니, aml 스킬은 `/` 가 아니라 `$aml:status` 처럼 `$` 로 부르세요. 마켓플레이스는 내려받은 폴더를 가리키니, 폴더를 지우거나 옮기지 마세요.
 
 ### 예전 Codex 판(0.2.0)이 깔려 있다면
 
@@ -33,13 +33,13 @@ codex plugin marketplace remove automix-light  #   지운 뒤 위의 설치를 �
 
 | 스킬 | 하는 일 | Claude Code 판 |
 |---|---|---|
-| `$aml:aml-new` | 인터뷰로 `intent.md`·`spec.md`·`task.md`·`progress.md` 만들기 (구현은 안 함) | `/aml:new` |
-| `$aml:aml-go` | `task.md` 를 순서대로 구현·검증하고 기록, 할 일마다 커밋 | `/aml:go` |
-| `$aml:aml-review` | 커밋 전에 버그·안전·약속 지킴 점검 (코드는 안 고침) | `/aml:review` |
-| `$aml:aml-next` | 써 본 결과를 다음 할 일이나 새 기획으로 | `/aml:next` |
-| `$aml:aml-rule` | 두 번 반복된 실수를 `AGENTS.md` 나 규칙 카드(`.agents/skills/`)로 | `/aml:rule` |
-| `$aml:aml-status` | 진행 상황과 시간·토큰·비용 요약 | `/aml:status` |
-| `$aml:aml-doctor` | 시작 전 점검 (파일은 안 바꿈) | `/aml:doctor` |
+| `$aml:new` | 인터뷰로 `intent.md`·`spec.md`·`task.md`·`progress.md` 만들기 (구현은 안 함) | `/aml:new` |
+| `$aml:go` | `task.md` 를 순서대로 구현·검증하고 기록, 할 일마다 커밋 | `/aml:go` |
+| `$aml:review` | 커밋 전에 버그·안전·약속 지킴 점검 (코드는 안 고침) | `/aml:review` |
+| `$aml:next` | 써 본 결과를 다음 할 일이나 새 기획으로 | `/aml:next` |
+| `$aml:rule` | 두 번 반복된 실수를 `AGENTS.md` 나 규칙 카드(`.agents/skills/`)로 | `/aml:rule` |
+| `$aml:status` | 진행 상황과 시간·토큰·비용 요약 | `/aml:status` |
+| `$aml:doctor` | 시작 전 점검 (파일은 안 바꿈) | `/aml:doctor` |
 
 프로젝트 안내 파일은 `CLAUDE.md` 대신 `AGENTS.md` 입니다. Codex 가 매 세션 자동으로 읽습니다.
 
@@ -56,10 +56,10 @@ codex plugin marketplace remove automix-light  #   지운 뒤 위의 설치를 �
 
 1. 프로젝트 폴더에 `spec.md`·`task.md`·`progress.md` 가 있고, `CLAUDE.md` 의 "확인하는 법"에 실행·테스트 명령이 있는지 봅니다.
 2. `AGENTS.md` 가 **없을 때만** Codex 에 이렇게 요청합니다: "spec.md·task.md·progress.md 는 그대로 두고, CLAUDE.md 의 내용(특히 확인하는 법)을 옮겨서 aml 의 AGENTS 템플릿 모양으로 AGENTS.md 만 만들어 줘. 다른 파일은 바꾸지 마."
-3. `$aml:aml-doctor` 로 점검합니다.
-4. `$aml:aml-go` 로 이어서 진행합니다.
+3. `$aml:doctor` 로 점검합니다.
+4. `$aml:go` 로 이어서 진행합니다.
 
-`AGENTS.md` 가 이미 있으면 그대로 두고, `CLAUDE.md` 와 다른 점이 있으면 어느 쪽이 맞는지 정해서 직접 고칩니다. `REVIEW.md` 는 두 도구가 함께 씁니다. `.claude/skills/` 의 규칙 카드는 Codex 가 읽지 않으니, 계속 지킬 것만 `$aml:aml-rule` 로 새로 적습니다. 한 번에 한 도구만 쓰고, 넘어가기 전에 커밋해 두세요. 자세한 내용: [`aml/references/switching.md`](aml/references/switching.md)
+`AGENTS.md` 가 이미 있으면 그대로 두고, `CLAUDE.md` 와 다른 점이 있으면 어느 쪽이 맞는지 정해서 직접 고칩니다. `REVIEW.md` 는 두 도구가 함께 씁니다. `.claude/skills/` 의 규칙 카드는 Codex 가 읽지 않으니, 계속 지킬 것만 `$aml:rule` 로 새로 적습니다. 한 번에 한 도구만 쓰고, 넘어가기 전에 커밋해 두세요. 자세한 내용: [`aml/references/switching.md`](aml/references/switching.md)
 
 반대 방향(Codex → Claude Code)은 [Claude Code 판 안내](../claude-code/README.md#codex-에서-하던-프로젝트를-claude-code-로-옮길-때)를 보세요.
 

@@ -5,7 +5,7 @@
   task-done  --since T --label L [--feature F] [--note N]
                                 할 일 끝: 지금 세션의 구간 사용량을 "측정: …" 한 줄로 출력
   summary    <progress.md>      progress.md 의 측정 줄 합산 (Claude/Codex 줄이 섞여도 됨)
-  check                         지금 세션 사용량을 읽을 수 있는지 한 줄로 알림 (aml-doctor 용)
+  check                         지금 세션 사용량을 읽을 수 있는지 한 줄로 알림 ($aml:doctor 용)
 
 규칙 (references/telemetry.md):
   - 세션은 Codex 가 넘겨주는 CODEX_THREAD_ID(또는 --session) 로만 고른다. 같은 폴더의 다른 세션을 고르지 않는다.
@@ -399,9 +399,9 @@ def main() -> None:
     td.add_argument("--feature")
     td.add_argument("--note")
     td.add_argument("--session")
-    sm = sub.add_parser("summary", help="progress.md 의 측정 줄 합산 (aml-status 용)")
+    sm = sub.add_parser("summary", help="progress.md 의 측정 줄 합산 ($aml:status 용)")
     sm.add_argument("path")
-    ck = sub.add_parser("check", help="사용량을 읽을 수 있는지 (aml-doctor 용)")
+    ck = sub.add_parser("check", help="사용량을 읽을 수 있는지 ($aml:doctor 용)")
     ck.add_argument("--session")
     args = ap.parse_args()
     handler = {"task-start": cmd_task_start, "task-done": cmd_task_done,

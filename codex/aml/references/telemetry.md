@@ -1,6 +1,6 @@
 # 측정 — Codex 판 측정 줄은 어떻게 만들어지나
 
-aml-go 는 할 일마다 `progress.md` 에 측정 줄을 하나 남깁니다. 숫자는 `scripts/observe.py` 가 Codex 의 세션 기록을 읽어 만듭니다. 측정은 **작업을 막지 않습니다** — 어떤 이유로든 확실하지 않으면 숫자를 지어내지 않고 `측정: 기록 없음 (이유)` 를 남깁니다.
+$aml:go 는 할 일마다 `progress.md` 에 측정 줄을 하나 남깁니다. 숫자는 `scripts/observe.py` 가 Codex 의 세션 기록을 읽어 만듭니다. 측정은 **작업을 막지 않습니다** — 어떤 이유로든 확실하지 않으면 숫자를 지어내지 않고 `측정: 기록 없음 (이유)` 를 남깁니다.
 
 ```text
 측정: gpt-6-astra · 4분 12초 · 토큰 입력 12.3k / 출력 2.1k (캐시 읽기 85.0k) · 비용 미산정
@@ -12,8 +12,8 @@ aml-go 는 할 일마다 `progress.md` 에 측정 줄을 하나 남깁니다. �
 python3 "<패키지>/scripts/observe.py" task-start --label "1.2 카드 추가 창"
 #  → 시작: 2026-10-17T06:00:00+10:00      (이 시각을 아래 --since 에 씀)
 python3 "<패키지>/scripts/observe.py" task-done --since 2026-10-17T06:00:00+10:00 --label "1.2 카드 추가 창"
-python3 "<패키지>/scripts/observe.py" summary progress.md     # aml-status
-python3 "<패키지>/scripts/observe.py" check                   # aml-doctor
+python3 "<패키지>/scripts/observe.py" summary progress.md     # $aml:status
+python3 "<패키지>/scripts/observe.py" check                   # $aml:doctor
 ```
 
 ## 어느 세션을 읽나
@@ -58,7 +58,7 @@ Codex 기록의 숫자는 서로 포함 관계가 있습니다. 2026-10-17 에 �
 
 지금은 확인한 단가가 없어서 Codex 판 측정 줄은 모두 `비용 미산정` 입니다. 구독 요금제로 쓰면 토큰마다 돈이 나가지 않기도 합니다. 단가를 넣을 때는 공식 가격표에서 확인하고, 이 표와 `observe.py` 의 `PRICING` 을 함께 고칩니다. 모르는 모델의 비용은 **0 으로 적지 않습니다** — 0 은 "공짜"로 읽히기 때문입니다.
 
-## 요약 (aml-status)
+## 요약 ($aml:status)
 
 `summary` 는 `progress.md` 의 측정 줄을 모두 읽어 작업 수 · 걸린 시간 합 · 토큰(대략) · 알려진 비용 합을 보여 줍니다. 측정 줄의 토큰은 `12.3k` 처럼 반올림된 표기라 합계도 **대략**입니다. 비용을 모르는 작업 수와 측정 없는 작업 수는 따로 셉니다. Claude 판과 Codex 판 줄이 섞여 있어도 됩니다.
 

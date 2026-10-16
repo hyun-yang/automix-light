@@ -1,18 +1,18 @@
 ---
-name: aml-status
-description: spec.md / task.md / progress.md 를 바탕으로 진행 상황과 지표(시간·토큰·비용)를 쉬운 말로 요약한다. 읽기 전용. "어디까지 왔어?", "진행 상황", "$aml:aml-status" 일 때 쓴다.
+name: status
+description: spec.md / task.md / progress.md 를 바탕으로 진행 상황과 지표(시간·토큰·비용)를 쉬운 말로 요약한다. 읽기 전용. "어디까지 왔어?", "진행 상황", "$aml:status" 일 때 쓴다.
 ---
 
-# aml-status — 진행 상황 확인
+# $aml:status — 진행 상황 확인
 
-프로젝트 루트의 spec.md, task.md, progress.md 를 읽는다(intent.md 와 REVIEW.md 가 있으면 그것도). 셋 다 없으면 aml-new 부터 하라고 알린다. 아무것도 고치지 않는다.
+프로젝트 루트의 spec.md, task.md, progress.md 를 읽는다(intent.md 와 REVIEW.md 가 있으면 그것도). 셋 다 없으면 $aml:new 부터 하라고 알린다. 아무것도 고치지 않는다.
 
 보고(한국어로, 쉬운 말로):
 
 - **어디까지 왔나** — 완성 기준 몇 개 중 몇 개 확인됨, 할 일 몇 개 중 몇 개 끝남, 가장 최근 작업 한 줄
 - **막힌 것** — progress.md 에 막힌 것이 적혀 있으면 그 내용과 사용자가 답해 줘야 할 질문
 - **지표** — 아래 참고
-- **다음에 할 일** — 할 일이 남았으면 aml-go, 다 끝났으면 직접 써 보고 aml-next, 커밋 전이면 aml-review
+- **다음에 할 일** — 할 일이 남았으면 $aml:go, 다 끝났으면 직접 써 보고 $aml:next, 커밋 전이면 $aml:review
 
 ## 지표
 
@@ -29,7 +29,7 @@ python3 "<패키지>/scripts/observe.py" summary progress.md
 - **완성 기준 통과** — spec.md 의 `- [x]` / 전체. "이 목록이 다 체크되면 다 만든 것입니다."
 - **확인 방식** — progress.md 의 가장 최근 `확인 방식:` 줄(자체 확인 / 독립 확인).
 - **되풀이 지적** — progress.md 의 최근 리뷰 줄 3개(`- 리뷰: 중요 N · 사소 M`)를 나란히 보여 준다. 중요 숫자가 줄고 있으면 그렇게 말해 준다.
-- **막힌 횟수** — progress.md 에서 막힘 기록의 개수. 같은 것에 두 번 이상 막혔으면 aml-rule 을 권한다.
+- **막힌 횟수** — progress.md 에서 막힘 기록의 개수. 같은 것에 두 번 이상 막혔으면 $aml:rule 을 권한다.
 - **며칠째** — intent.md 의 가장 오래된 날짜부터 오늘까지. "처음 생각한 지 N일째입니다."
 - **규칙 카드** — `.agents/skills/*/SKILL.md` 개수. 0개면 아직 규칙을 만들지 않았다는 뜻이지 잘못된 건 아니다.
 

@@ -33,7 +33,7 @@
 - `REVIEW.md` — 리뷰할 때 무엇을 보는지
 - `.agents/skills/` — 이 프로젝트의 규칙 카드
 
-작업은 `$aml:aml-go`, 점검은 `$aml:aml-review`, 진행 상황은 `$aml:aml-status`, 다음 바퀴는 `$aml:aml-next`.
+작업은 `$aml:go`, 점검은 `$aml:review`, 진행 상황은 `$aml:status`, 다음 바퀴는 `$aml:next`.
 
 ## 지켜 주세요
 
@@ -43,7 +43,7 @@
 
 ## Codex 가 자꾸 틀리는 것
 
-<!-- 같은 실수가 두 번 나오면 여기에 한 줄로 적습니다 ($aml:aml-rule 이 넣어 줍니다).
+<!-- 같은 실수가 두 번 나오면 여기에 한 줄로 적습니다 ($aml:rule 이 넣어 줍니다).
      여기 있는 줄이 다음 세션부터 그 실수를 막아 줍니다. -->
 
 - <아직 없음>

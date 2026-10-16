@@ -13,6 +13,7 @@ import unittest
 from datetime import datetime, timezone
 from pathlib import Path
 
+sys.dont_write_bytecode = True   # 패키지 폴더에 __pycache__ 를 남기지 않는다 (설치 때 함께 복사됨)
 HERE = Path(__file__).resolve().parent
 OBSERVE = HERE.parent / "aml" / "scripts" / "observe.py"
 spec = importlib.util.spec_from_file_location("observe", OBSERVE)
