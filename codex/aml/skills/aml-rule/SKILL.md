@@ -1,6 +1,6 @@
 ---
 name: aml-rule
-description: 같은 실수가 두 번 반복되면 규칙으로 굳힌다 — AGENTS.md 한 줄 또는 규칙 카드(.agents/skills). "이거 규칙으로 만들어 줘", "또 같은 실수야", "$aml-rule" 일 때 쓴다.
+description: 같은 실수가 두 번 반복되면 규칙으로 굳힌다 — AGENTS.md 한 줄 또는 규칙 카드(.agents/skills). "이거 규칙으로 만들어 줘", "또 같은 실수야", "$aml:aml-rule" 일 때 쓴다.
 ---
 
 # aml-rule — 같은 실수를 세 번째로 하지 않게

@@ -1,6 +1,6 @@
 ---
 name: aml-status
-description: spec.md / task.md / progress.md 를 바탕으로 진행 상황과 지표(시간·토큰·비용)를 쉬운 말로 요약한다. 읽기 전용. "어디까지 왔어?", "진행 상황", "$aml-status" 일 때 쓴다.
+description: spec.md / task.md / progress.md 를 바탕으로 진행 상황과 지표(시간·토큰·비용)를 쉬운 말로 요약한다. 읽기 전용. "어디까지 왔어?", "진행 상황", "$aml:aml-status" 일 때 쓴다.
 ---
 
 # aml-status — 진행 상황 확인

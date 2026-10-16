@@ -1,6 +1,6 @@
 ---
 name: aml-review
-description: 커밋 전 점검 — REVIEW.md 기준으로 버그·안전·약속 지킴 세 갈래를 훑는다. 코드는 고치지 않는다. "리뷰해 줘", "커밋해도 돼?", "전체 점검", "$aml-review" 일 때 쓴다.
+description: 커밋 전 점검 — REVIEW.md 기준으로 버그·안전·약속 지킴 세 갈래를 훑는다. 코드는 고치지 않는다. "리뷰해 줘", "커밋해도 돼?", "전체 점검", "$aml:aml-review" 일 때 쓴다.
 ---
 
 # aml-review — 커밋 전에 한 번 훑는다

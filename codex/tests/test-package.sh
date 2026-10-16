@@ -76,7 +76,13 @@ if command -v codex >/dev/null 2>&1; then
   CACHE="$(find "$CODEX_HOME/plugins/cache" -mindepth 3 -maxdepth 3 -type d | head -1)"
   [ "$(find "$CACHE/skills" -name SKILL.md | wc -l)" -eq 7 ] || fail "D 설치본 스킬이 7개가 아닙니다"
   check_package "$CACHE"
-  echo "정상: D 통과 (격리 설치본에 스킬 7개)"
+  # 모델을 부르지 않고 Codex 가 보게 될 스킬 목록만 뽑아 본다 — 플러그인 스킬은 aml:aml-go 처럼 보인다
+  mkdir -p "$TMP/empty" && (cd "$TMP/empty" && codex debug prompt-input "점검" >"$TMP/prompt.json" 2>/dev/null) \
+    || fail "D codex debug prompt-input 실패"
+  for s in $SKILLS; do
+    grep -q -- "- aml:$s: " "$TMP/prompt.json" || fail "D Codex 스킬 목록에 aml:$s 가 없습니다"
+  done
+  echo "정상: D 통과 (격리 설치본에 스킬 7개, Codex 목록에 aml:aml-* 7개)"
 else
   echo "건너뜀: D (codex 명령 없음)"
 fi

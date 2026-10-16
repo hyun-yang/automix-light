@@ -15,8 +15,8 @@ aml 의 계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·
 2. **옮겨 갈 도구에 없는 안내 파일만 만들어 달라고 요청합니다.** 옮겨 갈 도구에서 이렇게 말하면 됩니다.
    - Codex 로 옮길 때: "spec.md·task.md·progress.md 는 그대로 두고, CLAUDE.md 의 내용(특히 확인하는 법)을 옮겨서 aml 의 AGENTS 템플릿 모양으로 AGENTS.md 만 만들어 줘. 다른 파일은 바꾸지 마."
    - Claude Code 로 옮길 때: "spec.md·task.md·progress.md 는 그대로 두고, AGENTS.md 의 내용(특히 확인하는 법)을 옮겨서 aml 의 CLAUDE 템플릿 모양으로 CLAUDE.md 만 만들어 줘. 다른 파일은 바꾸지 마."
-3. **점검합니다.** Codex 는 `$aml-doctor`, Claude Code 는 `/aml:doctor`. 안내 파일이 있다고 나오고, 할 일이 남아 있으면 준비가 끝난 것입니다.
-4. **이어서 진행합니다.** Codex 는 `$aml-go`, Claude Code 는 `/aml:go`. 체크된 할 일과 지난 기록은 그대로 두고, 체크 안 된 할 일부터 이어 갑니다.
+3. **점검합니다.** Codex 는 `$aml:aml-doctor`, Claude Code 는 `/aml:doctor`. 안내 파일이 있다고 나오고, 할 일이 남아 있으면 준비가 끝난 것입니다.
+4. **이어서 진행합니다.** Codex 는 `$aml:aml-go`, Claude Code 는 `/aml:go`. 체크된 할 일과 지난 기록은 그대로 두고, 체크 안 된 할 일부터 이어 갑니다.
 
 ## 하지 않는 것
 

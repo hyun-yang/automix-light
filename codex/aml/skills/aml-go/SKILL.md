@@ -1,6 +1,6 @@
 ---
 name: aml-go
-description: task.md 를 순서대로 구현·검증하고 progress.md 에 기록한다. 다 되면 완성 기준 확인(자체 확인, 실제로 따로 맡겼을 때만 독립 확인)과 리뷰까지 한다. "구현해 줘", "이어서 해 줘", "$aml-go" 처럼 세워 둔 계획을 진행할 때 쓴다.
+description: task.md 를 순서대로 구현·검증하고 progress.md 에 기록한다. 다 되면 완성 기준 확인(자체 확인, 실제로 따로 맡겼을 때만 독립 확인)과 리뷰까지 한다. "구현해 줘", "이어서 해 줘", "$aml:aml-go" 처럼 세워 둔 계획을 진행할 때 쓴다.
 ---
 
 # aml-go — 구현
@@ -9,7 +9,7 @@ description: task.md 를 순서대로 구현·검증하고 progress.md 에 기�
 
 프로젝트 루트의 spec.md, task.md, progress.md(최신 기록), AGENTS.md 를 읽는다. intent.md 와 규칙 카드(`.agents/skills/*/SKILL.md`)가 있으면 그것도 읽는다. spec.md 나 task.md 가 없으면 aml-new 부터 하라고 알리고 멈춘다. 상태가 이상해 보이면 aml-doctor 로 점검할 수 있다고 알린다.
 
-**AGENTS.md 가 없고 CLAUDE.md 만 있다면** Claude Code 에서 시작한 프로젝트다. 계획을 새로 쓰지 말고 [도구 전환 준비](../../references/switching.md) 를 먼저 따른다 — 확인하는 법(실행·테스트 명령)을 CLAUDE.md 에서 찾아 AGENTS.md 를 만든 뒤 이어서 진행한다.
+**AGENTS.md 가 없고 CLAUDE.md 만 있다면** Claude Code 에서 시작한 프로젝트다. 계획을 새로 쓰지 말고 [도구 전환 준비](../../references/switching.md) 를 먼저 따른다 — 사용자에게 "Codex 용 안내 파일(AGENTS.md)만 새로 만들고 나머지는 그대로 둡니다"라고 한 줄로 알린 뒤, 확인하는 법(실행·테스트 명령)을 CLAUDE.md 에서 옮겨 AGENTS.md 를 만들고 이어서 진행한다. CLAUDE.md 는 고치지 않는다.
 
 시작 전에 `.aml/FIXING` 이 남아 있는지 본다. 있으면 지난번에 버그를 고치다 중간에 멈춘 흔적이니, 사용자에게 한 줄로 알리고 지운 뒤 진행한다.
 

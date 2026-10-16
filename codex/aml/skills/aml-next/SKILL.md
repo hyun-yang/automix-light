@@ -1,6 +1,6 @@
 ---
 name: aml-next
-description: 다 만든 뒤 써 보고 나온 것을 다음 바퀴로 — 작은 건 task.md 에, 큰 건 새 intent.md 로 옮긴다. "써 봤는데", "다음엔 뭘 해?", "$aml-next" 일 때 쓴다.
+description: 다 만든 뒤 써 보고 나온 것을 다음 바퀴로 — 작은 건 task.md 에, 큰 건 새 intent.md 로 옮긴다. "써 봤는데", "다음엔 뭘 해?", "$aml:aml-next" 일 때 쓴다.
 ---
 
 # aml-next — 한 바퀴 더

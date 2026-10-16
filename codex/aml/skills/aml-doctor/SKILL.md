@@ -1,6 +1,6 @@
 ---
 name: aml-doctor
-description: 시작 전 점검 — 계획 파일과 완성 기준, 프로젝트 안내(AGENTS.md), 도구 전환 준비, 안전망 안내, git/python3 를 확인한다. 읽기 전용. "점검해 줘", "준비됐어?", "$aml-doctor" 일 때 쓴다.
+description: 시작 전 점검 — 계획 파일과 완성 기준, 프로젝트 안내(AGENTS.md), 도구 전환 준비, 안전망 안내, git/python3 를 확인한다. 읽기 전용. "점검해 줘", "준비됐어?", "$aml:aml-doctor" 일 때 쓴다.
 ---
 
 # aml-doctor — 시작 전 점검

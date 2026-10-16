@@ -29,7 +29,7 @@ echo "정상: A 통과 (공통 템플릿 5개 완전 일치)"
 
 # B. 공통 템플릿에 한쪽 도구 전용 경로·호출이 없다
 for t in $COMMON; do
-  if grep -nE '/aml:|\$aml-|\.claude/|\.agents/|CLAUDE\.md|AGENTS\.md' "$CODEX_T/$t.template.md" >&2; then
+  if grep -nE '/aml:|\$aml[-:]|\.claude/|\.agents/|CLAUDE\.md|AGENTS\.md' "$CODEX_T/$t.template.md" >&2; then
     fail "B $t.template.md 에 도구 전용 안내가 있습니다 — 명령·스킬·전용 템플릿으로 옮기세요"
   fi
 done
