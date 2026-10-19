@@ -12,5 +12,8 @@
     "spec",
     "workflow",
     "korean"
-  ]
+  ],
+  "agents": "agents/",
+  "skills": "skills/",
+  "hooks": "hooks.json"
 }
