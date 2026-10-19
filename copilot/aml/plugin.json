@@ -1,0 +1,16 @@
+{
+  "name": "aml",
+  "version": "0.6.0",
+  "description": "automix 의 가벼운 버전 — 초보자를 위한 한국어 기획→구현→검증→기록 흐름 (Copilot CLI 판)",
+  "author": {
+    "name": "Hayden"
+  },
+  "license": "MIT",
+  "keywords": [
+    "automix",
+    "beginner",
+    "spec",
+    "workflow",
+    "korean"
+  ]
+}
