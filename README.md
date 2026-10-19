@@ -48,11 +48,11 @@ cd automix-light
 
 계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`)은 세 도구에서 형식이 같아, 진행 중인 프로젝트를 다른 도구로 옮겨 이어서 작업할 수 있습니다. 프로젝트 안내 파일(`CLAUDE.md` ↔ `AGENTS.md`)과 규칙 카드 위치(`.claude/skills/` ↔ `.agents/skills/`)만 다르고, Codex와 Copilot CLI는 둘 다 `AGENTS.md`와 `.agents/skills/`를 씁니다. 전환 절차는 각 폴더의 README에 있습니다. 한 번에 한 도구만 사용하세요.
 
-## 판의 차이
+## 도구별 차이
 
 | | Claude Code 판 | Codex 판 | Copilot CLI 판 |
 |---|---|---|---|
-| 위험한 작업 차단 | AML 훅이 `.env` 커밋, 버그 수정 중 테스트 파일 변경, 강제 푸시·하드 리셋을 막음 | 이 버전에는 AML 전용 차단 훅이 없습니다. Codex의 권한·샌드박스·승인 설정은 환경에 따라 적용되며, Claude Code 판의 AML 훅과 동일한 차단을 보장하지 않습니다 | Claude Code 판과 같은 세 가지를 AML 훅이 막고 이유를 보여 줌. 훅이 시간(10초)을 넘기면 Copilot이 막지 않고 통과시킴 |
+| 위험한 작업 차단 | AML 훅이 `.env` 커밋, 버그 수정 중 테스트 파일 변경, 강제 푸시·하드 리셋을 막음 | 이 버전에는 AML 전용 차단 훅이 없습니다. Codex의 권한·샌드박스·승인 설정은 환경에 따라 적용되며, Claude Code 판의 AML 훅과 동일한 차단을 보장하지 않습니다 | Claude Code 판과 같은 세 가지 작업을 AML 훅이 막고 이유를 보여 줌. 훅 실행 시간이 제한 시간(10초)을 넘으면 Copilot은 작업을 차단하지 않음 |
 | 최종 검증 | 별도 검증 에이전트(`verifier`)가 직접 실행해 확인 | 기본은 자체 검증. 별도 에이전트에게 실제로 검증을 맡겼을 때만 "독립 확인"으로 기록 | 검증 에이전트(`verifier`)를 부르고, 실제로 불렀을 때만 "독립 확인"으로 기록 |
 | 작업 지표 | 모델, 소요 시간, 토큰, 예상 비용. [Langfuse](https://langfuse.com) 전송은 선택 사항이며 **기본적으로 비활성화** | 모델, 소요 시간, 토큰. 측정값을 확인할 수 없으면 `측정: 기록 없음`으로 표시. 단가를 확인하지 않은 모델은 "비용 미산정"으로 표시. Langfuse 전송 없음 | 모델, 소요 시간, 토큰, Copilot이 기록한 AI 크레딧. 측정값을 확인할 수 없으면 `측정: 기록 없음`. 달러 비용은 "비용 미산정". Langfuse 전송 없음 |
 
@@ -77,7 +77,7 @@ copilot/                            GitHub Copilot CLI 판
   tests/                            템플릿 일치 · 안전망 · 측정 · 패키지 구조 검사
 ```
 
-세 `aml/` 폴더는 서로를 참조하지 않습니다. 공통 템플릿 5개(spec · task · progress · intent · review)는 세 판에 동일한 내용으로 포함되어 있으며, `codex/tests/test-templates.sh`와 `copilot/tests/test-templates.sh`로 내용이 일치하는지 확인합니다.
+세 도구의 `aml/` 폴더는 서로를 참조하지 않습니다. 공통 템플릿 5개(spec · task · progress · intent · review)는 세 버전에 동일한 내용으로 포함되어 있으며, `codex/tests/test-templates.sh`와 `copilot/tests/test-templates.sh`로 내용이 일치하는지 확인합니다.
 
 ## 테스트
 

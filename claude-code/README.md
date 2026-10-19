@@ -1,6 +1,6 @@
 # automix-light — Claude Code 판
 
-Claude Code에서 사용하는 aml입니다. 명령어 7개(`/aml:new` · `/aml:go` · `/aml:review` · `/aml:next` · `/aml:rule` · `/aml:status` · `/aml:doctor`)로 기획 → 구현 → 검증 → 기록 → 사용 후 개선 과정을 진행합니다. 명령어별 자세한 설명은 [`aml/README.md`](aml/README.md)에 있습니다.
+Claude Code에서 사용하는 aml입니다. 명령어 7개(`/aml:new` · `/aml:go` · `/aml:review` · `/aml:next` · `/aml:rule` · `/aml:status` · `/aml:doctor`)로 기획부터 구현, 검증, 기록, 사용 후 개선까지 진행할 수 있습니다. 명령어별 자세한 설명은 [`aml/README.md`](aml/README.md)에 있습니다.
 
 ## 설치
 
