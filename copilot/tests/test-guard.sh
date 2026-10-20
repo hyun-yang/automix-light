@@ -126,9 +126,11 @@ check "E6 모르는 도구는 통과"       0 "{\"cwd\": \"$TMP\", \"toolName\":
 check "E7 toolArgs 가 JSON 문자열" 2 "{\"cwd\": \"$TMP\", \"toolName\": \"bash\", \"toolArgs\": \"{\\\"command\\\": \\\"git reset --hard\\\"}\"}"
 check "E8 toolArgs 가 없음"         0 "{\"cwd\": \"$TMP\", \"toolName\": \"bash\"}"
 check "E9 없는 cwd"                 0 '{"cwd": "/없는/폴더", "toolName": "bash", "toolArgs": {"command": "git reset --hard"}}'
-# python3 이 없으면 통과 (PATH 에서 python3 만 빼고 bash 는 남긴다)
-NOPY="$(mktemp -d)"; ln -s "$(command -v bash)" "$NOPY/bash"
-out=$(printf '{"cwd": "%s", "toolName": "bash", "toolArgs": {"command": "git reset --hard"}}' "$TMP" | PATH="$NOPY" "$NOPY/bash" "$GUARD" 2>&1); code=$?
+# 실행되는 파이썬이 없으면 통과 — 실행하면 실패하는 python3·python·py 를 PATH 맨 앞에 둔다.
+# (Windows 의 가짜 python3 와 같은 상황. bash 를 따로 복사하지 않아 Windows 에서도 돈다.)
+NOPY="$(mktemp -d)"
+for p in python3 python py; do printf '#!/bin/sh\nexit 127\n' > "$NOPY/$p"; chmod +x "$NOPY/$p"; done
+out=$(printf '{"cwd": "%s", "toolName": "bash", "toolArgs": {"command": "git reset --hard"}}' "$TMP" | PATH="$NOPY:$PATH" bash "$GUARD" 2>&1); code=$?
 rm -rf "$NOPY"
 [[ "$code" == "0" ]] || { echo "실패: E10 python3 이 없으면 통과해야 합니다 (종료코드 $code)" >&2; exit 1; }
 echo "정상: E 통과 (끄기 + 0·2 로만 끝남)"

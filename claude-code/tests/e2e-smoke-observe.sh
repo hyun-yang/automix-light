@@ -15,8 +15,10 @@ PROJ="$TMP/proj"; mkdir -p "$PROJ"; cd "$PROJ"
 # ── 가짜 세션 기록: 인코딩된 cwd 폴더 아래 세션 JSONL 하나 ───────────────────
 ENC="$(python3 -c 'import os,re; print(re.sub(r"[^A-Za-z0-9]","-",os.path.realpath(os.getcwd())))')"
 TR="$TMP/projects/$ENC"; mkdir -p "$TR"
+# 기록에 적히는 cwd 는 파이썬이 보는 경로 그대로 (Windows 에서는 C:\... 모양 — JSON 문자열로 감싼다)
+PROJ_CWD_JSON="$(python3 -c 'import json,os; print(json.dumps(os.path.realpath(os.getcwd())))')"
 cat > "$TR/session.jsonl" <<EOF
-{"type":"assistant","timestamp":"2026-07-01T00:00:10Z","cwd":"$PROJ","message":{"model":"claude-opus-4-8","usage":{"input_tokens":1000,"output_tokens":500,"cache_creation_input_tokens":200,"cache_read_input_tokens":8000}}}
+{"type":"assistant","timestamp":"2026-07-01T00:00:10Z","cwd":$PROJ_CWD_JSON,"message":{"model":"claude-opus-4-8","usage":{"input_tokens":1000,"output_tokens":500,"cache_creation_input_tokens":200,"cache_read_input_tokens":8000}}}
 {"type":"assistant","timestamp":"2026-07-01T00:01:00Z","message":{"model":"claude-opus-4-8","usage":{"input_tokens":500,"output_tokens":250,"cache_creation_input_tokens":0,"cache_read_input_tokens":2000}}}
 {"type":"user","timestamp":"2026-07-01T00:01:30Z","message":{}}
 {"type":"assistant","timestamp":"2026-07-01T02:00:00Z","message":{"model":"claude-haiku-4-5","usage":{"input_tokens":100,"output_tokens":50}}}
