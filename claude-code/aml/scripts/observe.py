@@ -433,6 +433,10 @@ def cmd_ping() -> None:
 
 
 def main() -> None:
+    # Windows 에서는 출력 인코딩이 UTF-8 이 아니라 한글을 찍다가 멈춘다 — 출력만 UTF-8 로 맞춘다.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(prog="observe.py")
     sub = ap.add_subparsers(dest="cmd", required=True)
     td = sub.add_parser("task-done", help="작업 종료 — 측정 줄 출력 (+ langfuse 전송)")

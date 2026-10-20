@@ -24,12 +24,26 @@ if [[ ! -f "$SCRIPT_DIR/.claude-plugin/marketplace.json" ]]; then
   exit 1
 fi
 
-# 2. JSON 파일 검사 (python3 이 있을 때만)
-if command -v python3 >/dev/null 2>&1; then
-  python3 -c "import json; json.load(open('$SCRIPT_DIR/.claude-plugin/marketplace.json'))" \
+# 2. JSON 파일 검사 (실제로 실행되는 파이썬이 있을 때만)
+#    Windows 의 python3 는 Microsoft Store 바로가기일 수 있어서,
+#    이름이 있는지가 아니라 실제로 돌아가는지로 고른다 (python3 → python → py -3).
+PY=()
+for cand in "python3" "python" "py -3"; do
+  if $cand -c "import sys" >/dev/null 2>&1; then
+    read -r -a PY <<<"$cand"
+    break
+  fi
+done
+if (( ${#PY[@]} )); then
+  # 경로는 인자로 넘긴다 — Git Bash 가 /c/... 를 Windows 파이썬이 아는 C:/... 로 바꿔 준다.
+  # 한글이 들어 있으므로 UTF-8 로 읽는다 (Windows 파이썬의 기본 인코딩은 UTF-8 이 아니다).
+  check_json='import json, sys; json.load(open(sys.argv[1], encoding="utf-8"))'
+  "${PY[@]}" -c "$check_json" "$SCRIPT_DIR/.claude-plugin/marketplace.json" \
     || { echo "오류: marketplace.json 이 올바른 JSON 이 아닙니다" >&2; exit 1; }
-  python3 -c "import json; json.load(open('$SCRIPT_DIR/aml/.claude-plugin/plugin.json'))" \
+  "${PY[@]}" -c "$check_json" "$SCRIPT_DIR/aml/.claude-plugin/plugin.json" \
     || { echo "오류: plugin.json 이 올바른 JSON 이 아닙니다" >&2; exit 1; }
+else
+  echo "참고: 실행되는 파이썬을 찾지 못해 JSON 검사를 건너뜁니다 (설치는 계속합니다)"
 fi
 
 # 3. 고정 경로로 복사 (기존 설치본은 백업)
@@ -44,13 +58,18 @@ mkdir -p "$TARGET"
 cp -r "$SCRIPT_DIR/.claude-plugin" "$SCRIPT_DIR/aml" "$TARGET/"
 
 # 4. 다음 단계
+#    Windows(Git Bash)에서는 /c/Users/... 를 Claude Code 에 그대로 넣을 수 있는 C:/Users/... 로 바꿔 보여 준다.
+SHOW_TARGET="$TARGET"
+if command -v cygpath >/dev/null 2>&1; then
+  SHOW_TARGET="$(cygpath -m "$TARGET")"
+fi
 cat <<MSG
-✓ 복사 완료: $TARGET
+✓ 복사 완료: $SHOW_TARGET
 
 다음 — Claude Code 안에서 실행하세요:
 
   1. 마켓플레이스 추가:
-     /plugin marketplace add $TARGET
+     /plugin marketplace add $SHOW_TARGET
 
   2. 플러그인 설치:
      /plugin install aml@automix-light
