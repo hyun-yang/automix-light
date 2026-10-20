@@ -16,7 +16,7 @@ copilot plugin install aml@automix-light
 copilot plugin list            # aml@automix-light (v0.6.0) (enabled) 인지 확인합니다
 ```
 
-**Windows 11**에서는 위 명령을 **Git Bash**에서 실행하고, `"$PWD/copilot"` 대신 `"$(pwd -W)/copilot"`를 쓰세요(`C:/Users/...` 모양 경로). 안전망 훅은 Windows의 가짜 `python3`(Microsoft Store 바로가기)를 건너뛰고 `python`이나 `py -3`를 찾아 씁니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+**Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하고, `"$PWD/copilot"` 대신 `"$PWD\copilot"`를 쓰세요(PowerShell의 `$PWD`는 `C:\Users\...` 모양 경로). 안전망 훅은 Windows의 가짜 `python3`(Microsoft Store 바로가기)를 건너뛰고 `python`이나 `py -3`를 찾아 씁니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
 **`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽기 때문에, 실수로 `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스는 내려받은 폴더를 직접 읽으므로 그 폴더를 삭제하거나 옮기지 마세요.
 
@@ -73,3 +73,5 @@ bash copilot/tests/test-guard.sh       # Copilot 입력 형식에 따른 안전�
 python3 copilot/tests/test_observe.py  # 측정·요약 숫자 검사
 bash copilot/tests/test-package.sh     # 패키지 구조 (copilot 명령이 있으면 격리 설치와 스킬 목록까지)
 ```
+
+테스트는 저장소를 고치는 사람용이라 bash로 돌립니다. Windows에서는 Git for Windows와 함께 설치되는 **Git Bash**에서 실행하세요(일반 설치에는 필요 없습니다). 자세한 주의점은 [루트 README의 "테스트"](../README.md#테스트)를 보세요.

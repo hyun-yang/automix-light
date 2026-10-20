@@ -14,7 +14,7 @@ codex plugin add aml@automix-light
 codex plugin list            # aml@automix-light의 상태가 installed, enabled인지 확인합니다
 ```
 
-**Windows 11**에서는 위 명령을 **Git Bash**에서 실행하고, `"$PWD/codex"` 대신 `"$(pwd -W)/codex"`를 쓰세요(`C:/Users/...` 모양 경로). Windows의 `python3`는 가짜(Microsoft Store 바로가기)일 수 있으니 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+**Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하고, `"$PWD/codex"` 대신 `"$PWD\codex"`를 쓰세요(PowerShell의 `$PWD`는 `C:\Users\...` 모양 경로). `codex`에서 "스크립트를 실행할 수 없으므로…" 오류가 나면 `codex.cmd`로 바꿔 입력하세요. Windows의 `python3`는 가짜(Microsoft Store 바로가기)일 수 있으니 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
 Codex를 새로 열고 `$aml`을 입력했을 때 `aml:new`처럼 플러그인 이름이 앞에 붙은 스킬 7개가 표시되면 설치가 완료된 것입니다. 스킬은 `$aml:go`처럼 입력하거나, "남은 할 일 진행해 줘"처럼 말로 요청해도 됩니다. Codex에는 `/new`·`/status`·`/review` 같은 기본 명령이 따로 있으므로, aml 스킬을 실행할 때는 `$aml:status`처럼 `$`를 사용하세요. 마켓플레이스가 내려받은 폴더를 참조하므로 해당 폴더를 삭제하거나 옮기지 마세요.
 
@@ -72,3 +72,5 @@ bash codex/tests/test-templates.sh   # 두 판의 공통 템플릿 5개 일치 �
 python3 codex/tests/test_observe.py  # 측정·요약 숫자 검사
 bash codex/tests/test-package.sh     # 패키지 구조 (codex 명령이 있으면 격리 설치와 스킬 목록까지)
 ```
+
+테스트는 저장소를 고치는 사람용이라 bash로 돌립니다. Windows에서는 Git for Windows와 함께 설치되는 **Git Bash**에서 실행하세요(일반 설치에는 필요 없습니다). 자세한 주의점은 [루트 README의 "테스트"](../README.md#테스트)를 보세요.

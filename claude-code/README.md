@@ -17,7 +17,13 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 /plugin install aml@automix-light
 ```
 
-**Windows 11**에서는 위 명령을 **Git Bash**에서 실행하고, `~/.claude-marketplaces/...` 대신 `install.sh`가 마지막에 출력하는 `C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 경로를 그대로 붙여 넣으세요. 준비물(Git for Windows, Python)은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+**Windows 11**에서는 터미널(PowerShell)에서 `bash claude-code/install.sh` 대신 다음 명령을 실행하고, `~/.claude-marketplaces/...` 대신 마지막에 출력되는 `C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 경로를 그대로 붙여 넣으세요.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File claude-code\install.ps1
+```
+
+`-ExecutionPolicy Bypass`는 이번 한 번의 실행에만 스크립트를 허용한다는 뜻으로, 컴퓨터의 보안 설정은 바뀌지 않습니다. 준비물(Git for Windows, Python)은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
 `/help`에 `/aml:` 명령어 7개가 표시되면 설치가 완료된 것입니다. 예전 설치 명령(`./install.sh`)은 `bash claude-code/install.sh`로 바뀌었습니다.
 
@@ -27,6 +33,8 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 bash claude-code/tests/e2e-smoke-guard.sh     # 위험한 작업 차단: 6가지 사례
 bash claude-code/tests/e2e-smoke-observe.sh   # 작업 지표 기록 및 설치 결과 확인
 ```
+
+테스트는 저장소를 고치는 사람용이라 bash로 돌립니다. Windows에서는 Git for Windows와 함께 설치되는 **Git Bash**에서 실행하세요(일반 설치에는 필요 없습니다). 자세한 주의점은 [루트 README의 "테스트"](../README.md#테스트)를 보세요.
 
 ## Codex에서 진행하던 프로젝트를 Claude Code로 옮길 때
 
