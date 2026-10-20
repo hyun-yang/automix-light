@@ -9,14 +9,23 @@
 # 원칙:
 #   - spec.md 와 task.md 가 있는 aml 프로젝트에서만 동작한다. 다른 저장소에는 아무 영향이 없다.
 #   - 막을 때는 왜 막았는지와 어떻게 하면 되는지를 함께 말한다.
-#   - 무슨 일이 있어도 작업을 방해하지 않는다 — python3 이 없거나 입력이 이상하면 그냥 통과(exit 0).
+#   - 무슨 일이 있어도 작업을 방해하지 않는다 — 실행되는 파이썬이 없거나 입력이 이상하면 그냥 통과(exit 0).
 #   - 끄려면 .aml/config.yaml 에 guard: "off".
 #
 # 종료 코드: 0 = 통과, 2 = 막음(메시지는 stderr 로 Claude 에게 전달된다).
 
 set -uo pipefail
 
-command -v python3 >/dev/null 2>&1 || exit 0
+# Windows 의 python3 는 Microsoft Store 바로가기일 수 있어서, 이름이 있는지가 아니라
+# 실제로 돌아가는지로 파이썬을 고른다 (python3 → python → py -3).
+PY=()
+for cand in "python3" "python" "py -3"; do
+  if $cand -c "import sys" >/dev/null 2>&1; then
+    read -r -a PY <<<"$cand"
+    break
+  fi
+done
+(( ${#PY[@]} )) || exit 0
 
 INPUT=$(cat 2>/dev/null || echo "")
 [[ -z "$INPUT" ]] && exit 0
@@ -24,8 +33,12 @@ INPUT=$(cat 2>/dev/null || echo "")
 # 한 번의 python 호출로 네 가지를 뽑는다.
 # 1줄 = tool_name, 2줄 = cwd, 3줄 = file_path, 나머지 전부 = command
 # (도구 이름과 경로에는 줄바꿈이 없지만 명령에는 있을 수 있으므로 명령을 맨 뒤에 둔다.)
-PARSED=$(printf '%s' "$INPUT" | python3 -c '
+PARSED=$(printf '%s' "$INPUT" | "${PY[@]}" -c '
 import json, sys
+if hasattr(sys.stdout, "reconfigure"):
+    # Windows: 입출력을 UTF-8 로, 줄바꿈을 \n 으로 맞춘다 (\r\n 이면 bash 쪽 비교가 어긋난다).
+    sys.stdin.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")
 try:
     d = json.load(sys.stdin)
     inp = d.get("tool_input") or {}

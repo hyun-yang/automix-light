@@ -9,7 +9,7 @@
 # 원칙:
 #   - spec.md 와 task.md 가 있는 aml 프로젝트에서만 동작한다. 다른 저장소에는 아무 영향이 없다.
 #   - 막을 때는 왜 막았는지와 어떻게 하면 되는지를 함께 말한다.
-#   - 무슨 일이 있어도 작업을 방해하지 않는다 — python3 이 없거나 입력이 이상하면 그냥 통과(exit 0).
+#   - 무슨 일이 있어도 작업을 방해하지 않는다 — 실행되는 파이썬이 없거나 입력이 이상하면 그냥 통과(exit 0).
 #     Copilot 은 훅이 0·2 가 아닌 코드로 끝나면 도구를 막아 버리므로(fail-closed),
 #     맨 아래에서 0 과 2 말고는 모두 0 으로 바꿔 내보낸다.
 #   - 끄려면 .aml/config.yaml 에 guard: "off".
@@ -20,8 +20,18 @@
 
 set -o pipefail
 
+# Windows 의 python3 는 Microsoft Store 바로가기일 수 있어서, 이름이 있는지가 아니라
+# 실제로 돌아가는지로 파이썬을 고른다 (python3 → python → py -3).
+PY=()
+for cand in "python3" "python" "py -3"; do
+  if $cand -c "import sys" >/dev/null 2>&1; then
+    read -r -a PY <<<"$cand"
+    break
+  fi
+done
+
 guard() {
-  command -v python3 >/dev/null 2>&1 || return 0
+  (( ${#PY[@]} )) || return 0
 
   local INPUT
   INPUT=$(cat 2>/dev/null || echo "")
@@ -31,8 +41,12 @@ guard() {
   # 1줄 = 종류(shell / file / 빈칸), 2줄 = cwd, 3줄 = 고치려는 파일들(탭으로 구분), 나머지 전부 = command
   # (명령에는 줄바꿈이 있을 수 있으므로 맨 뒤에 둔다.)
   local PARSED
-  PARSED=$(printf '%s' "$INPUT" | python3 -c '
+  PARSED=$(printf '%s' "$INPUT" | "${PY[@]}" -c '
 import json, re, sys
+if hasattr(sys.stdout, "reconfigure"):
+    # Windows: 입출력을 UTF-8 로, 줄바꿈을 \n 으로 맞춘다 (\r\n 이면 bash 쪽 비교가 어긋난다).
+    sys.stdin.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")
 try:
     d = json.load(sys.stdin)
     name = d.get("toolName") or d.get("tool_name") or ""
@@ -164,8 +178,12 @@ MSG
 REASON=$(guard 2>&1 >/dev/null)
 if [[ $? == 2 ]]; then
   printf '%s\n' "$REASON" >&2
-  printf '%s' "$REASON" | python3 -c '
+  printf '%s' "$REASON" | "${PY[@]}" -c '
 import json, sys
+if hasattr(sys.stdout, "reconfigure"):
+    # Windows: 입출력을 UTF-8 로, 줄바꿈을 \n 으로 맞춘다 (\r\n 이면 bash 쪽 비교가 어긋난다).
+    sys.stdin.reconfigure(encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8", newline="\n")
 print(json.dumps({"permissionDecision": "deny", "permissionDecisionReason": sys.stdin.read().strip()}, ensure_ascii=False))
 ' 2>/dev/null
   exit 2
