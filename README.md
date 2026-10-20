@@ -34,6 +34,36 @@ git clone https://github.com/hyun-yang/automix-light.git
 cd automix-light
 ```
 
+위 명령은 Ubuntu(리눅스)·macOS 기준입니다. Windows 11에서는 아래 순서를 따르세요.
+
+## Windows 11에서 설치하기
+
+**1. 준비물을 설치합니다.**
+
+- [Git for Windows](https://git-scm.com/download/win) — **Git Bash** 터미널이 함께 설치됩니다. Claude Code도 Windows에서 Git Bash를 사용합니다.
+- [Python 3](https://www.python.org/downloads/windows/) — 설치 화면에서 **"Add python.exe to PATH"** 를 체크하세요. 파이썬이 없어도 설치는 되지만, 작업 지표 기록과 위험한 작업 차단(안전망)이 동작하지 않습니다.
+
+**2. Git Bash를 엽니다.** 시작 메뉴에서 "Git Bash"를 찾아 열고, 아래 명령은 모두 그 안에서 입력합니다. PowerShell이나 명령 프롬프트에서 `bash`를 입력하면 WSL(Windows 안의 리눅스)이 열려 엉뚱한 곳에 설치될 수 있습니다.
+
+**3. 내려받고 설치합니다.**
+
+```bash
+git clone https://github.com/hyun-yang/automix-light.git
+cd automix-light
+```
+
+| 쓰는 도구 | Git Bash에서 실행할 명령 |
+|---|---|
+| Claude Code | `bash claude-code/install.sh` → 마지막에 출력되는 `/plugin marketplace add C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 를 **그대로 복사해** Claude Code에 붙여 넣고, 이어서 `/plugin install aml@automix-light` |
+| Codex | `codex plugin marketplace add "$(pwd -W)/codex"` → `codex plugin add aml@automix-light` |
+| GitHub Copilot CLI | `copilot plugin marketplace add "$(pwd -W)/copilot"` → `copilot plugin install aml@automix-light` |
+
+`pwd -W`는 지금 폴더를 `C:/Users/...` 모양으로 알려 주는 Git Bash 명령입니다. Ubuntu 안내의 `$PWD`는 `/c/Users/...` 모양이라 Windows 프로그램이 잘못 알아들을 수 있습니다.
+
+**알아 둘 점 — Windows의 "가짜 python3"**
+
+Windows에는 처음부터 `python3`라는 이름의 Microsoft Store 바로가기(앱 실행 별칭)가 들어 있습니다. 진짜 파이썬이 아니어서, 실행하면 "Python was not found" 라는 문구만 나옵니다. aml의 설치 스크립트와 안전망은 `python3` → `python` → `py -3` 순서로 **실제로 실행되는** 파이썬을 찾아 쓰므로 그대로 두어도 됩니다. 다만 터미널에서 `python3` 명령을 직접 입력해야 할 때는 `python`으로 바꿔 입력하세요. 바로가기를 끄려면 설정 → 앱 → 고급 앱 설정 → **앱 실행 별칭**에서 "앱 설치 관리자 python.exe / python3.exe"를 끕니다.
+
 ## 명령어
 
 | 하는 일 | Claude Code | Codex | Copilot CLI |
@@ -92,6 +122,8 @@ bash copilot/tests/test-guard.sh              # Copilot 판 위험한 작업 차
 python3 copilot/tests/test_observe.py         # Copilot 측정·요약 숫자 검사
 bash copilot/tests/test-package.sh            # Copilot 패키지 구조 (copilot 명령이 있으면 격리 설치까지)
 ```
+
+테스트는 Ubuntu(리눅스) 기준으로 작성되어 있습니다. Windows의 Git Bash에서 돌릴 때는 `python3` 대신 `python`을 쓰고, 파이썬이 한글을 제대로 읽도록 앞에 `PYTHONUTF8=1`을 붙입니다(예: `PYTHONUTF8=1 python codex/tests/test_observe.py`). `bash`로 돌리는 테스트는 안에서 `python3`를 부르고 리눅스 모양 경로를 가정하는 부분이 있어 Windows에서는 일부가 실패할 수 있습니다 — 이런 테스트는 리눅스(또는 WSL)에서 돌리세요.
 
 ## 더 보기
 

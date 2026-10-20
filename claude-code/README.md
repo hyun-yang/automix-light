@@ -17,6 +17,8 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 /plugin install aml@automix-light
 ```
 
+**Windows 11**에서는 위 명령을 **Git Bash**에서 실행하고, `~/.claude-marketplaces/...` 대신 `install.sh`가 마지막에 출력하는 `C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 경로를 그대로 붙여 넣으세요. 준비물(Git for Windows, Python)은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+
 `/help`에 `/aml:` 명령어 7개가 표시되면 설치가 완료된 것입니다. 예전 설치 명령(`./install.sh`)은 `bash claude-code/install.sh`로 바뀌었습니다.
 
 ## 테스트

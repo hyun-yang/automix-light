@@ -16,6 +16,8 @@ copilot plugin install aml@automix-light
 copilot plugin list            # aml@automix-light (v0.6.0) (enabled) 인지 확인합니다
 ```
 
+**Windows 11**에서는 위 명령을 **Git Bash**에서 실행하고, `"$PWD/copilot"` 대신 `"$(pwd -W)/copilot"`를 쓰세요(`C:/Users/...` 모양 경로). 안전망 훅은 Windows의 가짜 `python3`(Microsoft Store 바로가기)를 건너뛰고 `python`이나 `py -3`를 찾아 씁니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+
 **`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽기 때문에, 실수로 `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스는 내려받은 폴더를 직접 읽으므로 그 폴더를 삭제하거나 옮기지 마세요.
 
 Copilot을 새로 열고 `/aml`을 입력했을 때 `/aml:go`처럼 플러그인 이름이 앞에 붙은 스킬 7개가 보이면 설치가 끝난 것입니다. 스킬은 `/aml:go`처럼 입력하거나 "남은 할 일 진행해 줘"처럼 말로 요청해도 됩니다. Copilot에는 `/new`(새 대화)·`/review`(코드 리뷰) 같은 기본 명령이 따로 있으니, aml 스킬은 꼭 `/aml:new`처럼 `aml:`을 붙여 부르세요.
