@@ -19,50 +19,65 @@ Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native
 
 ## 어느 도구에서 쓰나요?
 
-세 도구에서 같은 작업 흐름을 사용할 수 있습니다. 사용하는 도구에 맞는 설치 안내를 따르세요.
+세 도구에서 같은 작업 흐름을 사용할 수 있습니다. 쓰는 운영체제에 맞는 설치 절(아래의 Windows 11 또는 우분투·macOS)을 따르고, 도구별 자세한 안내는 각 README를 참고하세요.
 
-| 쓰는 도구 | 설치와 안내 | 설치 명령 (저장소 루트에서) |
-|---|---|---|
-| Claude Code | [`claude-code/README.md`](claude-code/README.md) | `bash claude-code/install.sh` |
-| Codex | [`codex/README.md`](codex/README.md) | `codex plugin marketplace add "$PWD/codex"` → `codex plugin add aml@automix-light` |
-| GitHub Copilot CLI | [`copilot/README.md`](copilot/README.md) | `copilot plugin marketplace add "$PWD/copilot"` → `copilot plugin install aml@automix-light` |
-
-> 설치 명령이 바뀌었습니다. 예전의 `./install.sh` 대신 저장소 루트에서 `bash claude-code/install.sh`를 실행합니다.
-
-```bash
-git clone https://github.com/hyun-yang/automix-light.git
-cd automix-light
-```
-
-위 명령은 Ubuntu(리눅스)·macOS 기준입니다. Windows 11에서는 아래 순서를 따르세요.
+| 쓰는 도구 | 설치와 안내 |
+|---|---|
+| Claude Code | [`claude-code/README.md`](claude-code/README.md) |
+| Codex | [`codex/README.md`](codex/README.md) |
+| GitHub Copilot CLI | [`copilot/README.md`](copilot/README.md) |
 
 ## Windows 11에서 설치하기
 
+모든 명령은 Windows에 기본으로 들어 있는 **터미널(PowerShell)** 에 입력합니다.
+
 **1. 준비물을 설치합니다.**
 
-- [Git for Windows](https://git-scm.com/download/win) — **Git Bash** 터미널이 함께 설치됩니다. Claude Code도 Windows에서 Git Bash를 사용합니다.
-- [Python 3](https://www.python.org/downloads/windows/) — 설치 화면에서 **"Add python.exe to PATH"** 를 체크하세요. 파이썬이 없어도 설치는 되지만, 작업 지표 기록과 위험한 작업 차단(안전망)이 동작하지 않습니다.
+- [Git for Windows](https://git-scm.com/download/win) — 내려받기(`git clone`)에 쓰이고, Claude Code와 aml의 안전망(위험한 작업 차단)도 Git에 들어 있는 도구를 사용합니다. 설치 화면은 기본값 그대로 넘기면 됩니다. 설치 후 따로 열 창은 없습니다.
+- [Python 3](https://www.python.org/downloads/windows/) — 설치 화면에서 **"Add python.exe to PATH"** 를 체크하세요. 파이썬이 없어도 설치는 되지만, 작업 지표 기록과 안전망이 동작하지 않습니다.
 
-**2. Git Bash를 엽니다.** 시작 메뉴에서 "Git Bash"를 찾아 열고, 아래 명령은 모두 그 안에서 입력합니다. PowerShell이나 명령 프롬프트에서 `bash`를 입력하면 WSL(Windows 안의 리눅스)이 열려 엉뚱한 곳에 설치될 수 있습니다.
+터미널에 익숙하다면 두 가지를 명령으로 설치해도 됩니다: `winget install Git.Git` · `winget install Python.Python.3.12`
+
+**2. 터미널을 엽니다.** 시작 버튼을 마우스 오른쪽 버튼으로 누르고 **터미널**을 고르세요(시작 메뉴에서 "터미널"이나 "PowerShell"을 검색해도 됩니다). 준비물을 방금 설치했다면 터미널을 새로 열어야 `git`과 `python` 명령을 찾습니다.
 
 **3. 내려받고 설치합니다.**
+
+```powershell
+git clone https://github.com/hyun-yang/automix-light.git
+cd automix-light
+```
+
+| 쓰는 도구 | 터미널(PowerShell)에서 실행할 명령 |
+|---|---|
+| Claude Code | `powershell -ExecutionPolicy Bypass -File claude-code\install.ps1` → 마지막에 출력되는 `/plugin marketplace add C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 를 **그대로 복사해** Claude Code에 붙여 넣고, 이어서 `/plugin install aml@automix-light` |
+| Codex | `codex plugin marketplace add "$PWD\codex"` → `codex plugin add aml@automix-light` |
+| GitHub Copilot CLI | `copilot plugin marketplace add "$PWD\copilot"` → `copilot plugin install aml@automix-light` |
+
+PowerShell의 `$PWD`는 지금 폴더(`C:\Users\...\automix-light`)를 뜻합니다.
+
+**알아 둘 점**
+
+- **Claude Code 설치 명령이 긴 이유** — Windows는 처음 상태에서 내려받은 스크립트(`.ps1`) 실행을 막아 둡니다. `-ExecutionPolicy Bypass`는 **이번 한 번의 실행에만** 허용한다는 뜻이고, 컴퓨터의 보안 설정은 바뀌지 않습니다. `.\claude-code\install.ps1`처럼 바로 실행하면 "스크립트를 실행할 수 없으므로…" 오류가 나니 위 명령을 그대로 쓰세요.
+- **`codex`에서 같은 오류가 날 때** — npm으로 설치한 Codex는 PowerShell 스크립트(`codex.ps1`)로 실행되어 같은 이유로 막힐 수 있습니다. 그럴 때는 `codex` 대신 `codex.cmd`라고 입력하세요(예: `codex.cmd plugin marketplace add "$PWD\codex"`).
+- **Git for Windows는 지우지 마세요** — 터미널에서 직접 쓸 일은 없어도, Claude Code와 aml의 안전망이 안에서 Git의 `bash`를 사용합니다.
+- **Windows의 "가짜 python3"** — Windows에는 처음부터 `python3`라는 이름의 Microsoft Store 바로가기(앱 실행 별칭)가 들어 있습니다. 진짜 파이썬이 아니어서, 실행하면 "Python was not found" 라는 문구만 나옵니다. aml의 설치 스크립트와 안전망은 `python3` → `python` → `py -3` 순서로 **실제로 실행되는** 파이썬을 찾아 쓰므로 그대로 두어도 됩니다. 다만 터미널에서 `python3` 명령을 직접 입력해야 할 때는 `python`으로 바꿔 입력하세요. 바로가기를 끄려면 설정 → 앱 → 고급 앱 설정 → **앱 실행 별칭**에서 "앱 설치 관리자 python.exe / python3.exe"를 끕니다.
+
+## 우분투, macOS에서 설치하기
+
+터미널에서 실행합니다. Git이 필요하고, 작업 지표 기록과 안전망을 쓰려면 `python3`도 필요합니다.
 
 ```bash
 git clone https://github.com/hyun-yang/automix-light.git
 cd automix-light
 ```
 
-| 쓰는 도구 | Git Bash에서 실행할 명령 |
+| 쓰는 도구 | 터미널에서 실행할 명령 |
 |---|---|
-| Claude Code | `bash claude-code/install.sh` → 마지막에 출력되는 `/plugin marketplace add C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 를 **그대로 복사해** Claude Code에 붙여 넣고, 이어서 `/plugin install aml@automix-light` |
-| Codex | `codex plugin marketplace add "$(pwd -W)/codex"` → `codex plugin add aml@automix-light` |
-| GitHub Copilot CLI | `copilot plugin marketplace add "$(pwd -W)/copilot"` → `copilot plugin install aml@automix-light` |
+| Claude Code | `bash claude-code/install.sh` → 마지막에 출력되는 `/plugin marketplace add ~/.claude-marketplaces/automix-light` 와 `/plugin install aml@automix-light` 를 Claude Code에 입력 |
+| Codex | `codex plugin marketplace add "$PWD/codex"` → `codex plugin add aml@automix-light` |
+| GitHub Copilot CLI | `copilot plugin marketplace add "$PWD/copilot"` → `copilot plugin install aml@automix-light` |
 
-`pwd -W`는 지금 폴더를 `C:/Users/...` 모양으로 알려 주는 Git Bash 명령입니다. Ubuntu 안내의 `$PWD`는 `/c/Users/...` 모양이라 Windows 프로그램이 잘못 알아들을 수 있습니다.
-
-**알아 둘 점 — Windows의 "가짜 python3"**
-
-Windows에는 처음부터 `python3`라는 이름의 Microsoft Store 바로가기(앱 실행 별칭)가 들어 있습니다. 진짜 파이썬이 아니어서, 실행하면 "Python was not found" 라는 문구만 나옵니다. aml의 설치 스크립트와 안전망은 `python3` → `python` → `py -3` 순서로 **실제로 실행되는** 파이썬을 찾아 쓰므로 그대로 두어도 됩니다. 다만 터미널에서 `python3` 명령을 직접 입력해야 할 때는 `python`으로 바꿔 입력하세요. 바로가기를 끄려면 설정 → 앱 → 고급 앱 설정 → **앱 실행 별칭**에서 "앱 설치 관리자 python.exe / python3.exe"를 끕니다.
+> 설치 명령이 바뀌었습니다. 예전의 `./install.sh` 대신 저장소 루트에서 `bash claude-code/install.sh`를 실행합니다.
 
 ## 명령어
 
@@ -93,7 +108,8 @@ README.md                           이 문서 — 도구 고르기
 claude-code/                        Claude Code 판
   .claude-plugin/marketplace.json   마켓플레이스 설정
   aml/                              플러그인 (commands · agents · hooks · scripts · templates · references)
-  install.sh                        마켓플레이스 설치 스크립트
+  install.sh                        마켓플레이스 설치 스크립트 (우분투·macOS)
+  install.ps1                       같은 일을 하는 Windows(PowerShell)용 설치 스크립트
   tests/                            기본 동작 확인 테스트
   docs/archive/                     지난 분석 문서
 codex/                              Codex 판
