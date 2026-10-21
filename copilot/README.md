@@ -6,7 +6,7 @@ GitHub Copilot CLI(터미널에서 실행하는 `copilot`)용 aml 플러그인�
 
 ## 설치
 
-[GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli)(Copilot 구독 필요)와 Git이 필요합니다. 작업 지표를 기록하고 안전망 훅을 사용하려면 `python3`도 필요합니다. `python3`가 없어도 작업은 진행할 수 있지만, 측정 결과는 `기록 없음`으로 표시되고 훅의 작업 차단 기능은 동작하지 않습니다.
+[GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli)(Copilot 구독 필요)와 Git이 필요합니다. 작업 지표를 기록하고 안전망 훅을 사용하려면 실행 가능한 Python 3이 필요합니다. Python 3이 없어도 작업은 진행할 수 있지만, 측정 결과는 `기록 없음`으로 표시되고 훅의 작업 차단 기능은 동작하지 않습니다.
 
 ```bash
 git clone https://github.com/hyun-yang/automix-light.git
@@ -17,6 +17,8 @@ copilot plugin list            # aml@automix-light (v0.6.0) (enabled) 인지 확
 ```
 
 **Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/copilot"` 대신 `"$PWD\copilot"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). 안전망 훅은 `python3`가 Microsoft Store 바로가기일 경우 이를 건너뛰고 실제로 실행되는 `python`이나 `py -3`를 찾습니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+
+go·doctor·status의 작업 지표 측정도 실행 가능한 `python3` → `python` → `py -3`를 차례로 확인해 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
 
 **`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽습니다. `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스가 내려받은 폴더를 직접 읽으므로 해당 폴더를 삭제하거나 옮기지 마세요.
 

@@ -25,6 +25,8 @@ powershell -ExecutionPolicy Bypass -File claude-code\install.ps1
 
 `-ExecutionPolicy Bypass`는 이번 한 번의 실행에만 스크립트를 허용한다는 뜻으로, 컴퓨터의 보안 설정은 바뀌지 않습니다. 준비물(Git for Windows, Python)은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
+Windows의 작업 지표 측정과 doctor 점검은 실제로 실행되는 Python 3을 사용합니다. `python3`가 Microsoft Store 바로가기라면 `python`, 이어서 `py -3`를 확인합니다. [확인 방법](../README.md#windows-11에서-설치하기)을 참고하세요.
+
 `/help`에 `/aml:` 명령어 7개가 표시되면 설치가 완료된 것입니다. 예전 설치 명령(`./install.sh`)은 `bash claude-code/install.sh`로 바뀌었습니다.
 
 ## 테스트

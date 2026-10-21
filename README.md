@@ -61,6 +61,7 @@ PowerShell의 `$PWD`는 지금 폴더(`C:\Users\...\automix-light`)를 뜻합니
 - **`codex`에서 같은 오류가 날 때** — npm으로 설치한 Codex는 PowerShell 스크립트(`codex.ps1`)로 실행되어 같은 이유로 막힐 수 있습니다. 그럴 때는 `codex` 대신 `codex.cmd`라고 입력하세요(예: `codex.cmd plugin marketplace add "$PWD\codex"`).
 - **Git for Windows는 제거하지 마세요** — 터미널에서 Git Bash를 직접 열지 않아도, Claude Code와 aml의 안전망이 Git에 포함된 `bash`를 사용합니다.
 - **Windows의 "가짜 python3"** — Windows에는 처음부터 `python3`라는 이름의 Microsoft Store 바로가기(앱 실행 별칭)가 들어 있습니다. 진짜 파이썬이 아니어서, 실행하면 "Python was not found" 라는 문구만 나옵니다. aml의 설치 스크립트와 안전망은 `python3` → `python` → `py -3` 순서로 **실제로 실행되는** 파이썬을 찾아 쓰므로 그대로 두어도 됩니다. 다만 터미널에서 `python3` 명령을 직접 입력해야 할 때는 `python`으로 바꿔 입력하세요. 바로가기를 끄려면 설정 → 앱 → 고급 앱 설정 → **앱 실행 별칭**에서 "앱 설치 관리자 python.exe / python3.exe"를 끕니다.
+- **작업 지표 측정 명령** — 세 도구의 go·doctor·status도 `python3` → `python` → `py -3`를 실제로 실행해 보고 되는 명령을 사용합니다. PowerShell에서 직접 확인하려면 `python -c "import sys; print(sys.version_info[0])"`를 입력해 `3`이 나오는지 보세요. 안 되면 `py -3 -c "import sys; print(sys.version_info[0])"`를 사용하세요. 둘 다 실패하면 Python 3을 설치하고 터미널을 다시 여세요.
 
 ## 우분투, macOS에서 설치하기
 

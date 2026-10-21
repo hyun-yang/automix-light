@@ -77,7 +77,7 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 - 측정: claude-opus-4-8 · 4분 32초 · 토큰 입력 12.3k / 출력 4.1k (캐시 읽기 88k / 쓰기 2.1k) · 예상 비용 $0.42
 ```
 
-이 줄에는 사용한 모델, 소요 시간, 입력·출력 토큰 사용량, 예상 비용이 담깁니다. 토큰은 모델이 텍스트를 처리하는 단위입니다. 예상 비용은 공개 가격표를 기준으로 계산하므로 실제 청구액과 다를 수 있습니다. `python3`가 없으면 `측정: 기록 없음`으로 표시하고 구현을 계속합니다.
+이 줄에는 사용한 모델, 소요 시간, 입력·출력 토큰 사용량, 예상 비용이 담깁니다. 토큰은 모델이 텍스트를 처리하는 단위입니다. 예상 비용은 공개 가격표를 기준으로 계산하므로 실제 청구액과 다를 수 있습니다. `python3`·`python`·`py -3` 중 실행 가능한 Python 3이 없으면 `측정: 기록 없음`으로 표시하고 구현을 계속합니다.
 
 ### 3. `/aml:review`
 
@@ -106,7 +106,7 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 작업 시작 전이나 문제가 생겼을 때 프로젝트 상태를 점검합니다. 파일은 수정하지 않습니다.
 
 - ❌ **작업 전에 해결할 항목** — `spec.md`, `task.md`, `progress.md`가 없거나 완성 기준·작업 체크박스가 없으면 `/aml:new`를 안내합니다.
-- ⚠️ **참고 항목** — `CLAUDE.md`, `intent.md`, `REVIEW.md`의 유무, 버그 수정 상태 파일(`.aml/FIXING`)이 남아 있는지, 작업 차단 기능, Git·`python3` 설치 여부, 설정 변경 후 검증 여부, Langfuse 설정을 확인합니다.
+- ⚠️ **참고 항목** — `CLAUDE.md`, `intent.md`, `REVIEW.md`의 유무, 버그 수정 상태 파일(`.aml/FIXING`)이 남아 있는지, 작업 차단 기능, Git·실행 가능한 Python 3의 유무, 설정 변경 후 검증 여부, Langfuse 설정을 확인합니다.
 
 ## 위험한 작업 차단
 

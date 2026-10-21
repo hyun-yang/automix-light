@@ -5,6 +5,9 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Task, AskUserQuestion
 
 # /aml:go — 구현
 
+**Python 실행 명령 선택:** `python3 -c "import sys; print(sys.version_info[0])"` → `python -c "import sys; print(sys.version_info[0])"` → `py -3 -c "import sys; print(sys.version_info[0])"` 순서로 실제 실행한다. 출력이 `3`이고 종료 코드가 0인 첫 명령을 고른다. 아래의 `<파이썬>`은 고른 명령(`python3`, `python`, `py -3`)으로 바꾸어 실행한다. Windows의 Microsoft Store 바로가기는 이름이 있어도 실행에 실패할 수 있다.
+
+
 프로젝트 루트의 spec.md, task.md, progress.md(최신 기록), CLAUDE.md 를 읽는다. intent.md 와 규칙 카드(`.claude/skills/*/SKILL.md`)가 있으면 그것도 읽는다. spec.md 나 task.md 가 없으면 /aml:new 부터 하라고 알리고 멈춘다. 상태가 이상해 보이면 /aml:doctor 로 점검할 수 있다고 알린다.
 
 시작 전에 `.aml/FIXING` 이 남아 있는지 본다. 있으면 지난번에 버그를 고치다 중간에 멈춘 흔적이니, 사용자에게 한 줄로 알리고 지운 뒤 진행한다.
@@ -28,9 +31,9 @@ task.md 의 체크되지 않은 할 일을 순서대로:
 
 4. **기록** — task.md 에서 해당 할 일을 체크하고, progress.md 맨 위에 기록을 하나 추가한다: 한 일 / 확인 결과 / **메모**(계획과 다르게 한 것과 그 이유 — 초보자는 코드 대신 이 기록을 읽는다) / **측정 줄** / 다음. 측정 줄은 한 번의 호출로 얻는다:
 
-   `python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" task-done --since <시작 시각> --label "<할 일 번호와 이름>" --feature "<spec.md 제목>" --note "<한 줄 검증 결과>"`
+   `<파이썬> "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" task-done --since <시작 시각> --label "<할 일 번호와 이름>" --feature "<spec.md 제목>" --note "<한 줄 검증 결과>"`
 
-   출력된 "측정: …" 줄을 그대로 붙여 넣는다 — 이 줄은 스크립트가 만든 형식 그대로 두고 손대지 않는다 (Langfuse 를 켜 두었다면 같은 호출이 전송까지 한다 — 전송 실패는 무시하고 계속한다). 호출 자체가 실패하면(python3 없음 등) `측정: 기록 없음` 이라고 적고 계속한다.
+   출력된 "측정: …" 줄을 그대로 붙여 넣는다 — 이 줄은 스크립트가 만든 형식 그대로 두고 손대지 않는다 (Langfuse 를 켜 두었다면 같은 호출이 전송까지 한다 — 전송 실패는 무시하고 계속한다). 호출 자체가 실패하면(실행 가능한 Python 3 없음 등) `측정: 기록 없음` 이라고 적고 계속한다.
 
 5. **커밋** — git 저장소면 할 일 하나가 끝날 때마다 커밋한다(예: `feat: 1.2 카드 추가 창`). 되돌리고 싶을 때 이 단위로 되돌릴 수 있다. git 저장소가 아니면 조용히 건너뛴다.
 

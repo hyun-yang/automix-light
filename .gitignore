@@ -16,6 +16,7 @@ __pycache__/
 
 # 개발용 계획·기록 문서 — 로컬에만 둔다 (루트만)
 /CLAUDE.md
+/AGENTS.md
 /intent.md
 /spec.md
 /task.md

@@ -5,6 +5,9 @@ description: 시작 전 점검 — 계획 파일과 완성 기준, 프로젝트 
 
 # $aml:doctor — 시작 전 점검
 
+**Python 실행 명령 선택:** `python3 -c "import sys; print(sys.version_info[0])"` → `python -c "import sys; print(sys.version_info[0])"` → `py -3 -c "import sys; print(sys.version_info[0])"` 순서로 실제 실행한다. 출력이 `3`이고 종료 코드가 0인 첫 명령을 고른다. 아래의 `<파이썬>`은 고른 명령(`python3`, `python`, `py -3`)으로 바꾸어 실행한다. Windows의 Microsoft Store 바로가기는 이름이 있어도 실행에 실패할 수 있다.
+
+
 프로젝트 루트에서 아래를 순서대로 확인하고 한국어로 쉽게 보고한다. **아무것도 고치지 않는다** — 파일을 만들거나 바꾸거나 지우지 않는다. 고칠 것이 보이면 방법만 알려 준다.
 
 ## 막는 항목 — 실패하면 ❌ 와 해결 방법을 알린다
@@ -26,10 +29,10 @@ description: 시작 전 점검 — 계획 파일과 완성 기준, 프로젝트 
    "이 버전에는 AML 전용 차단 훅이 없습니다. Codex 의 권한·샌드박스·승인 설정은 환경에 따라 적용되며, Claude 판 AML 훅과 같은 차단을 보장하지 않습니다."
    지금 Codex 의 권한·샌드박스 설정을 실제로 확인하지 않았다면 "켜져 있다", "보호된다"고 말하지 않는다. 비밀키 커밋·강제 푸시·하드 리셋 같은 되돌리기 어려운 일은 사람이 확인해야 한다고 덧붙인다.
 9. **git** 저장소인가(`git rev-parse --is-inside-work-tree`)? — 아니면: "$aml:new 가 git 을 준비하고 기본 브랜치를 main 으로 맞춰 줍니다 — 있으면 실수를 되돌리기 쉽습니다"
-10. **python3** 를 쓸 수 있는가(`command -v python3`)? — 아니면: "progress.md 에 측정 줄(모델·시간·토큰·비용)이 남지 않습니다. 작업은 그대로 진행됩니다"
+10. **Python 3**를 실제로 실행할 수 있는가(위 선택 절차)? — 아니면: "progress.md 에 측정 줄(모델·시간·토큰·비용)이 남지 않습니다. 작업은 그대로 진행됩니다"
 11. **규칙 카드** — `.agents/skills/*/SKILL.md` 개수를 세어 알린다(0개도 정상). 있으면 이름만 한 줄로. `.claude/skills/` 에만 카드가 있으면 ⚠️ "Claude Code 용 규칙 카드는 Codex 가 자동으로 읽지 않습니다. 계속 지킬 규칙이 있으면 $aml:rule 로 `.agents/skills/` 에 옮겨 적으세요."
 12. **설정을 바꾼 뒤 확인했는가** — AGENTS.md · REVIEW.md · 규칙 카드 중 가장 최근에 고쳐진 시각이 progress.md 의 마지막 기록보다 나중이면 ⚠️: "Codex 를 이끄는 설정이 바뀐 뒤 아직 전체 확인을 안 했습니다. $aml:go 나 $aml:review 로 완성 기준을 한 번 다시 훑어보세요."
-13. **사용량 측정** — `python3 "<패키지>/scripts/observe.py" check` 를 돌려 나온 한 줄을 그대로 전한다(`<패키지>` 는 이 SKILL.md 의 두 단계 위). 측정을 못 해도 막지 않는다. Langfuse 전송은 Codex 판 첫 버전에 없다고 한 줄로 알린다.
+13. **사용량 측정** — `<파이썬> "<패키지>/scripts/observe.py" check` 를 돌려 나온 한 줄을 그대로 전한다(`<패키지>` 는 이 SKILL.md 의 두 단계 위). 측정을 못 해도 막지 않는다. Langfuse 전송은 Codex 판 첫 버전에 없다고 한 줄로 알린다.
 
 ## 보고 형식
 

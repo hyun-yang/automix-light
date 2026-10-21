@@ -5,6 +5,9 @@ description: spec.md / task.md / progress.md 를 바탕으로 진행 상황과 �
 
 # /aml:status — 진행 상황 확인
 
+**Python 실행 명령 선택:** `python3 -c "import sys; print(sys.version_info[0])"` → `python -c "import sys; print(sys.version_info[0])"` → `py -3 -c "import sys; print(sys.version_info[0])"` 순서로 실제 실행한다. 출력이 `3`이고 종료 코드가 0인 첫 명령을 고른다. 아래의 `<파이썬>`은 고른 명령(`python3`, `python`, `py -3`)으로 바꾸어 실행한다. Windows의 Microsoft Store 바로가기는 이름이 있어도 실행에 실패할 수 있다.
+
+
 프로젝트 루트의 spec.md, task.md, progress.md 를 읽는다(intent.md 와 REVIEW.md 가 있으면 그것도). 셋 다 없으면 /aml:new 부터 하라고 알린다. 아무것도 고치지 않는다.
 
 보고(한국어로, 쉬운 말로):
@@ -18,10 +21,10 @@ description: spec.md / task.md / progress.md 를 바탕으로 진행 상황과 �
 
 숫자 하나하나가 무슨 뜻인지 한 줄씩 붙여 준다. 초보자에게 숫자만 던지지 않는다.
 
-먼저 측정 줄을 합산한다(`<패키지>` 는 이 SKILL.md 의 두 단계 위. python3 이 없으면 이 줄만 건너뛴다):
+먼저 측정 줄을 합산한다(`<패키지>` 는 이 SKILL.md 의 두 단계 위. 실행 가능한 Python 3이 없으면 이 줄만 건너뛴다):
 
 ```bash
-python3 "<패키지>/scripts/observe.py" summary progress.md
+<파이썬> "<패키지>/scripts/observe.py" summary progress.md
 ```
 
 출력을 그대로 보여 준 뒤, 파일에서 셀 수 있는 것을 덧붙인다. Claude Code·Codex·Copilot 에서 남긴 측정 줄이 섞여 있어도 함께 합산된다. Copilot 줄의 "AI 크레딧"은 Copilot 이 직접 기록한 사용량이라 달러 비용과 섞지 않고 따로 더한다. "비용 미산정" 이 있으면 "가격을 확인하지 못한 모델이라 비용을 0 으로 치지 않고 따로 셌습니다"라고 풀어 준다.

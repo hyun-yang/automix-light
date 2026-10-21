@@ -8,12 +8,15 @@
 
 ## 부르는 법
 
+**Python 실행 명령 선택:** `python3 -c "import sys; print(sys.version_info[0])"` → `python -c "import sys; print(sys.version_info[0])"` → `py -3 -c "import sys; print(sys.version_info[0])"` 순서로 실제 실행한다. 출력이 `3`이고 종료 코드가 0인 첫 명령을 고른다. 아래의 `<파이썬>`은 고른 명령(`python3`, `python`, `py -3`)으로 바꾸어 실행한다. Windows의 Microsoft Store 바로가기는 이름이 있어도 실행에 실패할 수 있다.
+
+
 ```bash
-python3 "<패키지>/scripts/observe.py" task-start --label "1.2 카드 추가 창"
+<파이썬> "<패키지>/scripts/observe.py" task-start --label "1.2 카드 추가 창"
 #  → 시작: 2026-10-19T18:00:00+10:00      (이 시각을 아래 --since 에 씀)
-python3 "<패키지>/scripts/observe.py" task-done --since 2026-10-19T18:00:00+10:00 --label "1.2 카드 추가 창"
-python3 "<패키지>/scripts/observe.py" summary progress.md     # /aml:status
-python3 "<패키지>/scripts/observe.py" check                   # /aml:doctor
+<파이썬> "<패키지>/scripts/observe.py" task-done --since 2026-10-19T18:00:00+10:00 --label "1.2 카드 추가 창"
+<파이썬> "<패키지>/scripts/observe.py" summary progress.md     # /aml:status
+<파이썬> "<패키지>/scripts/observe.py" check                   # /aml:doctor
 ```
 
 `<패키지>` 는 스킬 파일(SKILL.md)이 있는 폴더의 두 단계 위입니다.

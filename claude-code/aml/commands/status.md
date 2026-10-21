@@ -5,6 +5,9 @@ allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 
 # /aml:status — 진행 상황 확인
 
+**Python 실행 명령 선택:** `python3 -c "import sys; print(sys.version_info[0])"` → `python -c "import sys; print(sys.version_info[0])"` → `py -3 -c "import sys; print(sys.version_info[0])"` 순서로 실제 실행한다. 출력이 `3`이고 종료 코드가 0인 첫 명령을 고른다. 아래의 `<파이썬>`은 고른 명령(`python3`, `python`, `py -3`)으로 바꾸어 실행한다. Windows의 Microsoft Store 바로가기는 이름이 있어도 실행에 실패할 수 있다.
+
+
 프로젝트 루트의 spec.md, task.md, progress.md 를 읽는다(intent.md 와 REVIEW.md 가 있으면 그것도). 셋 다 없으면 /aml:new 부터 하라고 알린다. 아무것도 고치지 않는다.
 
 보고(한국어로, 쉬운 말로):
@@ -18,10 +21,10 @@ allowed-tools: Read, Glob, Grep, Bash, AskUserQuestion
 
 숫자 하나하나가 무슨 뜻인지 한 줄씩 붙여 준다. 초보자에게 숫자만 던지지 않는다.
 
-먼저 측정 줄을 합산한다(python3 이 없으면 이 줄만 건너뛴다):
+먼저 측정 줄을 합산한다(실행 가능한 Python 3이 없으면 이 줄만 건너뛴다):
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" summary progress.md
+<파이썬> "${CLAUDE_PLUGIN_ROOT}/scripts/observe.py" summary progress.md
 ```
 
 출력을 그대로 보여 준 뒤, 파일에서 셀 수 있는 것을 덧붙인다.
