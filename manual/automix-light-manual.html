@@ -38,6 +38,7 @@
     .topbar nav { margin-left:auto; display:flex; gap:25px; font-size:13px; font-weight:600; }
     .topbar nav a { text-decoration:none; padding-block:12px; }
     .edition { color:var(--muted); font-size:11px; border-left:1px solid var(--line); padding-left:24px; }
+    .language-link { font-size:12px; white-space:nowrap; margin-left:8px; }
     .hero { display:grid; grid-template-columns:1.08fr 1fr; align-items:center; gap:50px; margin:72px 0 56px; }
     .eyebrow,.chapter,.margin-label { font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--green); }
     .eyebrow { display:flex; gap:8px; align-items:center; }
@@ -304,7 +305,8 @@
     }
     @media (max-width:700px) {
       body { font-size:16px; } main,.topbar,footer { padding-inline:22px; } section { margin-block:76px; }
-      .topbar { min-height:85px; flex-wrap:wrap; padding-block:20px 14px; gap:16px; }
+      .topbar { min-height:85px; flex-wrap:wrap; padding-block:20px 14px; gap:16px; position:relative; }
+      .language-link { position:absolute; right:22px; top:30px; }
       .brand { font-size:20px; } .topbar nav { width:100%; margin:0; justify-content:space-between; gap:8px; font-size:11px; } .topbar nav a { padding-block:4px; }
       .hero { grid-template-columns:1fr; gap:36px; margin-top:38px; margin-bottom:36px; } .hero-copy { max-width:500px; }
       h1 { font-size:clamp(43px,10.5vw,66px); } .hero-lead { font-size:20px; }
@@ -356,7 +358,7 @@
 <header class="topbar">
   <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true">a<span>m</span></span><span>automix<span class="brand-light">-light</span><small>처음 만드는 사람의 안내서</small></span></a>
   <nav aria-label="읽는 순서"><a href="#start">시작하기</a><a href="#four-zones">네 가지 앎</a><a href="#build">만들어 보기</a><a href="#help">도움말</a></nav>
-  <span class="edition">한국어 사용 안내서</span>
+  <a class="language-link" href="automix-light-manual-en.html" lang="en" hreflang="en">English</a>
 </header>
 <main id="main">
   <section class="hero" aria-labelledby="hero-title">

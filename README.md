@@ -4,6 +4,8 @@
 
 설치를 마쳤다면 **[초보자용 그림 안내서](manual/automix-light-manual.html)**로 시작하세요. `new`로 계획하고 `go`로 만드는 흐름과 KK·UK·KU·UU를 같은 예시로 설명합니다. `manual/automix-light-manual.html` 파일을 브라우저에서 열면 됩니다. GitHub에서는 파일을 내려받은 뒤 열어 주세요. 본문과 그림, 용어 설명은 인터넷 연결 없이도 작동합니다.
 
+**[English visual guide](manual/automix-light-manual-en.html)** — The same beginner-friendly guide in English. Open the HTML file in your browser; on GitHub, download it first. The guide works offline.
+
 Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native-sdlc-playbook)을 바탕으로, **혼자 앱을 만드는 사람도 따라갈 수 있도록 개발 절차를 간소화했습니다.** 핵심은 각 단계의 결과를 문서로 남기고, 다음 단계에서 그 문서를 기준으로 작업하는 것입니다.
 
 아이디어를 구체화하고, 구현 계획을 세우고, 앱을 만든 뒤 검증합니다. 완성된 앱을 직접 사용하면서 발견한 문제와 필요한 기능은 다음 작업에 반영합니다.
@@ -109,6 +111,7 @@ cd automix-light
 ```text
 README.md                           이 문서 — 도구 고르기
 manual/automix-light-manual.html     설치 후 처음 시작하는 사람을 위한 그림 안내서
+manual/automix-light-manual-en.html  같은 구성의 영문 그림 안내서
 claude-code/                        Claude Code 판
   .claude-plugin/marketplace.json   마켓플레이스 설정
   aml/                              플러그인 (commands · agents · hooks · scripts · templates · references)
