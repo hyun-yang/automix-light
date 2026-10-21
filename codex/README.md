@@ -1,6 +1,6 @@
 # automix-light — Codex 판
 
-Codex에서 사용하는 aml입니다. 스킬 7개로 Claude Code 판과 같은 순서(기획 → 구현 → 검증 → 기록 → 사용 후 개선)로 작업할 수 있습니다. 모든 대화와 문서는 한국어로 작성합니다.
+Codex용 aml 플러그인입니다. 스킬 7개로 Claude Code 판과 같은 흐름(기획 → 구현 → 검증 → 기록 → 사용 후 개선)에 따라 작업할 수 있습니다. 대화와 문서는 한국어로 작성합니다.
 
 ## 설치
 
@@ -14,13 +14,13 @@ codex plugin add aml@automix-light
 codex plugin list            # aml@automix-light의 상태가 installed, enabled인지 확인합니다
 ```
 
-**Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하고, `"$PWD/codex"` 대신 `"$PWD\codex"`를 쓰세요(PowerShell의 `$PWD`는 `C:\Users\...` 모양 경로). `codex`에서 "스크립트를 실행할 수 없으므로…" 오류가 나면 `codex.cmd`로 바꿔 입력하세요. Windows의 `python3`는 가짜(Microsoft Store 바로가기)일 수 있으니 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+**Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/codex"` 대신 `"$PWD\codex"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). `codex`를 실행할 때 "스크립트를 실행할 수 없으므로…" 오류가 나면 `codex.cmd`를 입력하세요. Windows의 `python3`가 Microsoft Store 바로가기일 수 있으니 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
 Codex를 새로 열고 `$aml`을 입력했을 때 `aml:new`처럼 플러그인 이름이 앞에 붙은 스킬 7개가 표시되면 설치가 완료된 것입니다. 스킬은 `$aml:go`처럼 입력하거나, "남은 할 일 진행해 줘"처럼 말로 요청해도 됩니다. Codex에는 `/new`·`/status`·`/review` 같은 기본 명령이 따로 있으므로, aml 스킬을 실행할 때는 `$aml:status`처럼 `$`를 사용하세요. 마켓플레이스가 내려받은 폴더를 참조하므로 해당 폴더를 삭제하거나 옮기지 마세요.
 
 ### 이전 Codex 판(0.2.0)이 설치되어 있다면
 
-이전 버전도 이름이 `aml@automix-light`여서 어느 버전이 실행되는지 혼동할 수 있습니다. 새로 설치하기 전에 설치된 버전을 확인하고 이전 버전을 제거합니다.
+이전 버전도 이름이 `aml@automix-light`라서 어느 버전이 실행되는지 헷갈릴 수 있습니다. 새 버전을 설치하기 전에 기존 버전을 확인하고 제거하세요.
 
 ```bash
 codex plugin list                              # VERSION이 0.2.0...이면 이전 판
@@ -73,4 +73,4 @@ python3 codex/tests/test_observe.py  # 측정·요약 숫자 검사
 bash codex/tests/test-package.sh     # 패키지 구조 (codex 명령이 있으면 격리 설치와 스킬 목록까지)
 ```
 
-테스트는 저장소를 고치는 사람용이라 bash로 돌립니다. Windows에서는 Git for Windows와 함께 설치되는 **Git Bash**에서 실행하세요(일반 설치에는 필요 없습니다). 자세한 주의점은 [루트 README의 "테스트"](../README.md#테스트)를 보세요.
+이 테스트는 저장소를 수정하는 사람을 위한 것으로, bash에서 실행합니다. Windows에서는 Git for Windows에 포함된 **Git Bash**를 사용하세요. 플러그인 설치만 한다면 테스트는 필요하지 않습니다. 자세한 주의사항은 [루트 README의 "테스트"](../README.md#테스트)를 참고하세요.

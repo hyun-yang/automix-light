@@ -1,6 +1,6 @@
 # automix-light — Claude Code 판
 
-Claude Code에서 사용하는 aml입니다. 명령어 7개(`/aml:new` · `/aml:go` · `/aml:review` · `/aml:next` · `/aml:rule` · `/aml:status` · `/aml:doctor`)로 기획부터 구현, 검증, 기록, 사용 후 개선까지 진행할 수 있습니다. 명령어별 자세한 설명은 [`aml/README.md`](aml/README.md)에 있습니다.
+Claude Code용 aml 플러그인입니다. 명령어 7개(`/aml:new` · `/aml:go` · `/aml:review` · `/aml:next` · `/aml:rule` · `/aml:status` · `/aml:doctor`)로 기획부터 구현, 검증, 기록, 사용 후 개선까지 진행할 수 있습니다. 각 명령어는 [`aml/README.md`](aml/README.md)에서 자세히 설명합니다.
 
 ## 설치
 
@@ -17,7 +17,7 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 /plugin install aml@automix-light
 ```
 
-**Windows 11**에서는 터미널(PowerShell)에서 `bash claude-code/install.sh` 대신 다음 명령을 실행하고, `~/.claude-marketplaces/...` 대신 마지막에 출력되는 `C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 경로를 그대로 붙여 넣으세요.
+**Windows 11**에서는 터미널(PowerShell)에서 `bash claude-code/install.sh` 대신 다음 명령을 실행하세요. Claude Code에는 `~/.claude-marketplaces/...` 대신 설치 명령 끝에 출력되는 `C:/Users/<사용자 이름>/.claude-marketplaces/automix-light` 경로를 그대로 붙여 넣으세요.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File claude-code\install.ps1
@@ -34,11 +34,11 @@ bash claude-code/tests/e2e-smoke-guard.sh     # 위험한 작업 차단: 6가지
 bash claude-code/tests/e2e-smoke-observe.sh   # 작업 지표 기록 및 설치 결과 확인
 ```
 
-테스트는 저장소를 고치는 사람용이라 bash로 돌립니다. Windows에서는 Git for Windows와 함께 설치되는 **Git Bash**에서 실행하세요(일반 설치에는 필요 없습니다). 자세한 주의점은 [루트 README의 "테스트"](../README.md#테스트)를 보세요.
+이 테스트는 저장소를 수정하는 사람을 위한 것으로, bash에서 실행합니다. Windows에서는 Git for Windows에 포함된 **Git Bash**를 사용하세요. 플러그인 설치만 한다면 테스트는 필요하지 않습니다. 자세한 주의사항은 [루트 README의 "테스트"](../README.md#테스트)를 참고하세요.
 
 ## Codex에서 진행하던 프로젝트를 Claude Code로 옮길 때
 
-`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`는 두 도구에서 형식이 같아 그대로 사용할 수 있습니다. 프로젝트 안내 파일(Codex는 `AGENTS.md`, Claude Code는 `CLAUDE.md`)과 규칙 카드 위치(`.agents/skills/` ↔ `.claude/skills/`)만 다릅니다.
+`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`는 두 도구에서 형식이 같아 그대로 사용할 수 있습니다. 프로젝트 안내 파일(Codex는 `AGENTS.md`, Claude Code는 `CLAUDE.md`)과 규칙 카드 위치(`.agents/skills/` ↔ `.claude/skills/`)는 도구에 따라 다릅니다.
 
 1. 프로젝트 폴더에 `spec.md`·`task.md`·`progress.md`가 있고, `AGENTS.md`의 "확인하는 법"에 실행·테스트 명령이 있는지 확인합니다.
 2. `CLAUDE.md`가 **없을 때만** Claude Code에 이렇게 요청합니다: "spec.md·task.md·progress.md는 그대로 두고, AGENTS.md의 내용(특히 확인하는 법)을 옮겨서 aml의 CLAUDE 템플릿 형식에 맞춰 CLAUDE.md만 만들어 줘. 다른 파일은 바꾸지 마."

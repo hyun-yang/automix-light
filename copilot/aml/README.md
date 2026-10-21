@@ -1,6 +1,6 @@
 # aml — Copilot CLI 판 패키지
 
-초보자가 한국어로 기획부터 구현, 검증, 기록까지 진행할 수 있도록 돕는 플러그인입니다. 설치 방법과 다른 도구용 버전과의 차이는 저장소의 `copilot/README.md`에 있습니다.
+처음 앱을 만드는 사람이 한국어로 기획부터 구현, 검증, 기록까지 진행하도록 돕는 플러그인입니다. 설치 방법과 다른 도구용 버전과의 차이를 알아보려면 저장소의 `copilot/README.md`를 참고하세요.
 
 ## 스킬
 
@@ -24,8 +24,8 @@ Copilot에는 `/new`·`/review` 같은 기본 명령이 있으므로, aml 스킬
 - `hooks.json` · `hooks/aml-guard.sh` — 안전망 훅 (되돌리기 어려운 세 종류의 작업을 차단)
 - `templates/` — 공통 템플릿 5개(spec · task · progress · intent · review, 다른 판과 같은 내용)와 Copilot 전용 `agents.template.md` · `skill.template.md`
 - `references/` — [도구 전환 준비](references/switching.md) · [완성 기준 확인](references/verification.md) · [측정 기준](references/telemetry.md) · [단계별 문서의 역할](references/artifact-chain.md)
-- `scripts/observe.py` — 작업 지표 기록 및 요약 (파이썬 표준 라이브러리만 사용)
+- `scripts/observe.py` — 작업 지표를 기록하고 요약하는 스크립트 (파이썬 표준 라이브러리만 사용)
 
 ## 위험한 작업 차단
 
-aml 안전망 훅은 `.env` 커밋, 버그 수정 중(`.aml/FIXING`) 테스트 파일 변경, 강제 푸시·하드 리셋·대량 파일 삭제를 막습니다. `spec.md`와 `task.md`가 있는 aml 프로젝트에서만 동작하며, 훅 내부에 오류가 발생하면 작업을 차단하지 않습니다. 훅 실행 시간이 제한 시간을 넘었을 때도 Copilot은 작업을 차단하지 않으므로, 되돌리기 어려운 작업은 사용자도 한 번 더 확인하세요.
+aml 안전망 훅은 `.env` 커밋, 버그 수정 중(`.aml/FIXING`) 테스트 파일 변경, 강제 푸시·하드 리셋·대량 파일 삭제를 막습니다. `spec.md`와 `task.md`가 있는 aml 프로젝트에서만 동작합니다. 훅 내부에 오류가 나거나 실행 시간이 제한 시간을 넘으면 작업이 차단되지 않으므로, 되돌리기 어려운 작업은 직접 한 번 더 확인하세요.

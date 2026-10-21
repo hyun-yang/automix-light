@@ -1,8 +1,8 @@
 # automix-light — Copilot CLI 판
 
-GitHub Copilot CLI(터미널에서 실행하는 `copilot`)에서 사용하는 aml입니다. 스킬 7개로 Claude Code 판과 같은 순서(기획 → 구현 → 검증 → 기록 → 사용 후 개선)로 작업할 수 있습니다. 모든 대화와 문서는 한국어로 작성합니다.
+GitHub Copilot CLI(터미널에서 실행하는 `copilot`)용 aml 플러그인입니다. 스킬 7개로 Claude Code 판과 같은 흐름(기획 → 구현 → 검증 → 기록 → 사용 후 개선)에 따라 작업할 수 있습니다. 대화와 문서는 한국어로 작성합니다.
 
-> Copilot CLI **1.0.98**에서 설치·스킬 목록·안전망 훅·사용량 기록을 확인했습니다(2026-10-19). VS Code의 Copilot Chat은 지원 대상이 아닙니다 — 같은 플러그인을 읽을 수도 있지만 확인하지 않았습니다.
+> Copilot CLI **1.0.98**에서 설치, 스킬 목록, 안전망 훅, 사용량 기록을 확인했습니다(2026-10-19). VS Code의 Copilot Chat은 지원 대상이 아닙니다. 같은 플러그인을 읽을 수 있는지도 확인하지 않았습니다.
 
 ## 설치
 
@@ -16,9 +16,9 @@ copilot plugin install aml@automix-light
 copilot plugin list            # aml@automix-light (v0.6.0) (enabled) 인지 확인합니다
 ```
 
-**Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하고, `"$PWD/copilot"` 대신 `"$PWD\copilot"`를 쓰세요(PowerShell의 `$PWD`는 `C:\Users\...` 모양 경로). 안전망 훅은 Windows의 가짜 `python3`(Microsoft Store 바로가기)를 건너뛰고 `python`이나 `py -3`를 찾아 씁니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+**Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/copilot"` 대신 `"$PWD\copilot"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). 안전망 훅은 `python3`가 Microsoft Store 바로가기일 경우 이를 건너뛰고 실제로 실행되는 `python`이나 `py -3`를 찾습니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
-**`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽기 때문에, 실수로 `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스는 내려받은 폴더를 직접 읽으므로 그 폴더를 삭제하거나 옮기지 마세요.
+**`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽습니다. `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스가 내려받은 폴더를 직접 읽으므로 해당 폴더를 삭제하거나 옮기지 마세요.
 
 Copilot을 새로 열고 `/aml`을 입력했을 때 `/aml:go`처럼 플러그인 이름이 앞에 붙은 스킬 7개가 보이면 설치가 끝난 것입니다. 스킬은 `/aml:go`처럼 입력하거나 "남은 할 일 진행해 줘"처럼 말로 요청해도 됩니다. Copilot에는 `/new`(새 대화)·`/review`(코드 리뷰) 같은 기본 명령이 따로 있으니, aml 스킬은 꼭 `/aml:new`처럼 `aml:`을 붙여 부르세요.
 
@@ -74,4 +74,4 @@ python3 copilot/tests/test_observe.py  # 측정·요약 숫자 검사
 bash copilot/tests/test-package.sh     # 패키지 구조 (copilot 명령이 있으면 격리 설치와 스킬 목록까지)
 ```
 
-테스트는 저장소를 고치는 사람용이라 bash로 돌립니다. Windows에서는 Git for Windows와 함께 설치되는 **Git Bash**에서 실행하세요(일반 설치에는 필요 없습니다). 자세한 주의점은 [루트 README의 "테스트"](../README.md#테스트)를 보세요.
+이 테스트는 저장소를 수정하는 사람을 위한 것으로, bash에서 실행합니다. Windows에서는 Git for Windows에 포함된 **Git Bash**를 사용하세요. 플러그인 설치만 한다면 테스트는 필요하지 않습니다. 자세한 주의사항은 [루트 README의 "테스트"](../README.md#테스트)를 참고하세요.

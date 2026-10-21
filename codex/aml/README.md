@@ -1,6 +1,6 @@
 # aml — Codex 판 패키지
 
-초보자가 한국어로 기획부터 구현, 검증, 기록까지 진행할 수 있도록 돕는 플러그인입니다. 설치 방법과 Claude Code 판과의 차이는 저장소의 `codex/README.md`에 있습니다.
+처음 앱을 만드는 사람이 한국어로 기획부터 구현, 검증, 기록까지 진행하도록 돕는 플러그인입니다. 설치 방법과 Claude Code 판과의 차이를 알아보려면 저장소의 `codex/README.md`를 참고하세요.
 
 ## 스킬
 
@@ -19,7 +19,7 @@
 - `skills/` — 스킬 7개
 - `templates/` — 공통 템플릿 5개(spec · task · progress · intent · review, Claude Code 판과 같은 내용)와 Codex 전용 `agents.template.md` · `skill.template.md`
 - `references/` — [도구 전환 준비](references/switching.md) · [완성 기준 확인](references/verification.md) · [측정 기준](references/telemetry.md) · [단계별 문서의 역할](references/artifact-chain.md)
-- `scripts/observe.py` — 작업 지표 기록 및 요약 (파이썬 표준 라이브러리만 사용)
+- `scripts/observe.py` — 작업 지표를 기록하고 요약하는 스크립트 (파이썬 표준 라이브러리만 사용)
 
 ## 위험한 작업 차단
 

@@ -1,6 +1,6 @@
 # automix-light (aml)
 
-> 첫 앱을 만드는 사람을 위한 Claude Code · Codex · Copilot CLI 플러그인입니다. automix를 가볍게 구성한 한국어 버전으로, 기획부터 구현, 검증, 사용 후 개선까지 안내합니다.
+> 처음 앱을 만드는 사람을 위한 Claude Code · Codex · Copilot CLI 플러그인입니다. automix의 핵심 기능을 간추린 한국어 버전으로, 기획부터 구현, 검증, 사용 후 개선까지 안내합니다.
 
 Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native-sdlc-playbook)을 바탕으로, **혼자 앱을 만드는 사람도 따라갈 수 있도록 개발 절차를 간소화했습니다.** 핵심은 각 단계의 결과를 문서로 남기고, 다음 단계에서 그 문서를 기준으로 작업하는 것입니다.
 
@@ -15,11 +15,11 @@ Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native
 | 코드 리뷰 | 버그, 보안 문제, 요구사항 충족 여부 |
 | 사용 후 개선 | 작은 수정은 `task.md`에 추가하고, 새 기능이나 방향 변경은 `intent.md`에 정리 |
 
-명령어 정의, 템플릿, 작업 결과는 모두 마크다운 파일입니다. 실행 코드는 작업 지표를 기록하는 스크립트(`observe.py`, 파이썬 표준 라이브러리만 사용)와 Claude Code 판·Copilot CLI 판의 차단 훅(`aml-guard.sh`)뿐입니다.
+명령어 정의, 템플릿, 작업 결과는 모두 마크다운 파일로 관리합니다. 실행 코드는 작업 지표 기록 스크립트(`observe.py`, 파이썬 표준 라이브러리만 사용)와 Claude Code 판·Copilot CLI 판의 작업 차단 훅(`aml-guard.sh`)뿐입니다.
 
 ## 어느 도구에서 쓰나요?
 
-세 도구에서 같은 작업 흐름을 사용할 수 있습니다. 쓰는 운영체제에 맞는 설치 절(아래의 Windows 11 또는 우분투·macOS)을 따르고, 도구별 자세한 안내는 각 README를 참고하세요.
+세 도구에서 같은 작업 흐름을 사용할 수 있습니다. 사용하는 운영체제에 맞는 설치 안내(아래의 Windows 11 또는 우분투·macOS)를 따르세요. 도구별 자세한 내용은 각 README를 참고하세요.
 
 | 쓰는 도구 | 설치와 안내 |
 |---|---|
@@ -29,14 +29,14 @@ Anthropic의 [AI-Native SDLC 플레이북](https://claude.com/blog/the-ai-native
 
 ## Windows 11에서 설치하기
 
-모든 명령은 Windows에 기본으로 들어 있는 **터미널(PowerShell)** 에 입력합니다.
+모든 명령은 Windows에 기본으로 제공되는 **터미널(PowerShell)** 에 입력합니다.
 
 **1. 준비물을 설치합니다.**
 
-- [Git for Windows](https://git-scm.com/download/win) — 내려받기(`git clone`)에 쓰이고, Claude Code와 aml의 안전망(위험한 작업 차단)도 Git에 들어 있는 도구를 사용합니다. 설치 화면은 기본값 그대로 넘기면 됩니다. 설치 후 따로 열 창은 없습니다.
+- [Git for Windows](https://git-scm.com/download/win) — 저장소를 내려받는 `git clone` 명령과 위험한 작업을 차단하는 안전망에 필요합니다. 설치할 때는 기본 설정을 그대로 사용하면 됩니다. 설치 후 Git Bash를 따로 열 필요는 없습니다.
 - [Python 3](https://www.python.org/downloads/windows/) — 설치 화면에서 **"Add python.exe to PATH"** 를 체크하세요. 파이썬이 없어도 설치는 되지만, 작업 지표 기록과 안전망이 동작하지 않습니다.
 
-터미널에 익숙하다면 두 가지를 명령으로 설치해도 됩니다: `winget install Git.Git` · `winget install Python.Python.3.12`
+터미널에 익숙하다면 Git과 Python을 명령으로 설치해도 됩니다: `winget install Git.Git` · `winget install Python.Python.3.12`
 
 **2. 터미널을 엽니다.** 시작 버튼을 마우스 오른쪽 버튼으로 누르고 **터미널**을 고르세요(시작 메뉴에서 "터미널"이나 "PowerShell"을 검색해도 됩니다). 준비물을 방금 설치했다면 터미널을 새로 열어야 `git`과 `python` 명령을 찾습니다.
 
@@ -59,7 +59,7 @@ PowerShell의 `$PWD`는 지금 폴더(`C:\Users\...\automix-light`)를 뜻합니
 
 - **Claude Code 설치 명령이 긴 이유** — Windows는 처음 상태에서 내려받은 스크립트(`.ps1`) 실행을 막아 둡니다. `-ExecutionPolicy Bypass`는 **이번 한 번의 실행에만** 허용한다는 뜻이고, 컴퓨터의 보안 설정은 바뀌지 않습니다. `.\claude-code\install.ps1`처럼 바로 실행하면 "스크립트를 실행할 수 없으므로…" 오류가 나니 위 명령을 그대로 쓰세요.
 - **`codex`에서 같은 오류가 날 때** — npm으로 설치한 Codex는 PowerShell 스크립트(`codex.ps1`)로 실행되어 같은 이유로 막힐 수 있습니다. 그럴 때는 `codex` 대신 `codex.cmd`라고 입력하세요(예: `codex.cmd plugin marketplace add "$PWD\codex"`).
-- **Git for Windows는 지우지 마세요** — 터미널에서 직접 쓸 일은 없어도, Claude Code와 aml의 안전망이 안에서 Git의 `bash`를 사용합니다.
+- **Git for Windows는 제거하지 마세요** — 터미널에서 Git Bash를 직접 열지 않아도, Claude Code와 aml의 안전망이 Git에 포함된 `bash`를 사용합니다.
 - **Windows의 "가짜 python3"** — Windows에는 처음부터 `python3`라는 이름의 Microsoft Store 바로가기(앱 실행 별칭)가 들어 있습니다. 진짜 파이썬이 아니어서, 실행하면 "Python was not found" 라는 문구만 나옵니다. aml의 설치 스크립트와 안전망은 `python3` → `python` → `py -3` 순서로 **실제로 실행되는** 파이썬을 찾아 쓰므로 그대로 두어도 됩니다. 다만 터미널에서 `python3` 명령을 직접 입력해야 할 때는 `python`으로 바꿔 입력하세요. 바로가기를 끄려면 설정 → 앱 → 고급 앱 설정 → **앱 실행 별칭**에서 "앱 설치 관리자 python.exe / python3.exe"를 끕니다.
 
 ## 우분투, macOS에서 설치하기
@@ -91,7 +91,7 @@ cd automix-light
 | 진행 상황, 완성 기준 통과율, 누적 시간과 비용 확인 | `/aml:status` | `$aml:status` | `/aml:status` |
 | 작업을 시작할 준비가 되었는지 점검 (파일은 수정하지 않음) | `/aml:doctor` | `$aml:doctor` | `/aml:doctor` |
 
-계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`)은 세 도구에서 형식이 같아, 진행 중인 프로젝트를 다른 도구로 옮겨 이어서 작업할 수 있습니다. 프로젝트 안내 파일(`CLAUDE.md` ↔ `AGENTS.md`)과 규칙 카드 위치(`.claude/skills/` ↔ `.agents/skills/`)만 다르고, Codex와 Copilot CLI는 둘 다 `AGENTS.md`와 `.agents/skills/`를 씁니다. 전환 절차는 각 폴더의 README에 있습니다. 한 번에 한 도구만 사용하세요.
+계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`)은 세 도구에서 형식이 같으므로, 진행 중인 프로젝트를 다른 도구로 옮겨 계속 작업할 수 있습니다. 프로젝트 안내 파일(`CLAUDE.md` ↔ `AGENTS.md`)과 규칙 카드 위치(`.claude/skills/` ↔ `.agents/skills/`)는 도구에 따라 다릅니다. Codex와 Copilot CLI는 둘 다 `AGENTS.md`와 `.agents/skills/`를 사용합니다. 전환 절차는 각 폴더의 README를 참고하세요. 한 번에 한 도구만 사용하세요.
 
 ## 도구별 차이
 
@@ -123,7 +123,7 @@ copilot/                            GitHub Copilot CLI 판
   tests/                            템플릿 일치 · 안전망 · 측정 · 패키지 구조 검사
 ```
 
-세 도구의 `aml/` 폴더는 서로를 참조하지 않습니다. 공통 템플릿 5개(spec · task · progress · intent · review)는 세 버전에 동일한 내용으로 포함되어 있으며, `codex/tests/test-templates.sh`와 `copilot/tests/test-templates.sh`로 내용이 일치하는지 확인합니다.
+세 도구의 `aml/` 폴더는 서로를 참조하지 않습니다. 공통 템플릿 5개(spec · task · progress · intent · review)는 세 버전에 같은 내용으로 포함되어 있습니다. `codex/tests/test-templates.sh`와 `copilot/tests/test-templates.sh`로 템플릿이 일치하는지 확인할 수 있습니다.
 
 ## 테스트
 
