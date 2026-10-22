@@ -264,6 +264,23 @@
     .help-drawers summary { padding-block:23px; font-size:16px; }
     .details-body { padding:26px; font-size:13px; }
     .details-body p:last-child { margin-bottom:0; }
+    .sdlc-reassurance { background:#eef2e7; border-left:3px solid #8ca174; padding:15px 18px; border-radius:0 9px 9px 0; }
+    .sdlc-scroll-hint { color:var(--muted); font-size:11px; margin-bottom:10px; }
+    .sdlc-scroll { margin-top:0; border:1px solid var(--line); border-radius:10px; }
+    .sdlc-scroll:focus-visible { outline-offset:3px; }
+    .sdlc-table { min-width:760px; table-layout:fixed; }
+    .sdlc-table caption { padding:13px 14px; margin:0; }
+    .sdlc-table th,.sdlc-table td { padding:15px 12px; font-size:12px; line-height:1.8; }
+    .sdlc-table tbody th { font-weight:650; }
+    .sdlc-table tbody tr:last-child>* { border-bottom:0; }
+    .sdlc-table tbody tr:nth-child(even) { background:#fafbf7; }
+    .sdlc-table code { font-size:11px; }
+    .sdlc-table .optional-command { display:inline-flex; flex-wrap:wrap; align-items:center; gap:4px; margin-top:7px; }
+    .optional-command small { display:inline-block; color:var(--green); background:#e8efdf; padding:0 5px; border-radius:4px; font-size:10px; }
+    .phase-meaning { display:block; color:var(--muted); font-size:10px; font-weight:400; margin-top:5px; }
+    .sdlc-notes { margin-top:25px; font-size:12px; }
+    .sdlc-notes b { color:var(--green); }
+    .sdlc-table sup { margin-left:3px; }
     .table-scroll { max-width:100%; overflow-x:auto; margin-block:24px; }
     table { border-collapse:collapse; width:100%; font-size:12px; text-align:left; }
     caption { text-align:left; font-size:11px; color:var(--muted); margin-bottom:12px; }
@@ -428,9 +445,38 @@
   <section id="next" class="next-section" aria-labelledby="next-title"><div class="next-copy"><span class="chapter">써 본 다음 / 하나만 더</span><h2 id="next-title">익숙해지면,<br>세 번째는 next.</h2><p>첫 작업을 시작할 때는 몰라도 괜찮았어요.<br>이제 직접 써 보니 바꾸고 싶은 게 생겼다면?</p><div class="next-code"><code>$aml:next</code><span>써 본 느낌을 다음 할 일로</span></div><blockquote>“글씨가 조금 더 컸으면 좋겠어요.”<br>“끝낸 일은 아래로 내려가면 좋겠어요.”</blockquote><p>느낀 점을 말하면 다음 계획으로 정리해 줘요.<br>그 계획이 맞으면 다시 <code>$aml:go</code>로 이어 가요.</p></div><div class="loop-art" aria-label="new로 계획하고 go로 만든 후 직접 사용하고 next로 개선 계획을 세워 다시 go로 이어지는 흐름"><div class="loop-start"><span>처음 한 번</span><code>new</code><span aria-hidden="true">↓</span></div><div class="loop-node go"><b>go</b><span>만들기</span></div><span class="loop-down" aria-hidden="true">↓</span><div class="loop-node use"><b>직접 써 보기</b><span>좋은 점과 아쉬운 점 찾기</span></div><span class="loop-down" aria-hidden="true">↓</span><div class="loop-node next"><b>next</b><span>다음 할 일 정하기</span></div><p class="loop-return">↳ 계획이 맞으면, 다시 <strong>go</strong>로</p></div><div class="next-bottom"><strong>지금은 두 개. 익숙해지면 하나 더.</strong><span>모든 기능을 미리 알아야 시작할 수 있는 건 아니에요.</span></div></section>
 
   <section id="help" aria-labelledby="help-title"><div class="section-heading"><span class="chapter">필요할 때만 / 도움말 서랍</span><h2 id="help-title">궁금한 만큼만 펼쳐 보세요.</h2><p>여기까지 읽었다면 시작할 준비가 됐어요. 아래 내용은 필요할 때 찾아도 됩니다.</p></div><div class="help-drawers">
+    <details id="sdlc"><summary>만드는 과정은 어떤 단계로 진행되고, 무엇이 남나요? (SDLC)</summary>
+      <div class="details-body">
+        <p><strong>소프트웨어 개발 생명 주기(SDLC)</strong>는 아이디어를 계획하고, 만들고, 확인하고, 고쳐 나가는 전체 과정이에요. automix-light가 각 단계에서 남기는 내용을 아래에 정리했어요.</p>
+        <p class="sdlc-reassurance"><strong>시작은 여전히 new·go 두 개면 충분해요.</strong> go에 확인과 검토가 포함되어 있어요. 아래 review·rule은 필요할 때만 쓰는 선택 기능이니 지금 외울 필요는 없어요.</p>
+        <p id="sdlc-scroll-hint" class="sdlc-scroll-hint">작은 화면에서는 표 안을 좌우로 움직여 읽어 보세요. 키보드에서는 Tab으로 표에 이동한 뒤 ← → 키를 쓸 수 있어요.</p>
+        <div class="table-scroll sdlc-scroll" tabindex="0" role="region" aria-label="개발 단계별 명령과 문서 표" aria-describedby="sdlc-scroll-hint">
+          <table class="sdlc-table">
+            <caption>automix-light가 단계마다 남기는 것 · 명령 표기는 Codex 기준</caption>
+            <colgroup><col style="width:17%"><col style="width:18%"><col style="width:28%"><col style="width:37%"></colgroup>
+            <thead><tr><th scope="col">만드는 단계</th><th scope="col">AML 명령</th><th scope="col">남는 것</th><th scope="col">담긴 내용</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">계획하기</th><td><code>$aml:new</code></td><td><code>intent.md</code></td><td>왜 만들고 싶은지, 처음 말한 그대로</td></tr>
+              <tr><th scope="row">필요한 것 정하기</th><td><code>$aml:new</code></td><td><code>spec.md</code></td><td>필요한 기능·선택한 것·참고 자료·걱정·완성 기준</td></tr>
+              <tr><th scope="row">모습과 순서 정하기</th><td><code>$aml:new</code></td><td><code>task.md</code>, 화면 시안, <code>AGENTS.md</code> 등<sup><a href="#sdlc-guide-note" aria-label="주석 1: 프로젝트 안내 파일">1</a></sup></td><td>할 일 순서와 바뀌는 파일·위험·확인 방법, 프로젝트 안내와 규칙</td></tr>
+              <tr><th scope="row">만들기</th><td><code>$aml:go</code></td><td>코드, 저장 기록(커밋), <code>progress.md</code></td><td>Git 저장소라면 작업별 저장 기록, 무엇을 왜 바꿨는지</td></tr>
+              <tr><th scope="row">잘 되는지 확인하기</th><td><code>$aml:go</code></td><td>확인 표시가 된 <code>spec.md</code>의 완성 기준</td><td>실제로 실행해 확인한 결과<sup><a href="#sdlc-check-note" aria-label="주석 2: 자체 확인과 독립 확인">2</a></sup></td></tr>
+              <tr><th scope="row">다시 살펴보기</th><td><code>$aml:go</code><br><span class="optional-command"><code>$aml:review</code> <small>선택</small></span></td><td><code>REVIEW.md</code> 기준에 따른 결과를 <code>progress.md</code>에 기록</td><td>안 되는 곳·정보 보호·약속대로 만들었는지</td></tr>
+              <tr><th scope="row">써 보고 개선하기</th><td><code>$aml:next</code><br><span class="optional-command"><code>$aml:rule</code> <small>선택</small></span></td><td>새 할 일, 새 <code>intent.md</code> 항목, 규칙 카드 또는 안내 파일의 규칙</td><td>써 본 느낌을 다음 일로, 반복 실수는 예방 규칙으로</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="sdlc-notes">
+          <p id="sdlc-guide-note"><b>1 · 프로젝트 안내</b> <code>AGENTS.md</code>는 작업 도구가 읽는 프로젝트 안내예요. Claude Code에서는 <code>CLAUDE.md</code>를 써요. 안내 파일은 없을 때 준비하며, 매번 새로 만들지는 않아요. 화면 시안은 모습 비교가 필요할 때 만들어요.</p>
+          <p id="sdlc-check-note"><b>2 · 확인 방식</b> Codex는 기본적으로 작업한 AI가 다시 확인해요(자체 확인). 별도 도우미에게 실제로 맡겼을 때만 독립 확인이라고 기록해요. 확인한 것과 못 한 것은 진행 기록에서 함께 살펴보세요. <a href="#verification-help">도구별 확인 방식 자세히 보기</a></p>
+          <p><b>낯선 말의 뜻</b> 완성 기준은 “다 됐다고 확인할 항목”, 규칙 카드는 “반복 실수를 막는 약속을 적은 문서”예요. 코드·파일·화면 시안·검증·리뷰·git·커밋과 SDLC의 영어 이름은 <a href="#glossary">쉬운 용어 풀이</a>에서 볼 수 있어요.</p>
+          <p>명령 앞의 <code>$</code>는 Codex 표기예요. Claude Code·Copilot CLI에서는 <code>/aml:new</code>처럼 시작해요. <a href="#other-tools">다른 도구의 정확한 명령 보기</a></p>
+        </div>
+      </div>
+    </details>
     <details id="other-tools"><summary>Claude Code나 Copilot CLI를 쓰고 있어요.</summary><div class="details-body"><p>하는 일은 같고, 앞에 붙이는 기호만 달라요. 설치한 도구의 대화 입력칸에 아래처럼 입력하세요.</p><div class="table-scroll"><table><caption>세 도구에서 쓰는 세 명령</caption><thead><tr><th scope="col">하고 싶은 일</th><th scope="col">Codex</th><th scope="col">Claude Code · Copilot CLI</th></tr></thead><tbody><tr><th scope="row">계획하기</th><td><code>$aml:new</code></td><td><code>/aml:new</code></td></tr><tr><th scope="row">만들기</th><td><code>$aml:go</code></td><td><code>/aml:go</code></td></tr><tr><th scope="row">써 본 뒤 개선 계획</th><td><code>$aml:next</code></td><td><code>/aml:next</code></td></tr></tbody></table></div><p>Copilot의 <code>/new</code>는 다른 기능이에요. 꼭 <code>/aml:new</code> 전체를 입력하세요. 설치가 필요하면 <a href="../README.md">저장소의 설치 안내</a>를 참고하세요.</p></div></details>
     <details id="glossary"><summary>모르는 말이 나왔어요. 쉬운 뜻을 보고 싶어요.</summary><div class="details-body"><p>본문에서 밑줄이 있는 낱말은 마우스를 올리거나 눌러 뜻을 볼 수 있어요. 키보드로는 Tab으로 이동한 뒤 Enter 또는 Space로 열고, Esc로 닫아요. 같은 낱말을 다시 누르거나 다른 곳을 눌러도 닫혀요.</p><dl class="glossary"><div><dt>코드</dt><dd>컴퓨터가 할 일을 적어 둔 글이에요. 이 안내에서는 AI가 작성을 맡으므로, 처음부터 읽거나 쓸 줄 알 필요는 없어요.</dd></div><div><dt>AI</dt><dd>여기서는 대화하며 계획과 제작을 돕는 프로그램을 말해요. 제안이나 결과가 틀릴 수 있어서 확인하는 과정이 필요해요.</dd></div><div><dt>Codex</dt><dd>이 안내에서 예시로 사용하는 AI 작업 도구의 이름이에요. automix-light를 설치하면 대화에서 계획과 제작 절차를 요청할 수 있어요.</dd></div><div><dt>파일</dt><dd>컴퓨터에 내용을 담아 두는 문서예요. <code>.md</code>로 끝나는 문서는 주로 글을 적어 둔 문서이고, <code>.html</code>은 지금 보고 있는 것처럼 브라우저에서 여는 문서예요.</dd></div><div><dt>화면 시안 · 목업(mockup)</dt><dd>만들기 전에 모양과 배치를 비교해 보는 예시 화면이에요. 버튼이 있는 그림이어도 실제로 작동하는 앱은 아닐 수 있어요.</dd></div><div><dt>검증 · 테스트</dt><dd>정한 대로 되는지 실제로 확인하는 일이에요. 예를 들어 할 일을 적고, 완료 표시가 되는지 확인해요.</dd></div><div><dt>검토 · 리뷰</dt><dd>틀린 곳이나 빠진 것, 약속과 다른 부분이 없는지 다시 살펴보는 일이에요.</dd></div><div><dt>git · 커밋(commit)</dt><dd>git은 작업의 변경 기록을 관리하는 도구, 커밋은 작업 한 묶음을 기록으로 남기는 일이에요. 이전 작업과 비교하거나 되돌리는 데 도움을 주지만, 이미 외부로 보낸 정보 같은 모든 행동을 되돌릴 수 있는 것은 아니에요.</dd></div><div><dt>SDLC · Software Development Life Cycle</dt><dd>아이디어를 계획하고, 만들고, 확인하고, 고쳐 나가는 전체 과정을 부르는 업계 용어예요. 이 이름을 외울 필요 없이, 이 안내서의 흐름대로 진행하면 돼요.</dd></div></dl></div></details>
-    <details><summary>“자체 확인”과 “독립 확인”은 무슨 차이인가요?</summary><div class="details-body"><div class="verification-pair"><div><h3>자체 확인</h3><p>작업한 AI가 완성 기준을 들고 처음부터 다시 확인해요. <strong>Codex의 기본 방식</strong>이에요.</p></div><div><h3>독립 확인</h3><p>별도 확인 도우미가 새로 살펴봐요. <strong>실제로 따로 맡겼을 때만</strong> 독립 확인이라고 기록해요.</p></div></div><p>Claude Code 판은 별도 확인 도우미를 부르는 절차가 있어요. Copilot CLI 판도 별도 도우미를 부르며, 실제로 맡기지 못하면 자체 확인으로 기록해요. 어느 방식이든 “무엇을 실행해서 확인했는지”를 함께 보세요.</p><p>위험한 작업을 막는 장치도 도구마다 달라요. Claude Code·Copilot CLI 판에는 AML의 일부 작업 차단 장치가 있고, Codex 판에는 같은 AML 전용 장치가 없어요. Codex 자체의 권한·승인 설정은 환경에 따라 적용돼요. Copilot의 차단 장치도 제한 시간을 넘으면 차단하지 못할 수 있어요. 모든 도구가 같은 보호를 보장하지는 않아요.</p></div></details>
+    <details id="verification-help"><summary>“자체 확인”과 “독립 확인”은 무슨 차이인가요?</summary><div class="details-body"><div class="verification-pair"><div><h3>자체 확인</h3><p>작업한 AI가 완성 기준을 들고 처음부터 다시 확인해요. <strong>Codex의 기본 방식</strong>이에요.</p></div><div><h3>독립 확인</h3><p>별도 확인 도우미가 새로 살펴봐요. <strong>실제로 따로 맡겼을 때만</strong> 독립 확인이라고 기록해요.</p></div></div><p>Claude Code 판은 별도 확인 도우미를 부르는 절차가 있어요. Copilot CLI 판도 별도 도우미를 부르며, 실제로 맡기지 못하면 자체 확인으로 기록해요. 어느 방식이든 “무엇을 실행해서 확인했는지”를 함께 보세요.</p><p>위험한 작업을 막는 장치도 도구마다 달라요. Claude Code·Copilot CLI 판에는 AML의 일부 작업 차단 장치가 있고, Codex 판에는 같은 AML 전용 장치가 없어요. Codex 자체의 권한·승인 설정은 환경에 따라 적용돼요. Copilot의 차단 장치도 제한 시간을 넘으면 차단하지 못할 수 있어요. 모든 도구가 같은 보호를 보장하지는 않아요.</p></div></details>
     <details><summary>중간에 막히거나 멈췄어요. 뭐라고 말하면 좋을까요?</summary><div class="details-body"><ul class="say-list"><li><strong>낯선 설명이 많을 때</strong><q>개발을 처음 해 봐요. 쉬운 말로, 한 가지씩 알려 주세요.</q></li><li><strong>무엇을 골라야 할지 모를 때</strong><q>잘 모르겠어요. 제 상황에 맞는 방법과 이유를 추천해 주세요.</q></li><li><strong>멈춘 이유를 모를 때</strong><q>지금 어디에서 멈췄는지, 제가 해야 할 일이 있는지 알려 주세요.</q></li><li><strong>새 대화에서 이어 하고 싶을 때</strong><q>같은 프로젝트의 계획과 진행 기록을 읽고, 남은 일을 알려 주세요.</q></li></ul><p>같은 작업 폴더에서 계획과 기록을 확인한 뒤 <code>$aml:go</code>로 이어 갈 수 있어요. 중간에 중요한 선택을 묻는다면, 이유를 읽고 답해 주세요.</p></div></details>
   </div></section>
 
