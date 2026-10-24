@@ -5,6 +5,7 @@
       {
         "type": "command",
         "bash": "bash \"${PLUGIN_ROOT}/hooks/aml-guard.sh\"",
+        "powershell": "& \"$env:PLUGIN_ROOT/hooks/aml-guard.ps1\"; exit $LASTEXITCODE",
         "timeoutSec": 10
       }
     ]

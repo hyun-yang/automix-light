@@ -58,10 +58,43 @@ PowerShell의 `$PWD`는 지금 폴더(`C:\Users\...\automix-light`)를 뜻합니
 **알아 둘 점**
 
 - **Claude Code 설치 명령이 긴 이유** — Windows는 처음 상태에서 내려받은 스크립트(`.ps1`) 실행을 막아 둡니다. `-ExecutionPolicy Bypass`는 **이번 한 번의 실행에만** 허용한다는 뜻이고, 컴퓨터의 보안 설정은 바뀌지 않습니다. `.\claude-code\install.ps1`처럼 바로 실행하면 "스크립트를 실행할 수 없으므로…" 오류가 나니 위 명령을 그대로 쓰세요.
-- **`codex`에서 같은 오류가 날 때** — npm으로 설치한 Codex는 PowerShell 스크립트(`codex.ps1`)로 실행되어 같은 이유로 막힐 수 있습니다. 그럴 때는 `codex` 대신 `codex.cmd`라고 입력하세요(예: `codex.cmd plugin marketplace add "$PWD\codex"`).
-- **Git for Windows는 제거하지 마세요** — 터미널에서 Git Bash를 직접 열지 않아도, Claude Code와 aml의 안전망이 Git에 포함된 `bash`를 사용합니다.
+- **`codex`에서 같은 오류가 날 때** — npm으로 설치한 Codex의 `codex.ps1`이 PowerShell 실행 정책에 막힐 수 있습니다. 아래의 [Codex 실행 정책 오류 해결](#codex-실행-정책-오류-해결)을 따라 설정 후 설치를 다시 시도하세요. 정책을 변경하지 않으려면 `codex` 대신 `codex.cmd`를 사용해도 됩니다.
+- **Git for Windows는 제거하지 마세요** — Claude Code의 안전망은 Git에 포함된 `bash`를 사용합니다. Copilot 판의 Windows 안전망은 PowerShell과 Python으로 실행되어 Bash PATH 설정이 필요 없습니다. Git은 저장소 작업에 계속 필요합니다.
 - **Windows의 "가짜 python3"** — Windows에는 처음부터 `python3`라는 이름의 Microsoft Store 바로가기(앱 실행 별칭)가 들어 있습니다. 진짜 파이썬이 아니어서, 실행하면 "Python was not found" 라는 문구만 나옵니다. aml의 설치 스크립트와 안전망은 `python3` → `python` → `py -3` 순서로 **실제로 실행되는** 파이썬을 찾아 쓰므로 그대로 두어도 됩니다. 다만 터미널에서 `python3` 명령을 직접 입력해야 할 때는 `python`으로 바꿔 입력하세요. 바로가기를 끄려면 설정 → 앱 → 고급 앱 설정 → **앱 실행 별칭**에서 "앱 설치 관리자 python.exe / python3.exe"를 끕니다.
 - **작업 지표 측정 명령** — 세 도구의 go·doctor·status도 `python3` → `python` → `py -3`를 실제로 실행해 보고 되는 명령을 사용합니다. PowerShell에서 직접 확인하려면 `python -c "import sys; print(sys.version_info[0])"`를 입력해 `3`이 나오는지 보세요. 안 되면 `py -3 -c "import sys; print(sys.version_info[0])"`를 사용하세요. 둘 다 실패하면 Python 3을 설치하고 터미널을 다시 여세요.
+
+### Codex 실행 정책 오류 해결
+
+설치 명령을 실행할 때 다음 메시지가 나오면 PowerShell이 `codex.ps1` 실행을 막은 것입니다.
+
+```text
+codex.ps1 cannot be loaded because running scripts is disabled on this system.
+PSSecurityException / UnauthorizedAccess
+```
+
+PowerShell에서 아래 명령을 실행합니다. 확인 질문이 표시되면 내용을 확인하고 `Y`를 입력하세요.
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+`CurrentUser`는 **현재 사용자에게 계속 적용되는 설정**이며, 보통 관리자 권한은 필요하지 않습니다. `RemoteSigned`는 로컬 스크립트를 허용하고 인터넷에서 내려받은 스크립트에는 신뢰할 수 있는 서명을 요구합니다. 회사·학교의 조직 정책이 우선하면 이 설정만으로 해결되지 않을 수 있습니다. 자세한 내용은 [Microsoft 실행 정책 안내](https://learn.microsoft.com/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-5.1)를 참고하세요.
+
+설정 후 `automix-light` 폴더에서 설치 명령을 다시 실행하고, 목록에서 `aml@automix-light`가 `installed`, `enabled`인지 확인합니다.
+
+```powershell
+codex plugin marketplace add "$PWD\codex"
+codex plugin add aml@automix-light
+codex plugin list
+```
+
+실행 정책을 변경하지 않으려면 다음처럼 `codex.cmd`로 실행하세요.
+
+```powershell
+codex.cmd plugin marketplace add "$PWD\codex"
+codex.cmd plugin add aml@automix-light
+codex.cmd plugin list
+```
 
 ## 우분투, macOS에서 설치하기
 

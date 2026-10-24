@@ -51,7 +51,7 @@ PY
   if grep -rnE 'AML 전용 차단 훅이 없|~/\.codex|codex-measure' "$pkg" >&2; then
     fail "A Codex 판 전용 문구가 남아 있습니다"
   fi
-  for f in hooks.json hooks/aml-guard.sh agents/verifier.agent.md scripts/observe.py \
+  for f in hooks.json hooks/aml-guard.sh hooks/aml-guard.ps1 hooks/aml-guard.py agents/verifier.agent.md scripts/observe.py \
            templates/agents.template.md templates/skill.template.md \
            references/switching.md references/verification.md references/telemetry.md references/artifact-chain.md; do
     [ -f "$pkg/$f" ] || fail "C 리소스 없음: $f"
@@ -111,7 +111,7 @@ sys.exit(0 if ok else 1)' || fail "D 설치 목록에 켜진 aml@automix-light �
   mkdir -p "$TMP/empty"
   (cd "$TMP/empty" && copilot skill list --json 2>/dev/null) | python3 -c '
 import json, sys
-names = sorted(s["name"] for s in json.load(sys.stdin) if s.get("source") == "plugin" and "/aml/skills/" in s.get("path", ""))
+names = sorted(s["name"] for s in json.load(sys.stdin) if s.get("source") == "plugin" and "/aml/skills/" in s.get("path", "").replace(chr(92), "/"))
 want = sorted("new go review next rule status doctor".split())
 if names != want:
     print("실패: D 스킬 목록이 다릅니다: %s" % names, file=sys.stderr); sys.exit(1)' || exit 1

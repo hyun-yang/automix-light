@@ -147,6 +147,7 @@ entries = hj.get("hooks", {}).get("preToolUse", [])
 assert entries, "hooks.json 에 preToolUse 훅이 없습니다"
 cmd = entries[0].get("bash", "")
 assert "${PLUGIN_ROOT}/hooks/aml-guard.sh" in cmd, "훅 명령이 ${PLUGIN_ROOT}/hooks/aml-guard.sh 를 가리켜야 합니다: %r" % cmd
+assert "$env:PLUGIN_ROOT/hooks/aml-guard.ps1" in entries[0].get("powershell", ""), "Windows PowerShell 훅이 없습니다"
 assert 0 < entries[0].get("timeoutSec", 30) <= 30, "timeoutSec 이 이상합니다"
 PY
 [[ $? == 0 ]] || exit 1
