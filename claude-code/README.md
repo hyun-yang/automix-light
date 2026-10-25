@@ -10,7 +10,7 @@ cd automix-light
 bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사합니다
 ```
 
-그런 다음 Claude Code에서 다음 명령을 입력합니다.
+설치가 끝나면 Claude Code에서 아래 명령을 입력합니다.
 
 ```text
 /plugin marketplace add ~/.claude-marketplaces/automix-light
@@ -23,7 +23,7 @@ bash claude-code/install.sh   # ~/.claude-marketplaces/automix-light에 복사�
 powershell -ExecutionPolicy Bypass -File claude-code\install.ps1
 ```
 
-`-ExecutionPolicy Bypass`는 이번 한 번의 실행에만 스크립트를 허용한다는 뜻으로, 컴퓨터의 보안 설정은 바뀌지 않습니다. 준비물(Git for Windows, Python)은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
+`-ExecutionPolicy Bypass`는 이번 실행에 한해 스크립트 실행을 허용한다는 뜻으로, 컴퓨터의 보안 설정은 바뀌지 않습니다. 준비물(Git for Windows, Python)은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
 Windows의 작업 지표 측정과 doctor 점검은 실제로 실행되는 Python 3을 사용합니다. `python3`가 Microsoft Store 바로가기라면 `python`, 이어서 `py -3`를 확인합니다. [확인 방법](../README.md#windows-11에서-설치하기)을 참고하세요.
 

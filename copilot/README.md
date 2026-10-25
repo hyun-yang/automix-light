@@ -18,7 +18,7 @@ copilot plugin list            # aml@automix-light (v0.6.0) (enabled) 인지 확
 
 **Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/copilot"` 대신 `"$PWD\copilot"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). 안전망 훅은 `python3`가 Microsoft Store 바로가기일 경우 이를 건너뛰고 실제로 실행되는 `python`이나 `py -3`를 찾습니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
-go·doctor·status의 작업 지표 측정도 실행 가능한 `python3` → `python` → `py -3`를 차례로 확인해 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
+go·doctor·status에서 작업 지표를 측정할 때도 `python3` → `python` → `py -3` 순서로 실행해 보고, 실행되는 명령을 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
 
 **`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽습니다. `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스가 내려받은 폴더를 직접 읽으므로 해당 폴더를 삭제하거나 옮기지 마세요.
 
@@ -65,7 +65,7 @@ Claude Code에서 진행하던 프로젝트를 Copilot으로 옮길 때:
 3. `/aml:doctor`로 점검합니다.
 4. `/aml:go`로 이어서 진행합니다.
 
-`AGENTS.md`가 이미 있으면 그대로 두고, `CLAUDE.md`와 다른 점이 있으면 어느 쪽이 맞는지 확인해 직접 수정합니다. Copilot은 두 파일을 함께 읽기 때문에 내용이 다르면 서로 다른 지시를 따를 수 있습니다. `REVIEW.md`는 세 도구에서 함께 사용합니다. 한 번에 한 도구만 사용하고, 전환하기 전에 커밋해 두세요. 자세한 내용은 [도구 전환 안내](aml/references/switching.md)를 참고하세요.
+`AGENTS.md`가 이미 있으면 그대로 두고, `CLAUDE.md`와 다른 점이 있으면 어느 쪽이 맞는지 확인해 직접 수정합니다. Copilot은 두 파일을 함께 읽기 때문에 내용이 서로 어긋나면 어떤 지시를 따라야 할지 혼동할 수 있습니다. `REVIEW.md`는 세 도구에서 함께 사용합니다. 한 번에 한 도구만 사용하고, 전환하기 전에 커밋해 두세요. 자세한 내용은 [도구 전환 안내](aml/references/switching.md)를 참고하세요.
 
 ## 테스트 (저장소 수정 시)
 

@@ -16,7 +16,7 @@ codex plugin list            # aml@automix-light의 상태가 installed, enabled
 
 **Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/codex"` 대신 `"$PWD\codex"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). `codex`를 실행할 때 "스크립트를 실행할 수 없으므로…" 오류가 나면 `codex.cmd`를 입력하세요. Windows의 `python3`가 Microsoft Store 바로가기일 수 있으니 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
-작업 지표 측정과 doctor 점검은 실행 가능한 `python3` → `python` → `py -3`를 차례로 확인해 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
+작업 지표 측정과 doctor 점검에서는 `python3` → `python` → `py -3` 순서로 실행해 보고, 실행되는 명령을 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
 
 Codex를 새로 열고 `$aml`을 입력했을 때 `aml:new`처럼 플러그인 이름이 앞에 붙은 스킬 7개가 표시되면 설치가 완료된 것입니다. 스킬은 `$aml:go`처럼 입력하거나, "남은 할 일 진행해 줘"처럼 말로 요청해도 됩니다. Codex에는 `/new`·`/status`·`/review` 같은 기본 명령이 따로 있으므로, aml 스킬을 실행할 때는 `$aml:status`처럼 `$`를 사용하세요. 마켓플레이스가 내려받은 폴더를 참조하므로 해당 폴더를 삭제하거나 옮기지 마세요.
 
@@ -50,7 +50,7 @@ codex plugin marketplace remove automix-light  # 기존 항목이 남아 있으�
 ## Claude Code 판과 다른 점 (꼭 읽어 주세요)
 
 - **위험한 작업 차단** — 이 버전에는 AML 전용 차단 훅이 없습니다. Codex의 권한·샌드박스·승인 설정은 환경에 따라 적용되며, Claude Code 판의 AML 훅과 동일한 차단을 보장하지 않습니다. 비밀키가 담긴 `.env` 파일 커밋, 버그 수정 중 테스트 파일 변경, 강제 푸시·하드 리셋에 대해서는 스킬에서 주의사항만 안내하므로, 실행 전에 직접 확인하세요.
-- **독립 확인** — 기본은 같은 세션 안에서 수행하는 **자체 검증**입니다. 별도 에이전트에게 실제로 검증을 맡겼을 때만 `progress.md`에 "독립 확인"이라고 기록합니다.
+- **독립 확인** — 기본적으로 같은 세션에서 직접 확인합니다(**자체 검증**). 별도 에이전트에게 실제로 검증을 맡겼을 때만 `progress.md`에 "독립 확인"이라고 기록합니다.
 - **사용량 측정** — Codex 세션 기록(`~/.codex/sessions/`)에서 현재 작업에 사용한 토큰 수를 읽어 작업 지표를 기록합니다. 현재 세션을 확실히 찾지 못하거나 작업 시작 시점의 기록이 없으면 `측정: 기록 없음`으로 표시합니다. 다른 세션의 값으로 대신 채우지 않습니다. 단가를 확인한 모델만 비용을 계산하고, 나머지는 "비용 미산정"으로 표시합니다. 자세한 기준은 [작업 지표 측정 기준](aml/references/telemetry.md)을 참고하세요.
 - **Langfuse 전송** — Codex 판 첫 버전에서는 지원하지 않습니다.
 
