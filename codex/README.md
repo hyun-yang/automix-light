@@ -16,6 +16,41 @@ codex plugin list            # aml@automix-light의 상태가 installed, enabled
 
 **Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/codex"` 대신 `"$PWD\codex"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). `codex`를 실행할 때 "스크립트를 실행할 수 없으므로…" 오류가 나면 `codex.cmd`를 입력하세요. Windows의 `python3`가 Microsoft Store 바로가기일 수 있으니 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
+### Windows에서 codex.ps1 실행이 차단될 때
+
+설치 명령을 실행할 때 다음 메시지가 나오면 PowerShell이 `codex.ps1` 실행을 막은 것입니다.
+
+```text
+codex.ps1 cannot be loaded because running scripts is disabled on this system.
+PSSecurityException / UnauthorizedAccess
+```
+
+PowerShell에서 아래 명령을 실행합니다. 확인 질문이 표시되면 내용을 확인하고 `Y`를 입력하세요.
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+`CurrentUser`는 **현재 사용자에게 계속 적용되는 설정**이며, 보통 관리자 권한은 필요하지 않습니다. `RemoteSigned`는 로컬 스크립트를 허용하고 인터넷에서 내려받은 스크립트에는 신뢰할 수 있는 서명을 요구합니다. 회사·학교의 조직 정책이 우선하면 이 설정만으로 해결되지 않을 수 있습니다. 자세한 내용은 [Microsoft 실행 정책 안내](https://learn.microsoft.com/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-5.1)를 참고하세요.
+
+설정 후 `automix-light` 폴더에서 설치 명령을 다시 실행하고, 목록에서 `aml@automix-light`가 `installed`, `enabled`인지 확인합니다.
+
+```powershell
+codex plugin marketplace add "$PWD\codex"
+codex plugin add aml@automix-light
+codex plugin list
+```
+
+실행 정책을 변경하지 않으려면 다음처럼 `codex.cmd`로 실행하세요.
+
+```powershell
+codex.cmd plugin marketplace add "$PWD\codex"
+codex.cmd plugin add aml@automix-light
+codex.cmd plugin list
+```
+
+### 작업 지표와 설치 확인
+
 작업 지표 측정과 doctor 점검에서는 `python3` → `python` → `py -3` 순서로 실행해 보고, 실행되는 명령을 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
 
 Codex를 새로 열고 `$aml`을 입력했을 때 `aml:new`처럼 플러그인 이름이 앞에 붙은 스킬 7개가 표시되면 설치가 완료된 것입니다. 스킬은 `$aml:go`처럼 입력하거나, "남은 할 일 진행해 줘"처럼 말로 요청해도 됩니다. Codex에는 `/new`·`/status`·`/review` 같은 기본 명령이 따로 있으므로, aml 스킬을 실행할 때는 `$aml:status`처럼 `$`를 사용하세요. 마켓플레이스가 내려받은 폴더를 참조하므로 해당 폴더를 삭제하거나 옮기지 마세요.

@@ -18,6 +18,21 @@ copilot plugin list            # aml@automix-light (v0.6.0) (enabled) 인지 확
 
 **Windows 11**에서는 위 명령을 터미널(PowerShell)에서 실행하세요. `"$PWD/copilot"` 대신 `"$PWD\copilot"`를 사용합니다(PowerShell의 `$PWD`는 `C:\Users\...` 형태의 경로). 안전망 훅은 `python3`가 Microsoft Store 바로가기일 경우 이를 건너뛰고 실제로 실행되는 `python`이나 `py -3`를 찾습니다. 준비물은 [루트 README의 "Windows 11에서 설치하기"](../README.md#windows-11에서-설치하기)를 참고하세요.
 
+Windows 안전망 훅은 Windows PowerShell 5.1 또는 PowerShell 7에서 Python 3을 실행합니다. **훅 실행에는 Bash 설치나 PATH 변경이 필요 없습니다.** Linux/macOS에서는 기존 Bash 진입점을 사용하며, 두 진입점은 같은 Python 안전망 판단을 사용합니다. Python이 없거나 입력을 해석할 수 없으면 기존 정책대로 허용하므로 이 경우 안전망 차단은 동작하지 않습니다.
+
+`hook errored`와 함께 로그에 `spawn bash ENOENT`가 보이면 이전 Bash 전용 훅 설정이 로드된 상태일 수 있습니다. `copilot plugin list`에서 로컬 마켓플레이스가 수정된 `copilot/`을 가리키는 Live Plugin이면 Copilot을 완전히 종료하고 새로 여세요. 복사된 설치본이거나 경로가 다르면 올바른 마켓플레이스 등록을 확인하고 다시 설치하세요:
+
+```powershell
+copilot plugin uninstall aml@automix-light
+copilot plugin install aml@automix-light
+```
+
+새 세션에서 `/env`의 AML 훅 표시와 `/aml:doctor`의 실행을 확인하세요. `/env`에 훅이 표시되는 것만으로 실행 성공을 뜻하지는 않습니다. 이 저장소의 소스 변경이 기존 세션이나 복사된 설치본에 즉시 반영되지는 않습니다.
+
+PowerShell이 npm의 `copilot.ps1` 실행을 막으면 `copilot` 대신 `copilot.cmd`를 사용하세요. 컴퓨터 전체의 실행 정책을 바꿀 필요는 없습니다.
+
+Windows 개발 검증은 `python copilot/tests/test_guard_windows.py`로 실행합니다. 위험 명령을 실제로 실행하지 않고 훅에 입력만 전달해 허용·차단을 검사합니다. PowerShell 7이 없으면 해당 검사는 건너뛰며, 7에서 확인한 것으로 간주하지 않습니다.
+
 go·doctor·status에서 작업 지표를 측정할 때도 `python3` → `python` → `py -3` 순서로 실행해 보고, 실행되는 명령을 사용합니다. Windows에서 `python3`가 실패해도 `python`이나 `py -3`가 실행되면 측정을 계속합니다.
 
 **`copilot/` 폴더를 등록하세요.** Copilot은 Claude Code용 마켓플레이스 파일도 읽습니다. `claude-code/` 폴더를 등록하면 Copilot CLI 판 대신 Claude Code 판이 설치됩니다. 마켓플레이스가 내려받은 폴더를 직접 읽으므로 해당 폴더를 삭제하거나 옮기지 마세요.
