@@ -98,6 +98,28 @@ cd automix-light
 
 계획·기록 파일(`intent.md`·`spec.md`·`task.md`·`progress.md`·`REVIEW.md`)은 세 도구에서 형식이 같으므로, 진행 중인 프로젝트를 다른 도구로 옮겨 계속 작업할 수 있습니다. 프로젝트 안내 파일(`CLAUDE.md` ↔ `AGENTS.md`)과 규칙 카드 위치(`.claude/skills/` ↔ `.agents/skills/`)는 도구에 따라 다릅니다. Codex와 Copilot CLI는 둘 다 `AGENTS.md`와 `.agents/skills/`를 사용합니다. 전환 절차는 각 폴더의 README를 참고하세요. 한 번에 한 도구만 사용하세요.
 
+## 명령어와 소프트웨어 개발 생애 주기(SDLC)
+
+소프트웨어 개발 생애 주기(SDLC)는 아이디어를 계획하고, 만들고, 확인하고, 사용하며 고치는 과정입니다. AML 명령어는 각 단계에서 다음과 같은 결과를 남깁니다.
+
+아래 명령은 Codex 표기입니다. Claude Code·Copilot CLI에서는 `$aml:` 대신 `/aml:`을 씁니다(예: `/aml:new`).
+
+| 개발 단계 | AML 명령어 | 남는 결과 | 담는 내용 |
+|---|---|---|---|
+| 기획 (Planning) | `$aml:new` | `intent.md` | 왜 만드는지 사용자의 말로 남긴 원래 요청 |
+| 요구사항 정리 (Requirements) | `$aml:new` | `spec.md` | 필요한 기능, 정한 것, 참고 자료, 걱정되는 것, 완성 기준 |
+| 설계·작업 계획 (Design) | `$aml:new` | `task.md`, 필요할 때 화면 시안, 프로젝트 안내 파일 | 작업 순서와 바뀌는 파일·위험·증명, 프로젝트 안내와 규칙 |
+| 구현 (Implementation) | `$aml:go` | 코드, 작업별 커밋, `progress.md` | 할 일을 순서대로 만들고 무엇을 왜 바꿨는지 기록 |
+| 시험·검증 (Testing / Verification) | `$aml:go` | `spec.md`의 확인한 완성 기준, `progress.md`의 확인 결과 | 실제 실행으로 정한 대로 되는지 확인. 확인하지 못한 항목도 기록 |
+| 검토 (Review) | `$aml:go`, `$aml:review` | `REVIEW.md` 기준으로 검토한 결과를 `progress.md`에 기록 | 버그·안전·약속 지킴 점검 |
+| 유지보수·다음 작업 (Maintenance / Next iteration) | `$aml:next`, `$aml:rule` | 다음 할 일 또는 새 `intent.md` 항목, 프로젝트 안내의 규칙 또는 규칙 카드 | 써 본 의견을 다음 작업으로 바꾸고 반복 실수를 규칙으로 예방 |
+| 시작 전 준비 점검 (단계 공통) | `$aml:doctor` | 대화에 표시하는 준비 점검 결과 | 계획·안내 파일과 실행 도구 등 작업 준비 확인. 파일은 수정하지 않음 |
+| 진행 상황 확인 (단계 공통) | `$aml:status` | 대화에 표시하는 진행 요약 | 진행 상황·완성 기준·시간·토큰·비용 등 확인 가능한 지표. 파일은 수정하지 않음 |
+
+프로젝트 안내 파일은 Claude Code의 `CLAUDE.md`, Codex·Copilot CLI의 `AGENTS.md`입니다. 기획할 때 없으면 만들고, 기존 파일은 덮어쓰지 않습니다. 화면 시안은 필요한 경우에 만듭니다.
+
+Claude Code는 별도 검증 에이전트(`verifier`)로 확인합니다. Codex는 기본 자체 확인이며, 별도 에이전트에게 실제로 맡겼을 때만 독립 확인으로 기록합니다. Copilot CLI도 `verifier`를 실제로 불렀을 때만 독립 확인으로 기록합니다. 자세한 내용은 아래 [도구별 차이](#도구별-차이)를 참고하세요.
+
 ## 도구별 차이
 
 | | Claude Code 판 | Codex 판 | Copilot CLI 판 |
