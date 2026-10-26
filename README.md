@@ -204,7 +204,6 @@ flowchart TD
 ```text
 README.md                           이 문서 — 도구 고르기
 manual/automix-light-manual.html     설치 후 처음 시작하는 사람을 위한 그림 안내서
-manual/automix-light-manual-en.html  같은 구성의 영문 그림 안내서
 claude-code/                        Claude Code 판
   .claude-plugin/marketplace.json   마켓플레이스 설정
   aml/                              플러그인 (commands · agents · hooks · scripts · templates · references)
